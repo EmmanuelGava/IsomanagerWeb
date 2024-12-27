@@ -1,0 +1,140 @@
+/* Estilos para la gestión de normas */
+
+/* Columna de acciones */
+.action-column {
+    width: 60px !important;
+    min-width: 60px !important;
+    position: relative;
+    text-align: center;
+}
+
+/* Botón de tres puntos */
+.btn-icon {
+    padding: 0.25rem 0.5rem;
+    background: transparent;
+    border: none;
+    color: #6c757d;
+    transition: color 0.15s ease-in-out;
+}
+
+.btn-icon:hover {
+    color: #000;
+}
+
+.btn-icon i {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+/* Menú desplegable */
+.dropdown-menu {
+    padding: 0.25rem 0;
+    min-width: 160px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    margin: 0;
+    transform: none !important;
+    position: absolute !important;
+    inset: auto !important;
+    right: 0 !important;
+    left: auto !important;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dropdown-item i {
+    font-size: 1rem;
+    opacity: 0.7;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-item.text-danger:hover {
+    background-color: #dc3545;
+    color: white !important;
+}
+
+.dropdown-item.text-danger:hover i {
+    opacity: 1;
+}
+
+/* Contenedor de tabla */
+.table-responsive {
+    overflow: initial !important;
+}
+
+/* Contenedor del dropdown */
+.dropdown {
+    position: static !important;
+}
+
+/* Estados de norma */
+.badge {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    border-radius: 2rem;
+}
+
+.badge-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.badge-warning {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+.badge-danger {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+/* Ajustes de la tabla */
+.table {
+    vertical-align: middle;
+}
+
+.table > :not(caption) > * > * {
+    padding: 1rem 0.75rem;
+}
+
+.table > tbody > tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+/* Estilos para la barra de búsqueda */
+.search-container {
+    max-width: 300px;
+}
+
+.search-container .input-group-text {
+    border-right: none;
+    background-color: transparent;
+}
+
+.search-container .form-control {
+    border-left: none;
+}
+
+.search-container .form-control:focus {
+    border-color: #dee2e6;
+    box-shadow: none;
+} 

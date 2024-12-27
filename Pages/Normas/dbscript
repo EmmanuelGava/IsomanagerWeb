@@ -1,0 +1,787 @@
+USE [master]
+GO
+/****** Object:  Database [IsomanagerDB]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE DATABASE [IsomanagerDB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'IsomanagerDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\IsomanagerDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'IsomanagerDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\IsomanagerDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [IsomanagerDB] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [IsomanagerDB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [IsomanagerDB] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [IsomanagerDB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [IsomanagerDB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [IsomanagerDB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [IsomanagerDB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [IsomanagerDB] SET READ_COMMITTED_SNAPSHOT ON 
+GO
+ALTER DATABASE [IsomanagerDB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [IsomanagerDB] SET  MULTI_USER 
+GO
+ALTER DATABASE [IsomanagerDB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [IsomanagerDB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [IsomanagerDB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [IsomanagerDB] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [IsomanagerDB] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [IsomanagerDB] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [IsomanagerDB] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [IsomanagerDB] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [IsomanagerDB]
+GO
+/****** Object:  Table [dbo].[__MigrationHistory]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[__MigrationHistory](
+	[MigrationId] [nvarchar](150) NOT NULL,
+	[ContextKey] [nvarchar](300) NOT NULL,
+	[Model] [varbinary](max) NOT NULL,
+	[ProductVersion] [nvarchar](32) NOT NULL,
+ CONSTRAINT [PK_dbo.__MigrationHistory] PRIMARY KEY CLUSTERED 
+(
+	[MigrationId] ASC,
+	[ContextKey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Area]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Area](
+	[AreaId] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](max) NULL,
+	[Activo] [bit] NOT NULL,
+	[ContextoId] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.Area] PRIMARY KEY CLUSTERED 
+(
+	[AreaId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[AuditoriasInternaProceso]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[AuditoriasInternaProceso](
+	[AuditoriaId] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](100) NOT NULL,
+	[Descripcion] [nvarchar](500) NOT NULL,
+	[FechaAuditoria] [datetime] NOT NULL,
+	[TipoAuditoria] [int] NOT NULL,
+	[Alcance] [nvarchar](500) NOT NULL,
+	[Hallazgos] [nvarchar](1000) NULL,
+	[Recomendaciones] [nvarchar](1000) NULL,
+	[Comentarios] [nvarchar](500) NULL,
+	[ProcesoId] [int] NOT NULL,
+	[UsuarioId] [int] NOT NULL,
+	[Estado] [int] NOT NULL,
+	[Activo] [bit] NOT NULL,
+	[FechaCreacion] [datetime] NOT NULL,
+	[FechaModificacion] [datetime] NULL,
+	[Contexto_ContextoId] [int] NULL,
+ CONSTRAINT [PK_dbo.AuditoriasInternaProceso] PRIMARY KEY CLUSTERED 
+(
+	[AuditoriaId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CambiosProceso]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CambiosProceso](
+	[CambioId] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](100) NOT NULL,
+	[Descripcion] [nvarchar](500) NOT NULL,
+	[Justificacion] [nvarchar](500) NOT NULL,
+	[Impacto] [nvarchar](500) NOT NULL,
+	[ProcesoId] [int] NOT NULL,
+	[UsuarioId] [int] NOT NULL,
+	[Estado] [int] NOT NULL,
+	[FechaSolicitud] [datetime] NOT NULL,
+	[ContextoId] [int] NOT NULL,
+	[Activo] [bit] NOT NULL,
+	[FechaCreacion] [datetime] NOT NULL,
+	[FechaModificacion] [datetime] NULL,
+ CONSTRAINT [PK_dbo.CambiosProceso] PRIMARY KEY CLUSTERED 
+(
+	[CambioId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Contexto]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Contexto](
+	[ContextoId] [int] IDENTITY(1,1) NOT NULL,
+	[NormaId] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.Contexto] PRIMARY KEY CLUSTERED 
+(
+	[ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[DefinicionObjetivoAlcance]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DefinicionObjetivoAlcance](
+	[ContextoId] [int] NOT NULL,
+	[Objetivo] [nvarchar](max) NULL,
+	[Alcance] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.DefinicionObjetivoAlcance] PRIMARY KEY CLUSTERED 
+(
+	[ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Desempeno]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Desempeno](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Mes] [nvarchar](max) NULL,
+	[Promedio] [float] NOT NULL,
+	[UsuarioId] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.Desempeno] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Documentos]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Documentos](
+	[DocumentoId] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](100) NOT NULL,
+	[RutaArchivo] [nvarchar](500) NOT NULL,
+	[TipoArchivo] [nvarchar](10) NOT NULL,
+	[Version] [nvarchar](20) NOT NULL,
+	[FechaCarga] [datetime] NOT NULL,
+	[UsuarioId] [int] NOT NULL,
+	[Seccion] [nvarchar](50) NOT NULL,
+	[SeccionId] [int] NOT NULL,
+	[Activo] [bit] NOT NULL,
+	[FechaModificacion] [datetime] NULL,
+ CONSTRAINT [PK_dbo.Documentos] PRIMARY KEY CLUSTERED 
+(
+	[DocumentoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[EvaluacionProcesos]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[EvaluacionProcesos](
+	[EvaluacionId] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](100) NOT NULL,
+	[Fecha] [datetime] NOT NULL,
+	[Observaciones] [nvarchar](1000) NOT NULL,
+	[IndicadoresClaves] [nvarchar](1000) NOT NULL,
+	[CriteriosEvaluacion] [nvarchar](1000) NOT NULL,
+	[NivelCumplimiento] [int] NOT NULL,
+	[OportunidadesMejora] [nvarchar](1000) NULL,
+	[AccionesCorrectivas] [nvarchar](1000) NULL,
+	[Recursos] [nvarchar](500) NULL,
+	[PorcentajeCumplimiento] [decimal](18, 2) NOT NULL,
+	[FechaProximaEvaluacion] [datetime] NULL,
+	[ProcesoId] [int] NOT NULL,
+	[UsuarioId] [int] NOT NULL,
+	[ContextoId] [int] NOT NULL,
+	[Estado] [int] NOT NULL,
+	[Activo] [bit] NOT NULL,
+	[FechaCreacion] [datetime] NOT NULL,
+	[FechaModificacion] [datetime] NULL,
+ CONSTRAINT [PK_dbo.EvaluacionProcesos] PRIMARY KEY CLUSTERED 
+(
+	[EvaluacionId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[FactoresExternos]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FactoresExternos](
+	[FactoresExternosId] [int] IDENTITY(1,1) NOT NULL,
+	[Descripcion] [nvarchar](500) NOT NULL,
+	[FechaCreacion] [datetime] NOT NULL,
+	[TipoFactorId] [int] NOT NULL,
+	[Impacto] [nvarchar](max) NOT NULL,
+	[Probabilidad] [nvarchar](max) NOT NULL,
+	[AccionesSugeridas] [nvarchar](max) NOT NULL,
+	[Responsable] [nvarchar](max) NULL,
+	[ContextoId] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.FactoresExternos] PRIMARY KEY CLUSTERED 
+(
+	[FactoresExternosId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Foda]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Foda](
+	[ContextoId] [int] NOT NULL,
+	[Fortalezas] [nvarchar](max) NULL,
+	[Oportunidades] [nvarchar](max) NULL,
+	[Debilidades] [nvarchar](max) NULL,
+	[Amenazas] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.Foda] PRIMARY KEY CLUSTERED 
+(
+	[ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Formacion]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Formacion](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Area] [nvarchar](max) NULL,
+	[Horas] [int] NOT NULL,
+	[UsuarioId] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.Formacion] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[KPI]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[KPI](
+	[KpiId] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](max) NULL,
+	[Valor] [nvarchar](max) NULL,
+	[FechaMedicion] [datetime] NOT NULL,
+	[ProcesoId] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.KPI] PRIMARY KEY CLUSTERED 
+(
+	[KpiId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[MejoraProceso]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MejoraProceso](
+	[MejoraId] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](100) NOT NULL,
+	[Descripcion] [nvarchar](500) NOT NULL,
+	[FechaCreacion] [datetime] NOT NULL,
+	[Origen] [int] NOT NULL,
+	[Estado] [int] NOT NULL,
+	[AccionPropuesta] [nvarchar](500) NOT NULL,
+	[FechaObjetivo] [datetime] NULL,
+	[AreaMejora] [nvarchar](100) NOT NULL,
+	[Beneficios] [nvarchar](500) NULL,
+	[FechaImplementacion] [datetime] NULL,
+	[ProcesoId] [int] NOT NULL,
+	[ResponsableId] [int] NOT NULL,
+	[CreadoPorId] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.MejoraProceso] PRIMARY KEY CLUSTERED 
+(
+	[MejoraId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Norma]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Norma](
+	[NormaId] [int] IDENTITY(1,1) NOT NULL,
+	[Titulo] [nvarchar](max) NULL,
+	[Descripcion] [nvarchar](max) NULL,
+	[Version] [nvarchar](max) NULL,
+	[Estado] [nvarchar](max) NULL,
+	[ResponsableId] [int] NOT NULL,
+	[FechaCreacion] [datetime] NOT NULL,
+	[UltimaActualizacion] [datetime] NOT NULL,
+ CONSTRAINT [PK_dbo.Norma] PRIMARY KEY CLUSTERED 
+(
+	[NormaId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Proceso]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Proceso](
+	[ProcesoId] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](100) NOT NULL,
+	[Propietario] [nvarchar](max) NULL,
+	[Objetivo] [nvarchar](max) NULL,
+	[Descripcion] [nvarchar](500) NULL,
+	[Estado] [int] NOT NULL,
+	[FechaCreacion] [datetime] NOT NULL,
+	[FechaModificacion] [datetime] NULL,
+	[Activo] [bit] NOT NULL,
+	[ContextoId] [int] NOT NULL,
+	[ResponsableId] [int] NOT NULL,
+	[AdministradorId] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.Proceso] PRIMARY KEY CLUSTERED 
+(
+	[ProcesoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TipoFactor]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TipoFactor](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.TipoFactor] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[UbicacionGeografica]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[UbicacionGeografica](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](max) NULL,
+	[DefinicionObjetivoAlcanceId] [int] NOT NULL,
+ CONSTRAINT [PK_dbo.UbicacionGeografica] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Usuarios]    Script Date: 21/12/2024 21:27:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Usuarios](
+	[UsuarioId] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](100) NOT NULL,
+	[Email] [nvarchar](100) NOT NULL,
+	[Rol] [nvarchar](50) NOT NULL,
+	[EstadoUsuario] [int] NOT NULL,
+	[TokenReset] [nvarchar](100) NOT NULL,
+	[FechaCreacion] [datetime] NOT NULL,
+	[UltimaConexion] [datetime] NULL,
+	[ContadorIntentos] [int] NOT NULL,
+	[TokenVencimiento] [datetime] NULL,
+ CONSTRAINT [PK_dbo.Usuarios] PRIMARY KEY CLUSTERED 
+(
+	[UsuarioId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ContextoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ContextoId] ON [dbo].[Area]
+(
+	[ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Contexto_ContextoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_Contexto_ContextoId] ON [dbo].[AuditoriasInternaProceso]
+(
+	[Contexto_ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ProcesoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ProcesoId] ON [dbo].[AuditoriasInternaProceso]
+(
+	[ProcesoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_UsuarioId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_UsuarioId] ON [dbo].[AuditoriasInternaProceso]
+(
+	[UsuarioId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ContextoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ContextoId] ON [dbo].[CambiosProceso]
+(
+	[ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ProcesoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ProcesoId] ON [dbo].[CambiosProceso]
+(
+	[ProcesoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_UsuarioId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_UsuarioId] ON [dbo].[CambiosProceso]
+(
+	[UsuarioId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_NormaId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_NormaId] ON [dbo].[Contexto]
+(
+	[NormaId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ContextoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ContextoId] ON [dbo].[DefinicionObjetivoAlcance]
+(
+	[ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_UsuarioId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_UsuarioId] ON [dbo].[Desempeno]
+(
+	[UsuarioId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_UsuarioId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_UsuarioId] ON [dbo].[Documentos]
+(
+	[UsuarioId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ContextoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ContextoId] ON [dbo].[EvaluacionProcesos]
+(
+	[ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ProcesoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ProcesoId] ON [dbo].[EvaluacionProcesos]
+(
+	[ProcesoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_UsuarioId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_UsuarioId] ON [dbo].[EvaluacionProcesos]
+(
+	[UsuarioId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ContextoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ContextoId] ON [dbo].[FactoresExternos]
+(
+	[ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_TipoFactorId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_TipoFactorId] ON [dbo].[FactoresExternos]
+(
+	[TipoFactorId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ContextoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ContextoId] ON [dbo].[Foda]
+(
+	[ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_UsuarioId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_UsuarioId] ON [dbo].[Formacion]
+(
+	[UsuarioId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ProcesoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ProcesoId] ON [dbo].[KPI]
+(
+	[ProcesoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_CreadoPorId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_CreadoPorId] ON [dbo].[MejoraProceso]
+(
+	[CreadoPorId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ProcesoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ProcesoId] ON [dbo].[MejoraProceso]
+(
+	[ProcesoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ResponsableId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ResponsableId] ON [dbo].[MejoraProceso]
+(
+	[ResponsableId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ResponsableId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ResponsableId] ON [dbo].[Norma]
+(
+	[ResponsableId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_AdministradorId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_AdministradorId] ON [dbo].[Proceso]
+(
+	[AdministradorId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ContextoId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ContextoId] ON [dbo].[Proceso]
+(
+	[ContextoId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_ResponsableId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_ResponsableId] ON [dbo].[Proceso]
+(
+	[ResponsableId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_DefinicionObjetivoAlcanceId]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE NONCLUSTERED INDEX [IX_DefinicionObjetivoAlcanceId] ON [dbo].[UbicacionGeografica]
+(
+	[DefinicionObjetivoAlcanceId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_Email]    Script Date: 21/12/2024 21:27:10 ******/
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Email] ON [dbo].[Usuarios]
+(
+	[Email] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Proceso] ADD  DEFAULT ((0)) FOR [AdministradorId]
+GO
+ALTER TABLE [dbo].[Usuarios] ADD  DEFAULT ('') FOR [TokenReset]
+GO
+ALTER TABLE [dbo].[Usuarios] ADD  DEFAULT ('1900-01-01T00:00:00.000') FOR [FechaCreacion]
+GO
+ALTER TABLE [dbo].[Usuarios] ADD  DEFAULT ((0)) FOR [ContadorIntentos]
+GO
+ALTER TABLE [dbo].[Area]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Area_dbo.DefinicionObjetivoAlcance_ContextoId] FOREIGN KEY([ContextoId])
+REFERENCES [dbo].[DefinicionObjetivoAlcance] ([ContextoId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Area] CHECK CONSTRAINT [FK_dbo.Area_dbo.DefinicionObjetivoAlcance_ContextoId]
+GO
+ALTER TABLE [dbo].[AuditoriasInternaProceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.AuditoriasInternaProceso_dbo.Contexto_Contexto_ContextoId] FOREIGN KEY([Contexto_ContextoId])
+REFERENCES [dbo].[Contexto] ([ContextoId])
+GO
+ALTER TABLE [dbo].[AuditoriasInternaProceso] CHECK CONSTRAINT [FK_dbo.AuditoriasInternaProceso_dbo.Contexto_Contexto_ContextoId]
+GO
+ALTER TABLE [dbo].[AuditoriasInternaProceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.AuditoriasInternaProceso_dbo.Proceso_ProcesoId] FOREIGN KEY([ProcesoId])
+REFERENCES [dbo].[Proceso] ([ProcesoId])
+GO
+ALTER TABLE [dbo].[AuditoriasInternaProceso] CHECK CONSTRAINT [FK_dbo.AuditoriasInternaProceso_dbo.Proceso_ProcesoId]
+GO
+ALTER TABLE [dbo].[AuditoriasInternaProceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.AuditoriasInternaProceso_dbo.Usuarios_UsuarioId] FOREIGN KEY([UsuarioId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+GO
+ALTER TABLE [dbo].[AuditoriasInternaProceso] CHECK CONSTRAINT [FK_dbo.AuditoriasInternaProceso_dbo.Usuarios_UsuarioId]
+GO
+ALTER TABLE [dbo].[CambiosProceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.CambiosProceso_dbo.Contexto_ContextoId] FOREIGN KEY([ContextoId])
+REFERENCES [dbo].[Contexto] ([ContextoId])
+GO
+ALTER TABLE [dbo].[CambiosProceso] CHECK CONSTRAINT [FK_dbo.CambiosProceso_dbo.Contexto_ContextoId]
+GO
+ALTER TABLE [dbo].[CambiosProceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.CambiosProceso_dbo.Proceso_ProcesoId] FOREIGN KEY([ProcesoId])
+REFERENCES [dbo].[Proceso] ([ProcesoId])
+GO
+ALTER TABLE [dbo].[CambiosProceso] CHECK CONSTRAINT [FK_dbo.CambiosProceso_dbo.Proceso_ProcesoId]
+GO
+ALTER TABLE [dbo].[CambiosProceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.CambiosProceso_dbo.Usuarios_UsuarioId] FOREIGN KEY([UsuarioId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+GO
+ALTER TABLE [dbo].[CambiosProceso] CHECK CONSTRAINT [FK_dbo.CambiosProceso_dbo.Usuarios_UsuarioId]
+GO
+ALTER TABLE [dbo].[Contexto]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Contexto_dbo.Norma_NormaId] FOREIGN KEY([NormaId])
+REFERENCES [dbo].[Norma] ([NormaId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Contexto] CHECK CONSTRAINT [FK_dbo.Contexto_dbo.Norma_NormaId]
+GO
+ALTER TABLE [dbo].[DefinicionObjetivoAlcance]  WITH CHECK ADD  CONSTRAINT [FK_dbo.DefinicionObjetivoAlcance_dbo.Contexto_ContextoId] FOREIGN KEY([ContextoId])
+REFERENCES [dbo].[Contexto] ([ContextoId])
+GO
+ALTER TABLE [dbo].[DefinicionObjetivoAlcance] CHECK CONSTRAINT [FK_dbo.DefinicionObjetivoAlcance_dbo.Contexto_ContextoId]
+GO
+ALTER TABLE [dbo].[Desempeno]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Desempeno_dbo.Usuarios_UsuarioId] FOREIGN KEY([UsuarioId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Desempeno] CHECK CONSTRAINT [FK_dbo.Desempeno_dbo.Usuarios_UsuarioId]
+GO
+ALTER TABLE [dbo].[Documentos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Documentos_dbo.Usuarios_UsuarioId] FOREIGN KEY([UsuarioId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+GO
+ALTER TABLE [dbo].[Documentos] CHECK CONSTRAINT [FK_dbo.Documentos_dbo.Usuarios_UsuarioId]
+GO
+ALTER TABLE [dbo].[EvaluacionProcesos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.EvaluacionProcesos_dbo.Contexto_ContextoId] FOREIGN KEY([ContextoId])
+REFERENCES [dbo].[Contexto] ([ContextoId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[EvaluacionProcesos] CHECK CONSTRAINT [FK_dbo.EvaluacionProcesos_dbo.Contexto_ContextoId]
+GO
+ALTER TABLE [dbo].[EvaluacionProcesos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.EvaluacionProcesos_dbo.Proceso_ProcesoId] FOREIGN KEY([ProcesoId])
+REFERENCES [dbo].[Proceso] ([ProcesoId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[EvaluacionProcesos] CHECK CONSTRAINT [FK_dbo.EvaluacionProcesos_dbo.Proceso_ProcesoId]
+GO
+ALTER TABLE [dbo].[EvaluacionProcesos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.EvaluacionProcesos_dbo.Usuarios_UsuarioId] FOREIGN KEY([UsuarioId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[EvaluacionProcesos] CHECK CONSTRAINT [FK_dbo.EvaluacionProcesos_dbo.Usuarios_UsuarioId]
+GO
+ALTER TABLE [dbo].[FactoresExternos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.FactoresExternos_dbo.Contexto_ContextoId] FOREIGN KEY([ContextoId])
+REFERENCES [dbo].[Contexto] ([ContextoId])
+GO
+ALTER TABLE [dbo].[FactoresExternos] CHECK CONSTRAINT [FK_dbo.FactoresExternos_dbo.Contexto_ContextoId]
+GO
+ALTER TABLE [dbo].[FactoresExternos]  WITH CHECK ADD  CONSTRAINT [FK_dbo.FactoresExternos_dbo.TipoFactor_TipoFactorId] FOREIGN KEY([TipoFactorId])
+REFERENCES [dbo].[TipoFactor] ([Id])
+GO
+ALTER TABLE [dbo].[FactoresExternos] CHECK CONSTRAINT [FK_dbo.FactoresExternos_dbo.TipoFactor_TipoFactorId]
+GO
+ALTER TABLE [dbo].[Foda]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Foda_dbo.Contexto_ContextoId] FOREIGN KEY([ContextoId])
+REFERENCES [dbo].[Contexto] ([ContextoId])
+GO
+ALTER TABLE [dbo].[Foda] CHECK CONSTRAINT [FK_dbo.Foda_dbo.Contexto_ContextoId]
+GO
+ALTER TABLE [dbo].[Formacion]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Formacion_dbo.Usuarios_UsuarioId] FOREIGN KEY([UsuarioId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Formacion] CHECK CONSTRAINT [FK_dbo.Formacion_dbo.Usuarios_UsuarioId]
+GO
+ALTER TABLE [dbo].[KPI]  WITH CHECK ADD  CONSTRAINT [FK_dbo.KPI_dbo.Proceso_ProcesoId] FOREIGN KEY([ProcesoId])
+REFERENCES [dbo].[Proceso] ([ProcesoId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[KPI] CHECK CONSTRAINT [FK_dbo.KPI_dbo.Proceso_ProcesoId]
+GO
+ALTER TABLE [dbo].[MejoraProceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.MejoraProceso_dbo.Proceso_ProcesoId] FOREIGN KEY([ProcesoId])
+REFERENCES [dbo].[Proceso] ([ProcesoId])
+GO
+ALTER TABLE [dbo].[MejoraProceso] CHECK CONSTRAINT [FK_dbo.MejoraProceso_dbo.Proceso_ProcesoId]
+GO
+ALTER TABLE [dbo].[MejoraProceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.MejoraProceso_dbo.Usuarios_CreadoPorId] FOREIGN KEY([CreadoPorId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+GO
+ALTER TABLE [dbo].[MejoraProceso] CHECK CONSTRAINT [FK_dbo.MejoraProceso_dbo.Usuarios_CreadoPorId]
+GO
+ALTER TABLE [dbo].[MejoraProceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.MejoraProceso_dbo.Usuarios_ResponsableId] FOREIGN KEY([ResponsableId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+GO
+ALTER TABLE [dbo].[MejoraProceso] CHECK CONSTRAINT [FK_dbo.MejoraProceso_dbo.Usuarios_ResponsableId]
+GO
+ALTER TABLE [dbo].[Norma]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Norma_dbo.Usuarios_ResponsableId] FOREIGN KEY([ResponsableId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+GO
+ALTER TABLE [dbo].[Norma] CHECK CONSTRAINT [FK_dbo.Norma_dbo.Usuarios_ResponsableId]
+GO
+ALTER TABLE [dbo].[Proceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Proceso_dbo.Contexto_ContextoId] FOREIGN KEY([ContextoId])
+REFERENCES [dbo].[Contexto] ([ContextoId])
+GO
+ALTER TABLE [dbo].[Proceso] CHECK CONSTRAINT [FK_dbo.Proceso_dbo.Contexto_ContextoId]
+GO
+ALTER TABLE [dbo].[Proceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Proceso_dbo.Usuarios_AdministradorId] FOREIGN KEY([AdministradorId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+GO
+ALTER TABLE [dbo].[Proceso] CHECK CONSTRAINT [FK_dbo.Proceso_dbo.Usuarios_AdministradorId]
+GO
+ALTER TABLE [dbo].[Proceso]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Proceso_dbo.Usuarios_ResponsableId] FOREIGN KEY([ResponsableId])
+REFERENCES [dbo].[Usuarios] ([UsuarioId])
+GO
+ALTER TABLE [dbo].[Proceso] CHECK CONSTRAINT [FK_dbo.Proceso_dbo.Usuarios_ResponsableId]
+GO
+ALTER TABLE [dbo].[UbicacionGeografica]  WITH CHECK ADD  CONSTRAINT [FK_dbo.UbicacionGeografica_dbo.DefinicionObjetivoAlcance_DefinicionObjetivoAlcanceId] FOREIGN KEY([DefinicionObjetivoAlcanceId])
+REFERENCES [dbo].[DefinicionObjetivoAlcance] ([ContextoId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[UbicacionGeografica] CHECK CONSTRAINT [FK_dbo.UbicacionGeografica_dbo.DefinicionObjetivoAlcance_DefinicionObjetivoAlcanceId]
+GO
+USE [master]
+GO
+ALTER DATABASE [IsomanagerDB] SET  READ_WRITE 
+GO

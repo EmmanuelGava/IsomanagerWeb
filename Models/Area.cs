@@ -12,6 +12,9 @@ namespace IsomanagerWeb.Models
         {
             Usuarios = new HashSet<Usuario>();
             Procesos = new HashSet<Proceso>();
+            Activo = true;
+            FechaCreacion = DateTime.Now;
+            UltimaModificacion = DateTime.Now;
         }
 
         [Key]
@@ -26,6 +29,15 @@ namespace IsomanagerWeb.Models
 
         [Required]
         public int UbicacionId { get; set; }
+
+        [Required]
+        public bool Activo { get; set; }
+
+        [Required]
+        public DateTime FechaCreacion { get; set; }
+
+        [Required]
+        public DateTime UltimaModificacion { get; set; }
 
         [ForeignKey("UbicacionId")]
         public virtual UbicacionGeografica UbicacionGeografica { get; set; }

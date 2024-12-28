@@ -143,6 +143,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\usuarios.css" />
     <Content Include="controls\ucDepartamentoSelector.ascx" />
+    <Content Include="controls\ucSeleccionAreas.ascx" />
     <Content Include="controls\ucUsuarioSelector.ascx" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
@@ -151,7 +152,9 @@
     <Content Include="Pages\Dashboard.aspx" />
     <Content Include="Pages\Documentos\GestionArchivos.aspx" />
     <Content Include="Pages\Error.aspx" />
+    <Content Include="Pages\Normas\ComponentesNorma.aspx" />
     <Content Include="Pages\Normas\GestionNormas.aspx" />
+    <Content Include="Pages\Normas\Secciones\DatosPartida.aspx" />
     <Content Include="Pages\Procesos\Auditorias\GestionAuditorias.aspx" />
     <Content Include="Pages\Procesos\Cambios\GestionCambios.aspx" />
     <Content Include="Pages\Procesos\Evaluaciones\GestionEvaluaciones.aspx" />
@@ -246,6 +249,13 @@
     <Compile Include="controls\ucDepartamentoSelector.ascx.designer.cs">
       <DependentUpon>ucDepartamentoSelector.ascx</DependentUpon>
     </Compile>
+    <Compile Include="controls\ucSeleccionAreas.ascx.cs">
+      <DependentUpon>ucSeleccionAreas.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="controls\ucSeleccionAreas.ascx.designer.cs">
+      <DependentUpon>ucSeleccionAreas.ascx</DependentUpon>
+    </Compile>
     <Compile Include="controls\ucUsuarioSelector.ascx.cs">
       <DependentUpon>ucUsuarioSelector.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -271,9 +281,9 @@
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202412272210577_Initial.cs" />
-    <Compile Include="Migrations\202412272210577_Initial.Designer.cs">
-      <DependentUpon>202412272210577_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\202412282243187_ajustarAreaAFactores.cs" />
+    <Compile Include="Migrations\202412282243187_ajustarAreaAFactores.Designer.cs">
+      <DependentUpon>202412282243187_ajustarAreaAFactores.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AlcanceSistemaGestion.cs" />
@@ -329,12 +339,26 @@
     <Compile Include="Pages\Error.aspx.designer.cs">
       <DependentUpon>Error.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Normas\ComponentesNorma.aspx.cs">
+      <DependentUpon>ComponentesNorma.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Normas\ComponentesNorma.aspx.designer.cs">
+      <DependentUpon>ComponentesNorma.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Normas\GestionNormas.aspx.cs">
       <DependentUpon>GestionNormas.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\Normas\GestionNormas.aspx.designer.cs">
       <DependentUpon>GestionNormas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Normas\Secciones\DatosPartida.aspx.cs">
+      <DependentUpon>DatosPartida.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Normas\Secciones\DatosPartida.aspx.designer.cs">
+      <DependentUpon>DatosPartida.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Procesos\Auditorias\GestionAuditorias.aspx.cs">
       <DependentUpon>GestionAuditorias.aspx</DependentUpon>
@@ -439,8 +463,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202412272210577_Initial.resx">
-      <DependentUpon>202412272210577_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202412282243187_ajustarAreaAFactores.resx">
+      <DependentUpon>202412282243187_ajustarAreaAFactores.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

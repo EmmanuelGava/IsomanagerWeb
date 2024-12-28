@@ -6,14 +6,14 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace IsomanagerWeb.Models
 {
-    [System.ComponentModel.DataAnnotations.Schema.Table("AlcanceSistemaGestion", Schema = "dbo")]
+    [Table("AlcanceSistemaGestion")]
     public class AlcanceSistemaGestion
     {
         [Key]
         public int AlcanceId { get; set; }
 
         [Required]
-        [StringLength(500)]
+        [StringLength(1000)]
         public string Descripcion { get; set; }
 
         [Required]
@@ -25,10 +25,11 @@ namespace IsomanagerWeb.Models
         [Required]
         public bool Activo { get; set; }
 
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("Contexto")]
-        public int ContextoId { get; set; }
+        [Required]
+        public int NormaId { get; set; }
 
-        public virtual Contexto Contexto { get; set; }
+        [ForeignKey("NormaId")]
+        public virtual Norma Norma { get; set; }
     }
 
     public class AlcanceSistemaGestionConfiguration : EntityTypeConfiguration<AlcanceSistemaGestion>
@@ -42,13 +43,13 @@ namespace IsomanagerWeb.Models
             HasKey(a => a.AlcanceId);
 
             // Relaciones
-            HasRequired(a => a.Contexto)
+            HasRequired(a => a.Norma)
                 .WithMany()
-                .HasForeignKey(a => a.ContextoId)
+                .HasForeignKey(a => a.NormaId)
                 .WillCascadeOnDelete(false);
 
             // Propiedades requeridas
-            Property(a => a.Descripcion).IsRequired().HasMaxLength(500);
+            Property(a => a.Descripcion).IsRequired().HasMaxLength(1000);
             Property(a => a.FechaCreacion).IsRequired();
             Property(a => a.UltimaModificacion).IsRequired();
             Property(a => a.Activo).IsRequired();

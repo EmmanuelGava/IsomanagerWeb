@@ -7,8 +7,12 @@ namespace IsomanagerWeb.Models
     public class Foda
     {
         [Key]
-        [ForeignKey(nameof(Contexto))]
-        public int ContextoId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int FodaId { get; set; }
+
+        [Required]
+        [ForeignKey(nameof(Norma))]
+        public int NormaId { get; set; }
 
         [StringLength(4000)]
         public string Fortalezas { get; set; }
@@ -22,6 +26,6 @@ namespace IsomanagerWeb.Models
         [StringLength(4000)]
         public string Amenazas { get; set; }
 
-        public virtual Contexto Contexto { get; set; }
+        public virtual Norma Norma { get; set; }
     }
 } 

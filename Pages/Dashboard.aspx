@@ -125,7 +125,8 @@
                                             <asp:LinkButton runat="server" 
                                                 CssClass="btn btn-link text-dark p-0" 
                                                 OnClick="OnIrProcesosClick"
-                                                CommandArgument='<%# Eval("NormaId") %>'>
+                                                CommandArgument='<%# Eval("NormaId") %>'
+                                                ToolTip="Ver procesos">
                                                 <i class="bi bi-arrow-right"></i>
                                             </asp:LinkButton>
                                         </div>
@@ -146,6 +147,16 @@
                                             <span class="stat-value"><%# HttpUtility.HtmlEncode(Eval("Responsable")) %></span>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="card-footer bg-transparent border-0 text-end mt-3">
+                                    <asp:LinkButton runat="server" 
+                                        CssClass="btn btn-sm btn-light rounded-pill w-100 text-center" 
+                                        OnClick="OnIrComponentesClick"
+                                        CommandArgument='<%# Eval("NormaId") %>'
+                                        ToolTip="Ver estructura completa de la norma">
+                                        <i class="bi bi-diagram-3"></i> Ver estructura completa
+                                    </asp:LinkButton>
                                 </div>
                             </div>
                         </div>

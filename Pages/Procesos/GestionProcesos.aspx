@@ -138,9 +138,12 @@
                             <asp:TemplateField HeaderText="Progreso">
                                 <ItemTemplate>
                                     <div class="progress" style="height: 8px;">
-                                        <div class="progress-bar bg-success" role="progressbar" 
-                                            style="<%# string.Format("width: {0}%", Eval("Progreso")) %>"
-                                            aria-valuenow='<%# Eval("Progreso") %>' aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar bg-success" 
+                                            role="progressbar" 
+                                            style="width:<%# Eval("Progreso") %>%"
+                                            aria-valuenow="<%# Eval("Progreso") %>" 
+                                            aria-valuemin="0" 
+                                            aria-valuemax="100">
                                         </div>
                                     </div>
                                     <small class="text-muted"><%# Eval("Progreso") %>%</small>

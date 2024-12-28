@@ -541,5 +541,20 @@ namespace IsomanagerWeb.Pages
                 MostrarError("Error al navegar a la página de procesos.");
             }
         }
+
+        protected void OnIrComponentesClick(object sender, EventArgs e)
+        {
+            try
+            {
+                var btn = (LinkButton)sender;
+                var normaId = btn.CommandArgument;
+                Response.Redirect($"~/Pages/Normas/ComponentesNorma.aspx?NormaId={normaId}");
+            }
+            catch (Exception ex)
+            {
+                LogError("OnIrComponentesClick", ex);
+                MostrarError("Error al navegar a la estructura de la norma.");
+            }
+        }
     }
 } 

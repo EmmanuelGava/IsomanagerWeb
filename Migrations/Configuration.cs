@@ -87,6 +87,19 @@ namespace IsomanagerWeb.Migrations
                     context.Areas.AddRange(areasPreestablecidas);
                 }
 
+                if (!context.TiposFactores.Any())
+                {
+                    context.TiposFactores.AddOrUpdate(
+                        t => t.Nombre,
+                        new TipoFactor { Nombre = "Económico", Descripcion = "Factores relacionados con la economía y finanzas", Activo = true },
+                        new TipoFactor { Nombre = "Social", Descripcion = "Factores relacionados con la sociedad y cultura", Activo = true },
+                        new TipoFactor { Nombre = "Tecnológico", Descripcion = "Factores relacionados con la tecnología e innovación", Activo = true },
+                        new TipoFactor { Nombre = "Legal", Descripcion = "Factores relacionados con leyes y regulaciones", Activo = true }
+                    );
+
+                    context.SaveChanges();
+                }
+
                 context.SaveChanges();
             }
             catch (Exception ex)

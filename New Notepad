@@ -1,0 +1,164 @@
+ISOMANAGER - DOCUMENTACIÓN DE REFERENCIA
+
+IMPORTANTE : AL CREAR UNA PAGINA , CREAR SU DESIGNER
+
+ESTRUCTURA DEL PROYECTO
+----------------------
+Proyecto: IsomanagerWeb
+Tipo: ASP.NET WebForms
+Framework: .NET Framework 4.8
+Base de datos: SQL Server
+Patrón: N-Capas
+
+ESTÁNDARES Y CONVENCIONES
+------------------------
+UI/UX:
+- Bootstrap 5 para estilos
+ESTILOS DEL PROYECTO ISOMANAGER
+
+1. COLORES PRINCIPALES
+- Fondo principal: #fff (blanco)
+- Color texto principal: #212529 (casi negro)
+- Color oscuro (botones principales): #212529
+- Color hover botones: #000 (negro)
+
+2. NAVEGACIÓN Y TABS
+- Fondo tabs: #fff (blanco)
+- Texto tab inactivo: #6c757d
+- Texto tab activo: #212529
+- Borde inferior: #dee2e6
+- Border-radius: 0.375rem 0.375rem 0 0
+- Hover: 
+  * Color: #212529
+  * Fondo: #f8f9fa
+  * Borde: #e9ecef
+- Tab activo:
+  * Borde: #dee2e6 #dee2e6 #fff
+  * Fondo: #fff
+  * Font-weight: 500
+
+3. BOTONES
+- Botones principales: 
+  * Fondo: #212529
+  * Texto: #fff
+  * Hover: #000
+  * Padding: 0.5rem 1rem
+  * Font-weight: 500
+  * Transición: all 0.2s ease
+
+- Botones secundarios:
+  * Fondo: #f8f9fa
+  * Borde: #dee2e6
+  * Texto: #212529
+  * Hover fondo: #e9ecef
+
+4. TARJETAS (CARDS)
+- Fondo: #fff
+- Sin bordes
+- Sombra suave
+- Hover: translateY(-3px)
+- Border-radius: 0.5rem
+- Header:
+  * Fondo: #fff
+  * Borde inferior: #dee2e6
+  * Padding: 1rem
+
+5. BADGES (ESTADOS)
+- Success: 
+  * Fondo: #d1e7dd
+  * Texto: #0f5132
+- Warning:
+  * Fondo: #fff3cd
+  * Texto: #664d03
+- Danger:
+  * Fondo: #f8d7da
+  * Texto: #842029
+- Info:
+  * Fondo: #cff4fc
+  * Texto: #055160
+
+6. FORMULARIOS
+- Input border: #dee2e6
+- Input focus: sin sombra
+- Labels: peso normal
+- Padding: 0.5rem 0.75rem
+
+7. ICONOS
+- Bootstrap Icons (bi)
+- Font Awesome (fas)
+- Tamaño: 0.875rem - 1rem
+- Color: heredado del contenedor
+
+8. ESPACIADO
+- Margins básicos: 1rem
+- Padding contenedores: 1.5rem
+- Gap entre elementos: 0.5rem
+
+9. TIPOGRAFÍA
+- Tamaño base: 0.875rem
+- Títulos: 1.25rem
+- Font-weight normal: 400
+- Font-weight bold: 500
+
+10. EFECTOS
+- Transiciones: 0.2s ease
+- Hover cards: elevación y sombra
+- Hover botones: oscurecimiento
+- Hover enlaces: subrayado
+
+Componentes:
+- ModalHelper para todos los modales
+- UpdatePanels para actualizaciones parciales
+- WebUserControl para selección de usuarios
+- ASP Validators para validaciones del lado del cliente
+
+FLUJOS PRINCIPALES
+-----------------
+1. Autenticación:
+   Login (Email + Token) -> Dashboard
+   
+2. Gestión ISO:
+   Normas -> Procesos -> Mejoras/Auditorías
+   todos los elementos de la bd forman parte de Documents , para mostrarlos en @GestionArchivos.aspx y poder adjuntarle un archivo externo.
+
+3. Jerarquía de Roles:
+   - Administrador: Acceso total
+   - Supervisor: Gestión de procesos
+   - Usuario: Consultas y reportes
+
+REGLAS Y RESTRICCIONES
+---------------------
+1. Código:
+
+   - Evitar postbacks completos
+   - Usar UpdatePanels para actualizaciones parciales
+   - Mantener consistencia en el diseño
+
+2. Base de Datos:
+   - Usar Entity Framework
+   - Evitar SP, usar LINQ
+   - Manejar transacciones explícitas
+
+3. UI:
+   - Mantener diseño consistente
+   - Usar cards para secciones
+   - Botones primarios para acciones principales
+   - Feedback visual para todas las acciones
+
+ESTRUCTURA DE ARCHIVOS
+---------------------
+/Models: Clases de dominio y contexto
+/Pages: Páginas ASPX y código detrás
+/Controllers: Controles de usuario
+/Helpers: Clases utilitarias
+/Scripts: JavaScript y librerías
+/Content: CSS y recursos estáticos
+
+CONVENCIONES DE NOMBRES
+----------------------
+- Páginas: NombreFuncionalidad.aspx
+- Controles: ucNombreControl
+- Modales: modalNombreModal
+- Botones: btnAccion
+- Labels: lblDescripcion
+- TextBox: txtCampo 

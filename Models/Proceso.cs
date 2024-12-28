@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IsomanagerWeb.Models
 {
+    [Table("Proceso", Schema = "dbo")]
     public class Proceso
     {
         [Key]
@@ -49,16 +50,16 @@ namespace IsomanagerWeb.Models
         public DateTime? FechaFin { get; set; }
 
         // Propiedades de navegación
-        [ForeignKey("NormaId")]
+        [ForeignKey(nameof(NormaId))]
         public virtual Norma Norma { get; set; }
 
-        [ForeignKey("AreaId")]
+        [ForeignKey(nameof(AreaId))]
         public virtual Area Area { get; set; }
 
-        [ForeignKey("ResponsableId")]
+        [ForeignKey(nameof(ResponsableId))]
         public virtual Usuario Responsable { get; set; }
 
-        [ForeignKey("AdministradorId")]
+        [ForeignKey(nameof(AdministradorId))]
         public virtual Usuario Administrador { get; set; }
     }
 } 

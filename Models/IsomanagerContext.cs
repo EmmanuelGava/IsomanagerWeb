@@ -4,6 +4,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations.Schema;
 using IsomanagerWeb.Models;
 
 namespace IsomanagerWeb.Models
@@ -14,7 +15,7 @@ namespace IsomanagerWeb.Models
         {
             // Usar la configuración de migraciones
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<IsomanagerContext, Migrations.Configuration>());
-            
+
             // Habilitar el log de las consultas SQL para depuración
             Database.Log = sql => Debug.WriteLine(sql);
 
@@ -44,6 +45,7 @@ namespace IsomanagerWeb.Models
         public virtual DbSet<Tarea> Tareas { get; set; }
         public virtual DbSet<Mensaje> Mensajes { get; set; }
         public virtual DbSet<Archivo> Archivos { get; set; }
+        public virtual DbSet<AlcanceSistemaGestion> AlcanceSistemaGestion { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -281,6 +283,47 @@ namespace IsomanagerWeb.Models
                 .HasRequired(a => a.Creador)
                 .WithMany(u => u.Archivos)
                 .HasForeignKey(a => a.CreadorId)
+                .WillCascadeOnDelete(false);
+
+            // Configurar Foda
+            modelBuilder.Entity<Foda>()
+                .ToTable("Fodas", "dbo")
+                .HasKey(f => f.FodaId);
+
+            modelBuilder.Entity<Foda>()
+                .HasRequired(f => f.Norma)
+                .WithMany()
+                .HasForeignKey(f => f.NormaId)
+                .WillCascadeOnDelete(false);
+
+            // AlcanceSistemaGestion
+            modelBuilder.Entity<AlcanceSistemaGestion>()
+                .ToTable("AlcanceSistemaGestion", "dbo")
+                .HasKey(a => a.AlcanceId);
+
+            // TipoFactor
+            modelBuilder.Entity<TipoFactor>()
+                .ToTable("TipoFactor")
+                .HasKey(t => t.TipoFactorId);
+
+            modelBuilder.Entity<TipoFactor>()
+                .Property(t => t.Nombre)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<TipoFactor>()
+                .Property(t => t.Descripcion)
+                .HasMaxLength(200);
+
+            // FactoresExternos
+            modelBuilder.Entity<FactoresExternos>()
+                .ToTable("FactoresExternos")
+                .HasKey(f => f.FactorId);
+
+            modelBuilder.Entity<FactoresExternos>()
+                .HasRequired(f => f.TipoFactor)
+                .WithMany()
+                .HasForeignKey(f => f.TipoFactorId)
                 .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);

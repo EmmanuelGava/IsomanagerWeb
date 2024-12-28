@@ -7,18 +7,18 @@ namespace IsomanagerWeb.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
-    public sealed partial class Initial : IMigrationMetadata
+    public sealed partial class ajustarAreaAFactores : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ajustarAreaAFactores));
         
         string IMigrationMetadata.Id
         {
-            get { return "202412272210577_Initial"; }
+            get { return "202412282243187_ajustarAreaAFactores"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return null; }
+            get { return Resources.GetString("Source"); }
         }
         
         string IMigrationMetadata.Target

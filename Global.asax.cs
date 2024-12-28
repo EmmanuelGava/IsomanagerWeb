@@ -15,10 +15,28 @@ namespace IsomanagerWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            Database.SetInitializer(new CreateDatabaseIfNotExists<IsomanagerContext>());
-            using (var context = new IsomanagerContext())
+            try
             {
-                context.Database.Initialize(force: false);
+                // Habilitar migraciones automáticas
+                Database.SetInitializer(new MigrateDatabaseToLatestVersion<IsomanagerContext, Migrations.Configuration>());
+
+                // Inicializar la base de datos
+                using (var context = new IsomanagerContext())
+                {
+                    context.Database.Initialize(force: true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"=== ERROR EN APPLICATION_START ===");
+                Debug.WriteLine($"Mensaje: {ex.Message}");
+                Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                {
+                    Debug.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Debug.WriteLine($"Inner Stack Trace: {ex.InnerException.StackTrace}");
+                }
+                throw;
             }
         }
 
@@ -26,33 +44,21 @@ namespace IsomanagerWeb
         {
             Exception ex = Server.GetLastError();
             Debug.WriteLine($"=== ERROR GLOBAL ===");
-            Debug.WriteLine($"Tipo de error: {ex.GetType().Name}");
-            Debug.WriteLine($"Mensaje: {ex.Message}");
-            Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+            Debug.WriteLine($"*Tipo de error: {ex.GetType()}");
+            Debug.WriteLine($"*Mensaje: {ex.Message}");
+            Debug.WriteLine($"*Stack Trace: {ex.StackTrace}");
 
             if (ex.InnerException != null)
             {
-                Debug.WriteLine($"Inner Exception: {ex.InnerException.Message}");
-                Debug.WriteLine($"Inner Stack Trace: {ex.InnerException.StackTrace}");
+                Debug.WriteLine($"*Inner Exception: {ex.InnerException.Message}");
+                Debug.WriteLine($"*Inner Stack Trace: {ex.InnerException.StackTrace}");
             }
 
             // Si es un error de sesión, redirigir al login
             if (ex is HttpException && ex.Message.Contains("estado de sesión no está disponible"))
             {
-                Server.ClearError();
-                Response.Redirect("~/Login.aspx", true);
-                return;
+                Response.Redirect("~/Login.aspx");
             }
-
-            // Para otros errores, usar la página de error
-            string errorUrl = "~/Pages/Error.aspx";
-            if (HttpContext.Current != null && HttpContext.Current.Request.IsLocal)
-            {
-                errorUrl += $"?message={HttpUtility.UrlEncode(ex.Message)}";
-            }
-
-            Server.ClearError();
-            Response.Redirect(errorUrl, true);
         }
 
         protected void Session_Start(object sender, EventArgs e)

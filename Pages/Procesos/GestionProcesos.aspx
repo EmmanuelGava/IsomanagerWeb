@@ -5,6 +5,9 @@
 <%@ Register Src="~/Controls/ucDepartamentoSelector.ascx" TagPrefix="uc1" TagName="ucDepartamentoSelector" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <!-- Referencia al archivo CSS de procesos -->
+    <link href="../../Content/css/procesos.css" rel="stylesheet" type="text/css" />
+
     <div class="container-fluid">
         <!-- Título de la página -->
         <h2 class="mb-4">
@@ -22,10 +25,10 @@
                                 <h3 class="mb-0"><asp:Literal ID="litEvaluaciones" runat="server">0</asp:Literal></h3>
                             </div>
                             <div class="icon-shape bg-light rounded-circle p-3">
-                                <i class="bi bi-clipboard-check fs-4 text-primary"></i>
+                                <i class="bi bi-clipboard-check fs-4 text-success"></i>
                             </div>
                         </div>
-                        <asp:LinkButton ID="btnIrEvaluaciones" runat="server" CssClass="btn btn-sm btn-light mt-3 w-100"
+                        <asp:LinkButton ID="btnIrEvaluaciones" runat="server" CssClass="btn btn-sm mt-3 w-100"
                             OnClick="btnIrEvaluaciones_Click">
                             Ver Evaluaciones <i class="bi bi-arrow-right"></i>
                         </asp:LinkButton>
@@ -44,7 +47,7 @@
                                 <i class="bi bi-arrow-repeat fs-4 text-warning"></i>
                             </div>
                         </div>
-                        <asp:LinkButton ID="btnIrCambios" runat="server" CssClass="btn btn-sm btn-light mt-3 w-100"
+                        <asp:LinkButton ID="btnIrCambios" runat="server" CssClass="btn btn-sm mt-3 w-100"
                             OnClick="btnIrCambios_Click">
                             Ver Cambios <i class="bi bi-arrow-right"></i>
                         </asp:LinkButton>
@@ -60,10 +63,10 @@
                                 <h3 class="mb-0"><asp:Literal ID="litMejoras" runat="server">0</asp:Literal></h3>
                             </div>
                             <div class="icon-shape bg-light rounded-circle p-3">
-                                <i class="bi bi-graph-up-arrow fs-4 text-success"></i>
+                                <i class="bi bi-graph-up-arrow fs-4 text-primary"></i>
                             </div>
                         </div>
-                        <asp:LinkButton ID="btnIrMejoras" runat="server" CssClass="btn btn-sm btn-light mt-3 w-100"
+                        <asp:LinkButton ID="btnIrMejoras" runat="server" CssClass="btn btn-sm mt-3 w-100"
                             OnClick="btnIrMejoras_Click">
                             Ver Mejoras <i class="bi bi-arrow-right"></i>
                         </asp:LinkButton>
@@ -82,7 +85,7 @@
                                 <i class="bi bi-shield-check fs-4 text-info"></i>
                             </div>
                         </div>
-                        <asp:LinkButton ID="btnIrAuditorias" runat="server" CssClass="btn btn-sm btn-light mt-3 w-100"
+                        <asp:LinkButton ID="btnIrAuditorias" runat="server" CssClass="btn btn-sm mt-3 w-100"
                             OnClick="btnIrAuditorias_Click">
                             Ver Auditorías <i class="bi bi-arrow-right"></i>
                         </asp:LinkButton>

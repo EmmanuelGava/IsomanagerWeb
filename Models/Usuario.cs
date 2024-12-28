@@ -19,6 +19,7 @@ namespace IsomanagerWeb.Models
             Cambios = new HashSet<CambiosProceso>();
             Documentos = new HashSet<Documentos>();
             Evaluaciones = new HashSet<EvaluacionProcesos>();
+            Archivos = new HashSet<Archivo>();
         }
 
         [Key]
@@ -66,5 +67,7 @@ namespace IsomanagerWeb.Models
         public virtual ICollection<CambiosProceso> Cambios { get; set; }
         public virtual ICollection<Documentos> Documentos { get; set; }
         public virtual ICollection<EvaluacionProcesos> Evaluaciones { get; set; }
+        public virtual ICollection<MejoraProceso> Mejoras { get; set; }
+        public virtual ICollection<Archivo> Archivos { get; set; }
     }
 } 

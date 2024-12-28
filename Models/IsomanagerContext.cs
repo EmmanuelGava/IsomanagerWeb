@@ -43,6 +43,7 @@ namespace IsomanagerWeb.Models
         public virtual DbSet<Calificacion> Calificaciones { get; set; }
         public virtual DbSet<Tarea> Tareas { get; set; }
         public virtual DbSet<Mensaje> Mensajes { get; set; }
+        public virtual DbSet<Archivo> Archivos { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -123,15 +124,21 @@ namespace IsomanagerWeb.Models
                 .HasKey(m => m.MejoraId);
 
             modelBuilder.Entity<MejoraProceso>()
-                .HasRequired(m => m.Responsable)
-                .WithMany(u => u.MejorasResponsable)
-                .HasForeignKey(m => m.ResponsableId)
+                .HasRequired(m => m.Proceso)
+                .WithMany()
+                .HasForeignKey(m => m.ProcesoId)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<MejoraProceso>()
-                .HasRequired(m => m.CreadoPor)
-                .WithMany(u => u.MejorasCreadas)
-                .HasForeignKey(m => m.CreadoPorId)
+                .HasRequired(m => m.Creador)
+                .WithMany()
+                .HasForeignKey(m => m.CreadorId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<MejoraProceso>()
+                .HasRequired(m => m.Asignado)
+                .WithMany()
+                .HasForeignKey(m => m.AsignadoId)
                 .WillCascadeOnDelete(false);
 
             // AuditoriasInternaProceso
@@ -140,9 +147,21 @@ namespace IsomanagerWeb.Models
                 .HasKey(a => a.AuditoriaInternaProcesoId);
 
             modelBuilder.Entity<AuditoriasInternaProceso>()
-                .HasRequired(a => a.Usuario)
-                .WithMany(u => u.Auditorias)
-                .HasForeignKey(a => a.UsuarioId)
+                .HasRequired(a => a.Proceso)
+                .WithMany()
+                .HasForeignKey(a => a.ProcesoId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<AuditoriasInternaProceso>()
+                .HasRequired(a => a.Creador)
+                .WithMany()
+                .HasForeignKey(a => a.CreadorId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<AuditoriasInternaProceso>()
+                .HasRequired(a => a.Asignado)
+                .WithMany()
+                .HasForeignKey(a => a.AsignadoId)
                 .WillCascadeOnDelete(false);
 
             // CambiosProceso
@@ -151,9 +170,21 @@ namespace IsomanagerWeb.Models
                 .HasKey(c => c.CambioId);
 
             modelBuilder.Entity<CambiosProceso>()
-                .HasRequired(c => c.Usuario)
-                .WithMany(u => u.Cambios)
-                .HasForeignKey(c => c.UsuarioId)
+                .HasRequired(c => c.Proceso)
+                .WithMany()
+                .HasForeignKey(c => c.ProcesoId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<CambiosProceso>()
+                .HasRequired(c => c.Creador)
+                .WithMany()
+                .HasForeignKey(c => c.CreadorId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<CambiosProceso>()
+                .HasRequired(c => c.Asignado)
+                .WithMany()
+                .HasForeignKey(c => c.AsignadoId)
                 .WillCascadeOnDelete(false);
 
             // Documentos
@@ -173,9 +204,21 @@ namespace IsomanagerWeb.Models
                 .HasKey(e => e.EvaluacionId);
 
             modelBuilder.Entity<EvaluacionProcesos>()
-                .HasRequired(e => e.Evaluador)
-                .WithMany(u => u.Evaluaciones)
-                .HasForeignKey(e => e.EvaluadorId)
+                .HasRequired(e => e.Proceso)
+                .WithMany()
+                .HasForeignKey(e => e.ProcesoId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<EvaluacionProcesos>()
+                .HasRequired(e => e.Creador)
+                .WithMany()
+                .HasForeignKey(e => e.CreadorId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<EvaluacionProcesos>()
+                .HasRequired(e => e.Asignado)
+                .WithMany()
+                .HasForeignKey(e => e.AsignadoId)
                 .WillCascadeOnDelete(false);
 
             // Calificacion
@@ -227,6 +270,17 @@ namespace IsomanagerWeb.Models
                 .HasRequired(m => m.Destinatario)
                 .WithMany()
                 .HasForeignKey(m => m.DestinatarioId)
+                .WillCascadeOnDelete(false);
+
+            // Archivo
+            modelBuilder.Entity<Archivo>()
+                .ToTable("Archivo", "dbo")
+                .HasKey(a => a.ArchivoId);
+
+            modelBuilder.Entity<Archivo>()
+                .HasRequired(a => a.Creador)
+                .WithMany(u => u.Archivos)
+                .HasForeignKey(a => a.CreadorId)
                 .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);

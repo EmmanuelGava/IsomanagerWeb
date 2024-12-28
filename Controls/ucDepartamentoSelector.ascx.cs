@@ -27,10 +27,27 @@ namespace Isomanager.Controls
             }
             set
             {
-                if (value.HasValue)
-                    ddlDepartamento.SelectedValue = value.ToString();
-                else
+                try
+                {
+                    ddlDepartamento.ClearSelection();
+                    if (value.HasValue)
+                    {
+                        var item = ddlDepartamento.Items.FindByValue(value.ToString());
+                        if (item != null)
+                            ddlDepartamento.SelectedValue = value.ToString();
+                        else
+                            ddlDepartamento.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        ddlDepartamento.SelectedIndex = 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error en SelectedDepartamentoId setter: {ex.Message}");
                     ddlDepartamento.SelectedIndex = 0;
+                }
             }
         }
 
@@ -55,8 +72,6 @@ namespace Isomanager.Controls
             {
                 using (var context = new IsomanagerContext())
                 {
-                    // Mantener solo la primera opción (Seleccione un área) y la última (Crear Nueva Área)
-                    var ultimaOpcion = ddlDepartamento.Items[ddlDepartamento.Items.Count - 1];
                     ddlDepartamento.Items.Clear();
                     ddlDepartamento.Items.Add(new ListItem("Seleccione un área", ""));
 
@@ -72,14 +87,18 @@ namespace Isomanager.Controls
                         ddlDepartamento.Items.Add(new ListItem(area.Nombre, area.AreaId.ToString()));
                     }
 
-                    // Agregar la opción de crear nueva área
-                    ddlDepartamento.Items.Add(ultimaOpcion);
+                    // Agregar opción de nueva área
+                    ddlDepartamento.Items.Add(new ListItem("[Crear Nueva Área]", "nuevo"));
+                    
+                    // Asegurar que solo el primer elemento esté seleccionado
+                    ddlDepartamento.SelectedIndex = 0;
                 }
             }
             catch (Exception ex)
             {
                 lblErrorModal.Text = "Error al cargar las áreas: " + ex.Message;
                 lblErrorModal.Visible = true;
+                System.Diagnostics.Debug.WriteLine($"Error en CargarAreas: {ex.Message}");
             }
         }
 

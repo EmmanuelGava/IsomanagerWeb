@@ -1,31 +1,59 @@
 using System;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using IsomanagerWeb.Models;
 using System.Linq;
-using System.Diagnostics;
+using System.Web.UI;
+using IsomanagerWeb.Models;
 
 namespace IsomanagerWeb.Controls
 {
     public partial class ucUsuarioSelector : System.Web.UI.UserControl
     {
-        public bool Required { get; set; }
-        public string ValidationGroup { get; set; }
+        public bool Required
+        {
+            get { return rfvUsuarios.Enabled; }
+            set { rfvUsuarios.Enabled = value; }
+        }
+
+        public string ValidationGroup
+        {
+            get { return rfvUsuarios.ValidationGroup; }
+            set 
+            { 
+                rfvUsuarios.ValidationGroup = value;
+                ddlUsuarios.ValidationGroup = value;
+            }
+        }
 
         public int? SelectedUsuarioId
         {
             get
             {
-                if (int.TryParse(ddlUsuario.SelectedValue, out int usuarioId) && usuarioId > 0)
-                    return usuarioId;
-                return null;
+                if (string.IsNullOrEmpty(ddlUsuarios.SelectedValue))
+                    return null;
+                return Convert.ToInt32(ddlUsuarios.SelectedValue);
             }
             set
             {
-                if (value.HasValue)
-                    ddlUsuario.SelectedValue = value.ToString();
-                else
-                    ddlUsuario.SelectedIndex = 0;
+                try
+                {
+                    ddlUsuarios.ClearSelection();
+                    if (value.HasValue)
+                    {
+                        var item = ddlUsuarios.Items.FindByValue(value.ToString());
+                        if (item != null)
+                            ddlUsuarios.SelectedValue = value.ToString();
+                        else
+                            ddlUsuarios.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        ddlUsuarios.SelectedIndex = 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error en SelectedUsuarioId setter: {ex.Message}");
+                    ddlUsuarios.SelectedIndex = 0;
+                }
             }
         }
 
@@ -34,13 +62,6 @@ namespace IsomanagerWeb.Controls
             if (!IsPostBack)
             {
                 CargarUsuarios();
-
-                // Configurar el validador si es requerido
-                if (Required)
-                {
-                    rfvUsuario.Enabled = true;
-                    rfvUsuario.ValidationGroup = ValidationGroup;
-                }
             }
         }
 
@@ -48,37 +69,63 @@ namespace IsomanagerWeb.Controls
         {
             try
             {
+                if (ddlUsuarios == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("ERROR: ddlUsuarios es null");
+                    return;
+                }
+
+                ddlUsuarios.Items.Clear();
+                ddlUsuarios.Items.Add(new System.Web.UI.WebControls.ListItem("-- Seleccione un usuario --", ""));
+
                 using (var context = new IsomanagerContext())
                 {
                     var usuarios = context.Usuarios
                         .Where(u => u.Estado == "Activo")
+                        .OrderBy(u => u.Nombre)
                         .Select(u => new
                         {
                             u.UsuarioId,
-                            u.Nombre,
-                            u.Email
-                        })
-                        .AsEnumerable()
-                        .Select(u => new
-                        {
-                            u.UsuarioId,
-                            NombreCompleto = $"{u.Nombre} ({u.Email})"
+                            u.Nombre
                         })
                         .ToList();
 
-                    ddlUsuario.DataSource = usuarios;
-                    ddlUsuario.DataTextField = "NombreCompleto";
-                    ddlUsuario.DataValueField = "UsuarioId";
-                    ddlUsuario.DataBind();
+                    foreach (var usuario in usuarios)
+                    {
+                        if (usuario != null && !string.IsNullOrEmpty(usuario.Nombre))
+                        {
+                            ddlUsuarios.Items.Add(new System.Web.UI.WebControls.ListItem(
+                                usuario.Nombre,
+                                usuario.UsuarioId.ToString()
+                            ));
+                        }
+                    }
+                }
 
-                    // Agregar item por defecto
-                    ddlUsuario.Items.Insert(0, new ListItem("-- Seleccione un usuario --", ""));
+                // Asegurar que solo el primer elemento esté seleccionado
+                ddlUsuarios.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"ERROR en CargarUsuarios: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+            }
+        }
+
+        protected override void OnInit(EventArgs e)
+        {
+            try
+            {
+                base.OnInit(e);
+                if (!IsPostBack)
+                {
+                    CargarUsuarios();
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error al cargar los usuarios: {ex.Message}");
-                throw new Exception("Error al cargar los usuarios: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine($"ERROR en OnInit: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
             }
         }
     }

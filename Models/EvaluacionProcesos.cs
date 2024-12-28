@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IsomanagerWeb.Models
 {
-    [System.ComponentModel.DataAnnotations.Schema.Table("EvaluacionProcesos", Schema = "dbo")]
+    [Table("EvaluacionProcesos", Schema = "dbo")]
     public class EvaluacionProcesos
     {
         [Key]
@@ -33,16 +33,31 @@ namespace IsomanagerWeb.Models
         [Required]
         public bool Activo { get; set; }
 
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("Proceso")]
+        [ForeignKey("Proceso")]
         public int ProcesoId { get; set; }
 
-        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("Evaluador")]
-        public int EvaluadorId { get; set; }
+        [Required]
+        [ForeignKey("Creador")]
+        public int CreadorId { get; set; }
 
-        [ForeignKey("ProcesoId")]
+        [Required]
+        [ForeignKey("Asignado")]
+        public int AsignadoId { get; set; }
+
         public virtual Proceso Proceso { get; set; }
+        public virtual Usuario Creador { get; set; }
+        public virtual Usuario Asignado { get; set; }
 
-        [ForeignKey("EvaluadorId")]
-        public virtual Usuario Evaluador { get; set; }
+        [Required]
+        [StringLength(20)]
+        public string Estado { get; set; }
+
+        [Required]
+        [StringLength(500)]
+        public string Comentarios { get; set; }
+
+        [Required]
+        [StringLength(500)]
+        public string Recomendaciones { get; set; }
     }
 } 

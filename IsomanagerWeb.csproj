@@ -138,6 +138,7 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\css\perfil-usuario.css" />
+    <Content Include="Content\css\procesos.css" />
     <Content Include="Content\normas.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\usuarios.css" />
@@ -151,7 +152,11 @@
     <Content Include="Pages\Documentos\GestionArchivos.aspx" />
     <Content Include="Pages\Error.aspx" />
     <Content Include="Pages\Normas\GestionNormas.aspx" />
+    <Content Include="Pages\Procesos\Auditorias\GestionAuditorias.aspx" />
+    <Content Include="Pages\Procesos\Cambios\GestionCambios.aspx" />
+    <Content Include="Pages\Procesos\Evaluaciones\GestionEvaluaciones.aspx" />
     <Content Include="Pages\Procesos\GestionProcesos.aspx" />
+    <Content Include="Pages\Procesos\Mejoras\GestionMejoras.aspx" />
     <Content Include="Pages\Usuarios\GestionUsuarios.aspx" />
     <Content Include="Pages\Usuarios\PerfilUsuario.aspx" />
     <Content Include="RecuperarPassword.aspx" />
@@ -162,6 +167,28 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap.esm.min.js.map" />
+    <Content Include="Scripts\bootstrap.esm.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Content\bootstrap.rtl.min.css.map" />
+    <Content Include="Content\bootstrap.rtl.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-utilities.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.rtl.css.map" />
+    <Content Include="Content\bootstrap-utilities.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.css.map" />
+    <Content Include="Content\bootstrap-reboot.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.rtl.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-grid.rtl.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -244,16 +271,13 @@
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202412270335276_nueva.cs" />
-    <Compile Include="Migrations\202412270335276_nueva.Designer.cs">
-      <DependentUpon>202412270335276_nueva.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202412270546323_RemoveContextoFromProceso.cs" />
-    <Compile Include="Migrations\202412270546323_RemoveContextoFromProceso.Designer.cs">
-      <DependentUpon>202412270546323_RemoveContextoFromProceso.cs</DependentUpon>
+    <Compile Include="Migrations\202412272210577_Initial.cs" />
+    <Compile Include="Migrations\202412272210577_Initial.Designer.cs">
+      <DependentUpon>202412272210577_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AlcanceSistemaGestion.cs" />
+    <Compile Include="Models\Archivo.cs" />
     <Compile Include="Models\Area.cs" />
     <Compile Include="Models\AuditoriasInternaProceso.cs" />
     <Compile Include="Models\Calificacion.cs" />
@@ -312,12 +336,39 @@
     <Compile Include="Pages\Normas\GestionNormas.aspx.designer.cs">
       <DependentUpon>GestionNormas.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Procesos\Auditorias\GestionAuditorias.aspx.cs">
+      <DependentUpon>GestionAuditorias.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Procesos\Auditorias\GestionAuditorias.aspx.designer.cs">
+      <DependentUpon>GestionAuditorias.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Procesos\Cambios\GestionCambios.aspx.cs">
+      <DependentUpon>GestionCambios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Procesos\Cambios\GestionCambios.aspx.designer.cs">
+      <DependentUpon>GestionCambios.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Procesos\Evaluaciones\GestionEvaluaciones.aspx.cs">
+      <DependentUpon>GestionEvaluaciones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Procesos\Evaluaciones\GestionEvaluaciones.aspx.designer.cs">
+      <DependentUpon>GestionEvaluaciones.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Procesos\GestionProcesos.aspx.cs">
       <DependentUpon>GestionProcesos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\Procesos\GestionProcesos.aspx.designer.cs">
       <DependentUpon>GestionProcesos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Procesos\Mejoras\GestionMejoras.aspx.cs">
+      <DependentUpon>GestionMejoras.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Procesos\Mejoras\GestionMejoras.aspx.designer.cs">
+      <DependentUpon>GestionMejoras.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Usuarios\GestionUsuarios.aspx.cs">
       <DependentUpon>GestionUsuarios.aspx</DependentUpon>
@@ -375,35 +426,9 @@
     <Folder Include="App_Data\" />
     <Folder Include="Pages\Admin\" />
     <Folder Include="Pages\Cuenta\" />
-    <Folder Include="Pages\Procesos\Auditorias\" />
-    <Folder Include="Pages\Procesos\Cambios\" />
-    <Folder Include="Pages\Procesos\Evaluaciones\" />
-    <Folder Include="Pages\Procesos\Mejoras\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.rtl.min.css.map" />
-    <Content Include="Content\bootstrap.rtl.css.map" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-utilities.rtl.min.css.map" />
-    <Content Include="Content\bootstrap-utilities.rtl.css.map" />
-    <Content Include="Content\bootstrap-utilities.min.css.map" />
-    <Content Include="Content\bootstrap-utilities.css.map" />
-    <Content Include="Content\bootstrap-reboot.rtl.min.css.map" />
-    <Content Include="Content\bootstrap-reboot.rtl.css.map" />
-    <Content Include="Content\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\bootstrap-reboot.css.map" />
-    <Content Include="Content\bootstrap-grid.rtl.min.css.map" />
-    <Content Include="Content\bootstrap-grid.rtl.css.map" />
-    <Content Include="Content\bootstrap-grid.min.css.map" />
-    <Content Include="Content\bootstrap-grid.css.map" />
     <None Include="packages.config" />
-    <Content Include="Scripts\bootstrap.min.js.map" />
-    <Content Include="Scripts\bootstrap.js.map" />
-    <Content Include="Scripts\bootstrap.esm.min.js.map" />
-    <Content Include="Scripts\bootstrap.esm.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.1.min.map" />
     <None Include="Web.Debug.config">
@@ -414,11 +439,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202412270335276_nueva.resx">
-      <DependentUpon>202412270335276_nueva.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202412270546323_RemoveContextoFromProceso.resx">
-      <DependentUpon>202412270546323_RemoveContextoFromProceso.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202412272210577_Initial.resx">
+      <DependentUpon>202412272210577_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

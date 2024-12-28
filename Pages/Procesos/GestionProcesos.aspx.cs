@@ -255,13 +255,14 @@ namespace IsomanagerWeb.Pages.Procesos
                     if (proceso != null)
                     {
                         LimpiarModal();
-                        
+
                         hdnProcesoId.Value = proceso.ProcesoId.ToString();
+                        
+                        // Establecer valores directamente
+                        ddlEstado.SelectedValue = proceso.Estado;
                         txtNombre.Text = proceso.Nombre;
                         txtObjetivo.Text = proceso.Objetivo;
                         txtDescripcion.Text = proceso.Descripcion;
-                        ddlEstado.SelectedValue = proceso.Estado;
-                        
                         ucArea.SelectedDepartamentoId = proceso.AreaId;
                         ucResponsable.SelectedUsuarioId = proceso.ResponsableId;
 
@@ -281,6 +282,8 @@ namespace IsomanagerWeb.Pages.Procesos
             catch (Exception ex)
             {
                 MostrarError($"Error al cargar el proceso para editar: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error al cargar el proceso para editar: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
             }
         }
 
@@ -310,16 +313,25 @@ namespace IsomanagerWeb.Pages.Procesos
 
         private void LimpiarModal()
         {
-            hdnProcesoId.Value = string.Empty;
-            txtNombre.Text = string.Empty;
-            txtObjetivo.Text = string.Empty;
-            txtDescripcion.Text = string.Empty;
-            ddlEstado.SelectedIndex = 0;
-            ucArea.SelectedDepartamentoId = null;
-            ucResponsable.SelectedUsuarioId = null;
-            txtFechaInicio.Text = string.Empty;
-            txtFechaFin.Text = string.Empty;
-            lblErrorModal.Visible = false;
+            try
+            {
+                hdnProcesoId.Value = string.Empty;
+                ddlEstado.SelectedIndex = 0;
+                txtNombre.Text = string.Empty;
+                txtObjetivo.Text = string.Empty;
+                txtDescripcion.Text = string.Empty;
+                ucArea.SelectedDepartamentoId = null;
+                ucResponsable.SelectedUsuarioId = null;
+                txtFechaInicio.Text = string.Empty;
+                txtFechaFin.Text = string.Empty;
+                lblErrorModal.Visible = false;
+                litTituloModal.Text = "Nuevo Proceso";
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error en LimpiarModal: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+            }
         }
 
         private void MostrarError(string mensaje)

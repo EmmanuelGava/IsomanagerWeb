@@ -4,15 +4,42 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IsomanagerWeb.Models
 {
-    [System.ComponentModel.DataAnnotations.Schema.Table("MejoraProceso", Schema = "dbo")]
+    [Table("MejoraProceso", Schema = "dbo")]
     public class MejoraProceso
     {
         [Key]
         public int MejoraId { get; set; }
 
         [Required]
+        [StringLength(100)]
+        public string Titulo { get; set; }
+
+        [Required]
         [StringLength(500)]
         public string Descripcion { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string Estado { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string Prioridad { get; set; }
+
+        [Required]
+        [StringLength(500)]
+        public string Justificacion { get; set; }
+
+        [StringLength(500)]
+        public string ResultadosEsperados { get; set; }
+
+        [Required]
+        [StringLength(500)]
+        public string BeneficiosEsperados { get; set; }
+
+        [Required]
+        [StringLength(500)]
+        public string RecursosNecesarios { get; set; }
 
         [Required]
         public DateTime FechaCreacion { get; set; }
@@ -26,14 +53,16 @@ namespace IsomanagerWeb.Models
         [ForeignKey("Proceso")]
         public int ProcesoId { get; set; }
 
-        [ForeignKey("Responsable")]
-        public int ResponsableId { get; set; }
+        [Required]
+        [ForeignKey("Creador")]
+        public int CreadorId { get; set; }
 
-        [ForeignKey("CreadoPor")]
-        public int CreadoPorId { get; set; }
+        [Required]
+        [ForeignKey("Asignado")]
+        public int AsignadoId { get; set; }
 
         public virtual Proceso Proceso { get; set; }
-        public virtual Usuario Responsable { get; set; }
-        public virtual Usuario CreadoPor { get; set; }
+        public virtual Usuario Creador { get; set; }
+        public virtual Usuario Asignado { get; set; }
     }
 } 

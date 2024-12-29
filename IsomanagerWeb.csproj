@@ -137,6 +137,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\css\datospartida.css" />
     <Content Include="Content\css\perfil-usuario.css" />
     <Content Include="Content\css\procesos.css" />
     <Content Include="Content\normas.css" />

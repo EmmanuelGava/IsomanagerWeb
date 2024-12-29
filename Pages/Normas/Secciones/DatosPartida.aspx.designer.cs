@@ -382,5 +382,65 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnGuardarAlcance;
+
+        /// <summary>
+        /// Control btnNuevaArea.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.LinkButton btnNuevaArea;
+
+        /// <summary>
+        /// Control upAreas.
+        /// </summary>
+        protected global::System.Web.UI.UpdatePanel upAreas;
+
+        /// <summary>
+        /// Control gvAreas.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.GridView gvAreas;
+
+        /// <summary>
+        /// Control litTituloArea.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Literal litTituloArea;
+
+        /// <summary>
+        /// Control upFormArea.
+        /// </summary>
+        protected global::System.Web.UI.UpdatePanel upFormArea;
+
+        /// <summary>
+        /// Control txtNombreArea.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.TextBox txtNombreArea;
+
+        /// <summary>
+        /// Control rfvNombreArea.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNombreArea;
+
+        /// <summary>
+        /// Control txtDescripcionArea.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.TextBox txtDescripcionArea;
+
+        /// <summary>
+        /// Control ddlUbicacion.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.DropDownList ddlUbicacion;
+
+        /// <summary>
+        /// Control rfvUbicacion.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvUbicacion;
+
+        /// <summary>
+        /// Control btnCancelarArea.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Button btnCancelarArea;
+
+        /// <summary>
+        /// Control btnGuardarArea.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Button btnGuardarArea;
     }
 }

@@ -3,9 +3,24 @@
 <div class="card">
     <div class="card-body">
         <div class="mb-3">
-            <asp:ListBox ID="lstAreas" runat="server" CssClass="form-select" SelectionMode="Multiple" Rows="5">
-            </asp:ListBox>
-            <small class="form-text text-muted">Mantenga presionada la tecla Ctrl para seleccionar múltiples áreas</small>
+            <asp:UpdatePanel ID="upAreas" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <asp:ListBox ID="lstAreas" runat="server" 
+                        CssClass="form-select" 
+                        SelectionMode="Multiple" 
+                        Rows="5"
+                        OnSelectedIndexChanged="lstAreas_SelectedIndexChanged"
+                        AutoPostBack="true">
+                    </asp:ListBox>
+                    <small class="form-text text-muted">
+                        <ul class="mb-0 mt-2 ps-3">
+                            <li>Mantenga presionada la tecla Ctrl para seleccionar múltiples áreas</li>
+                            <li>Haga clic en un área seleccionada para deseleccionarla</li>
+                            <li>Mantenga presionada la tecla Shift para seleccionar un rango de áreas</li>
+                        </ul>
+                    </small>
+                </ContentTemplate>
+            </asp:UpdatePanel>
         </div>
         
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -33,6 +48,19 @@
                             <div class="mb-3">
                                 <label class="form-label">Descripción</label>
                                 <asp:TextBox ID="txtDescripcionArea" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Ubicación</label>
+                                <asp:DropDownList ID="ddlUbicacion" runat="server" CssClass="form-select">
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="rfvUbicacion" runat="server"
+                                    ControlToValidate="ddlUbicacion"
+                                    ValidationGroup="NuevaArea"
+                                    CssClass="text-danger"
+                                    Display="Dynamic"
+                                    InitialValue=""
+                                    ErrorMessage="Debe seleccionar una ubicación"></asp:RequiredFieldValidator>
                             </div>
 
                             <div class="d-flex justify-content-end gap-2">

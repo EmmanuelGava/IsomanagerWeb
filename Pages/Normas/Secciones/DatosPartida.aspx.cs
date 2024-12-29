@@ -4,6 +4,7 @@ using System.Linq;
 using IsomanagerWeb.Models;
 using System.Data.Entity;
 using System.Web.UI.WebControls;
+using System.Collections.Generic;
 
 namespace IsomanagerWeb.Pages.Normas.Secciones
 {
@@ -12,6 +13,18 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
         private IsomanagerContext db = new IsomanagerContext();
         private int normaId;
         private bool modoEdicion = false;
+        protected Repeater rptDetalles;
+        protected Repeater rptDetallesPartes;
+        protected GridView gvPartesInteresadas;
+        protected UpdatePanel upPartesInteresadas;
+        protected Literal litTituloParte;
+        protected TextBox txtNombreParte;
+        protected DropDownList ddlTipoParte;
+        protected DropDownList ddlCategoriaParte;
+        protected TextBox txtIntereses;
+        protected DropDownList ddlRelevancia;
+        protected TextBox txtImpacto;
+        protected TextBox txtAccionesParte;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -51,24 +64,36 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
 
         private void CargarFactor(int factorId)
         {
-            var factor = db.FactoresExternos
-                .Include(f => f.TipoFactor)
-                .Include(f => f.Areas)
-                .FirstOrDefault(f => f.FactorId == factorId);
-
-            if (factor != null)
+            try
             {
-                ViewState["FactorId"] = factorId;
-                txtNombreFactor.Text = factor.Nombre;
-                txtDescripcionFactor.Text = factor.Descripcion;
-                ddlTipoFactor.SelectedValue = factor.TipoFactorId.ToString();
-                ddlImpacto.SelectedValue = factor.Impacto.ToString();
-                ddlProbabilidad.SelectedValue = factor.Probabilidad.ToString();
-                txtFechaIdentificacion.Text = factor.FechaIdentificacion.ToString("yyyy-MM-dd");
-                txtAccionesRecomendadas.Text = factor.AccionesRecomendadas;
+                var factor = db.FactoresExternos
+                    .Include(f => f.TipoFactor)
+                    .Include(f => f.Areas)
+                    .FirstOrDefault(f => f.FactorId == factorId);
 
-                // Seleccionar las áreas del factor
-                ucAreas.SetSelectedAreaIds(factor.Areas.Select(a => a.AreaId).ToArray());
+                if (factor != null)
+                {
+                    ViewState["FactorId"] = factorId;
+                    litTituloFactor.Text = "Editar Factor";
+                    txtNombreFactor.Text = factor.Nombre;
+                    txtDescripcionFactor.Text = factor.Descripcion;
+                    ddlTipoFactor.SelectedValue = factor.TipoFactorId.ToString();
+                    ddlImpacto.SelectedValue = factor.Impacto.ToString();
+                    ddlProbabilidad.SelectedValue = factor.Probabilidad.ToString();
+                    txtFechaIdentificacion.Text = factor.FechaIdentificacion.ToString("yyyy-MM-dd");
+                    txtAccionesRecomendadas.Text = factor.AccionesRecomendadas;
+                    ucAreas.SetSelectedAreaIds(factor.Areas.Select(a => a.AreaId).ToArray());
+
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowForm", "showForm();", true);
+                }
+                else
+                {
+                    MostrarError("No se encontró el factor especificado");
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cargar el factor: {ex.Message}");
             }
         }
 
@@ -83,13 +108,13 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
                     db.FactoresExternos.Include(f => f.Areas).FirstOrDefault(f => f.FactorId == factorId.Value) : 
                     new FactoresExternos { NormaId = normaId, Activo = true };
 
-                factor.Nombre = txtNombreFactor.Text;
-                factor.Descripcion = txtDescripcionFactor.Text;
+                factor.Nombre = txtNombreFactor.Text.Trim();
+                factor.Descripcion = txtDescripcionFactor.Text.Trim();
                 factor.TipoFactorId = Convert.ToInt32(ddlTipoFactor.SelectedValue);
                 factor.Impacto = Convert.ToInt32(ddlImpacto.SelectedValue);
                 factor.Probabilidad = Convert.ToInt32(ddlProbabilidad.SelectedValue);
                 factor.FechaIdentificacion = Convert.ToDateTime(txtFechaIdentificacion.Text);
-                factor.AccionesRecomendadas = txtAccionesRecomendadas.Text;
+                factor.AccionesRecomendadas = txtAccionesRecomendadas.Text.Trim();
 
                 // Actualizar áreas seleccionadas
                 factor.Areas.Clear();
@@ -104,14 +129,18 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
                     db.FactoresExternos.Add(factor);
 
                 db.SaveChanges();
-                CargarFactoresExternos();
+
+                // Limpiar y ocultar formulario
                 LimpiarFormularioFactor();
-                MostrarMensaje("Factor guardado correctamente", "success");
                 ScriptManager.RegisterStartupScript(this, GetType(), "HideForm", "hideForm();", true);
+
+                // Recargar grid
+                CargarFactoresExternos();
+                MostrarMensaje("Factor guardado correctamente", "success");
             }
             catch (Exception ex)
             {
-                MostrarMensaje("Error al guardar el factor: " + ex.Message, "danger");
+                MostrarError($"Error al guardar el factor: {ex.Message}");
             }
         }
 
@@ -307,23 +336,28 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
         protected void btnNuevoFactor_Click(object sender, EventArgs e)
         {
             LimpiarFormularioFactor();
-            litTituloFactor.Text = "Nuevo Factor Externo";
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowModal", "showModal();", true);
+            litTituloFactor.Text = "Nuevo Factor";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowForm", "showForm();", true);
         }
 
         protected void gvFactores_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandName == "EditarFactor")
+            try
             {
-                int factorId = Convert.ToInt32(e.CommandArgument);
-                CargarFactor(factorId);
-                litTituloFactor.Text = "Editar Factor Externo";
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowModal", "showModal();", true);
+                if (e.CommandName == "EditarFactor")
+                {
+                    int factorId = Convert.ToInt32(e.CommandArgument);
+                    CargarFactor(factorId);
+                }
+                else if (e.CommandName == "EliminarFactor")
+                {
+                    int factorId = Convert.ToInt32(e.CommandArgument);
+                    EliminarFactor(factorId);
+                }
             }
-            else if (e.CommandName == "EliminarFactor")
+            catch (Exception ex)
             {
-                int factorId = Convert.ToInt32(e.CommandArgument);
-                EliminarFactor(factorId);
+                MostrarError($"Error al procesar la acción: {ex.Message}");
             }
         }
 
@@ -348,15 +382,28 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
 
         private void CargarFactoresExternos()
         {
-            var factores = db.FactoresExternos
-                .Include(f => f.TipoFactor)
-                .Where(f => f.NormaId == normaId)
-                .OrderBy(f => f.TipoFactor.Categoria)
-                .ThenBy(f => f.Nombre)
-                .ToList();
+            try
+            {
+                var factores = db.FactoresExternos
+                    .Include(f => f.TipoFactor)
+                    .Include(f => f.Areas)
+                    .Where(f => f.NormaId == normaId)
+                    .OrderBy(f => f.TipoFactor.Categoria)
+                    .ThenBy(f => f.Nombre)
+                    .ToList();
 
-            gvFactores.DataSource = factores;
-            gvFactores.DataBind();
+                gvFactores.DataSource = factores;
+                gvFactores.DataBind();
+                upFactores.Update();
+
+                // Asignar la misma fuente de datos al Repeater
+                rptDetalles.DataSource = factores;
+                rptDetalles.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cargar los factores: {ex.Message}");
+            }
         }
 
         protected string GetCategoriaNombre(object categoria)
@@ -413,6 +460,28 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
                 case 2: return baseClass + "bg-danger";
                 default: return baseClass + "bg-secondary";
             }
+        }
+
+        protected string GetProbabilidadNombre(object probabilidad)
+        {
+            if (probabilidad == null) return string.Empty;
+            switch (Convert.ToInt32(probabilidad))
+            {
+                case 0: return "Baja";
+                case 1: return "Media";
+                case 2: return "Alta";
+                default: return string.Empty;
+            }
+        }
+
+        protected string GetAreasAfectadas(object areas)
+        {
+            if (areas == null) return string.Empty;
+            var areasList = areas as IEnumerable<Area>;
+            if (areasList == null) return string.Empty;
+
+            return string.Join("", areasList.Select(a => 
+                $"<span class='badge bg-secondary me-1'>{a.Nombre}</span>"));
         }
         #endregion
 
@@ -551,5 +620,417 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
                 System.Diagnostics.Debug.WriteLine($"Error completo: {ex.ToString()}");
             }
         }
+
+        protected void btnNuevaArea_Click(object sender, EventArgs e)
+        {
+            litTituloArea.Text = "Nueva Área";
+            LimpiarFormularioArea();
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowForm", "showFormArea();", true);
+        }
+
+        protected void btnCancelarArea_Click(object sender, EventArgs e)
+        {
+            LimpiarFormularioArea();
+            ScriptManager.RegisterStartupScript(this, GetType(), "HideForm", "hideFormArea();", true);
+        }
+
+        protected void btnGuardarArea_Click(object sender, EventArgs e)
+        {
+            if (!Page.IsValid) return;
+
+            try
+            {
+                int ubicacionId;
+                if (!int.TryParse(ddlUbicacion.SelectedValue, out ubicacionId))
+                {
+                    throw new Exception("Debe seleccionar una ubicación válida");
+                }
+
+                int? areaId = ViewState["AreaId"] as int?;
+                var area = areaId.HasValue ? 
+                    db.Areas.Find(areaId.Value) : 
+                    new Area { 
+                        Activo = true,
+                        FechaCreacion = DateTime.Now
+                    };
+
+                area.Nombre = txtNombreArea.Text.Trim();
+                area.Descripcion = txtDescripcionArea.Text.Trim();
+                area.UbicacionId = ubicacionId;
+                area.UltimaModificacion = DateTime.Now;
+
+                if (!areaId.HasValue)
+                    db.Areas.Add(area);
+
+                db.SaveChanges();
+
+                // Limpiar y ocultar formulario
+                LimpiarFormularioArea();
+                ScriptManager.RegisterStartupScript(this, GetType(), "HideForm", "hideFormArea();", true);
+
+                // Recargar grid
+                CargarAreas();
+                MostrarMensaje("Área guardada correctamente", "success");
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al guardar el área: {ex.Message}");
+            }
+        }
+
+        protected void gvAreas_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            try
+            {
+                int areaId = Convert.ToInt32(e.CommandArgument);
+
+                switch (e.CommandName)
+                {
+                    case "EditarArea":
+                        CargarArea(areaId);
+                        break;
+
+                    case "CambiarEstado":
+                        CambiarEstadoArea(areaId);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al procesar la acción: {ex.Message}");
+            }
+        }
+
+        private void CargarArea(int areaId)
+        {
+            try 
+            {
+                var area = db.Areas
+                    .Include(a => a.UbicacionGeografica)
+                    .FirstOrDefault(a => a.AreaId == areaId);
+
+                if (area != null)
+                {
+                    ViewState["AreaId"] = areaId;
+                    litTituloArea.Text = "Editar Área";
+                    txtNombreArea.Text = area.Nombre;
+                    txtDescripcionArea.Text = area.Descripcion;
+                    ddlUbicacion.SelectedValue = area.UbicacionId.ToString();
+
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowForm", "showFormArea();", true);
+                }
+                else 
+                {
+                    MostrarError("No se encontró el área especificada");
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cargar el área: {ex.Message}");
+            }
+        }
+
+        private void CambiarEstadoArea(int areaId)
+        {
+            var area = db.Areas.Find(areaId);
+            if (area != null)
+            {
+                area.Activo = !area.Activo;
+                area.UltimaModificacion = DateTime.Now;
+                db.SaveChanges();
+                CargarAreas();
+            }
+        }
+
+        private void LimpiarFormularioArea()
+        {
+            txtNombreArea.Text = string.Empty;
+            txtDescripcionArea.Text = string.Empty;
+            ddlUbicacion.SelectedIndex = 0;
+            ViewState["AreaId"] = null;
+        }
+
+        private void CargarAreas()
+        {
+            try
+            {
+                var areas = db.Areas
+                    .Include(a => a.UbicacionGeografica)
+                    .OrderBy(a => a.Nombre)
+                    .ToList();
+
+                gvAreas.DataSource = areas;
+                gvAreas.DataBind();
+
+                upAreas.Update();
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cargar las áreas: {ex.Message}");
+            }
+        }
+
+        private void MostrarError(string mensaje)
+        {
+            pnlMensaje.Visible = true;
+            litMensaje.Text = $"<i class='bi bi-exclamation-triangle me-2'></i>{mensaje}";
+            pnlMensaje.CssClass = "alert alert-danger";
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (!IsPostBack)
+            {
+                CargarUbicaciones();
+                CargarAreas();
+            }
+        }
+
+        private void CargarUbicaciones()
+        {
+            try
+            {
+                var ubicaciones = db.UbicacionesGeograficas
+                    .Where(u => u.Activo)
+                    .OrderBy(u => u.Nombre)
+                    .ToList();
+
+                ddlUbicacion.DataSource = ubicaciones;
+                ddlUbicacion.DataTextField = "Nombre";
+                ddlUbicacion.DataValueField = "UbicacionId";
+                ddlUbicacion.DataBind();
+
+                ddlUbicacion.Items.Insert(0, new ListItem("Seleccione...", ""));
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cargar las ubicaciones: {ex.Message}");
+            }
+        }
+
+        #region Partes Interesadas
+        protected void btnNuevaParte_Click(object sender, EventArgs e)
+        {
+            LimpiarFormularioParte();
+            litTituloParte.Text = "Nueva Parte Interesada";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowForm", "showFormParte();", true);
+        }
+
+        protected void gvPartesInteresadas_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            try
+            {
+                if (e.CommandName == "EditarParte")
+                {
+                    int parteId = Convert.ToInt32(e.CommandArgument);
+                    CargarParte(parteId);
+                }
+                else if (e.CommandName == "EliminarParte")
+                {
+                    int parteId = Convert.ToInt32(e.CommandArgument);
+                    EliminarParte(parteId);
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al procesar la acción: {ex.Message}");
+            }
+        }
+
+        private void CargarParte(int parteId)
+        {
+            try
+            {
+                var parte = db.PartesInteresadas.Find(parteId);
+                if (parte != null)
+                {
+                    ViewState["ParteID"] = parteId;
+                    litTituloParte.Text = "Editar Parte Interesada";
+                    txtNombreParte.Text = parte.Nombre;
+                    ddlTipoParte.SelectedValue = parte.Tipo;
+                    ddlCategoriaParte.SelectedValue = parte.Categoria;
+                    txtIntereses.Text = parte.Intereses;
+                    ddlRelevancia.SelectedValue = parte.Relevancia.ToString();
+                    txtImpacto.Text = parte.Impacto;
+                    txtAccionesParte.Text = parte.Acciones;
+
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowForm", "showFormParte();", true);
+                }
+                else
+                {
+                    MostrarError("No se encontró la parte interesada especificada");
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cargar la parte interesada: {ex.Message}");
+            }
+        }
+
+        private void EliminarParte(int parteId)
+        {
+            try
+            {
+                var parte = db.PartesInteresadas.Find(parteId);
+                if (parte != null)
+                {
+                    db.PartesInteresadas.Remove(parte);
+                    db.SaveChanges();
+                    CargarPartesInteresadas();
+                    MostrarMensaje("Parte interesada eliminada correctamente", "success");
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al eliminar la parte interesada: {ex.Message}");
+            }
+        }
+
+        protected void btnGuardarParte_Click(object sender, EventArgs e)
+        {
+            if (!Page.IsValid) return;
+
+            try
+            {
+                int? parteId = ViewState["ParteID"] as int?;
+                var parte = parteId.HasValue ? 
+                    db.PartesInteresadas.Find(parteId.Value) : 
+                    new PartesInteresadas { NormaId = normaId };
+
+                parte.Nombre = txtNombreParte.Text.Trim();
+                parte.Tipo = ddlTipoParte.SelectedValue;
+                parte.Categoria = ddlCategoriaParte.SelectedValue;
+                parte.Intereses = txtIntereses.Text.Trim();
+                parte.Relevancia = Convert.ToInt32(ddlRelevancia.SelectedValue);
+                parte.Impacto = txtImpacto.Text.Trim();
+                parte.Acciones = txtAccionesParte.Text.Trim();
+
+                if (!parteId.HasValue)
+                    db.PartesInteresadas.Add(parte);
+
+                db.SaveChanges();
+
+                LimpiarFormularioParte();
+                ScriptManager.RegisterStartupScript(this, GetType(), "HideForm", "hideFormParte();", true);
+                CargarPartesInteresadas();
+                MostrarMensaje("Parte interesada guardada correctamente", "success");
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al guardar la parte interesada: {ex.Message}");
+            }
+        }
+
+        private void LimpiarFormularioParte()
+        {
+            ViewState["ParteID"] = null;
+            txtNombreParte.Text = string.Empty;
+            ddlTipoParte.SelectedIndex = 0;
+            ddlCategoriaParte.SelectedIndex = 0;
+            txtIntereses.Text = string.Empty;
+            ddlRelevancia.SelectedIndex = 0;
+            txtImpacto.Text = string.Empty;
+            txtAccionesParte.Text = string.Empty;
+        }
+
+        private void CargarPartesInteresadas()
+        {
+            try
+            {
+                var partes = db.PartesInteresadas
+                    .Where(p => p.NormaId == normaId)
+                    .OrderBy(p => p.Nombre)
+                    .ToList();
+
+                gvPartesInteresadas.DataSource = partes;
+                gvPartesInteresadas.DataBind();
+                upPartesInteresadas.Update();
+
+                // Asignar la misma fuente de datos al Repeater
+                rptDetallesPartes.DataSource = partes;
+                rptDetallesPartes.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cargar las partes interesadas: {ex.Message}");
+            }
+        }
+
+        protected string GetTipoParteNombre(object tipo)
+        {
+            if (tipo == null) return string.Empty;
+            switch (tipo.ToString())
+            {
+                case "I": return "Interna";
+                case "E": return "Externa";
+                default: return string.Empty;
+            }
+        }
+
+        protected string GetTipoParteBadgeClass(object tipo)
+        {
+            if (tipo == null) return "badge bg-secondary";
+            string baseClass = "badge ";
+            switch (tipo.ToString())
+            {
+                case "I": return baseClass + "bg-primary";
+                case "E": return baseClass + "bg-info";
+                default: return baseClass + "bg-secondary";
+            }
+        }
+
+        protected string GetCategoriaParteNombre(object categoria)
+        {
+            if (categoria == null) return string.Empty;
+            switch (categoria.ToString())
+            {
+                case "L": return "Legal";
+                case "E": return "Económica";
+                case "S": return "Social";
+                case "T": return "Tecnológica";
+                default: return string.Empty;
+            }
+        }
+
+        protected string GetCategoriaParteBadgeClass(object categoria)
+        {
+            if (categoria == null) return "badge bg-secondary";
+            string baseClass = "badge ";
+            switch (categoria.ToString())
+            {
+                case "L": return baseClass + "bg-warning text-dark";
+                case "E": return baseClass + "bg-success";
+                case "S": return baseClass + "bg-info";
+                case "T": return baseClass + "bg-primary";
+                default: return baseClass + "bg-secondary";
+            }
+        }
+
+        protected string GetRelevanciaNombre(object relevancia)
+        {
+            if (relevancia == null) return string.Empty;
+            switch (Convert.ToInt32(relevancia))
+            {
+                case 1: return "Baja";
+                case 2: return "Media";
+                case 3: return "Alta";
+                default: return string.Empty;
+            }
+        }
+
+        protected string GetRelevanciaBadgeClass(object relevancia)
+        {
+            if (relevancia == null) return "badge bg-secondary";
+            string baseClass = "badge ";
+            switch (Convert.ToInt32(relevancia))
+            {
+                case 1: return baseClass + "bg-success";
+                case 2: return baseClass + "bg-warning text-dark";
+                case 3: return baseClass + "bg-danger";
+                default: return baseClass + "bg-secondary";
+            }
+        }
+        #endregion
     }
 } 

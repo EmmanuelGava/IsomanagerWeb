@@ -2,6 +2,9 @@
 <%@ Register Src="~/Controls/ucSeleccionAreas.ascx" TagPrefix="uc" TagName="SeleccionAreas" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <link href="~/Content/css/datospartida.css" rel="stylesheet" type="text/css" runat="server" />
+    <link href="~/Content/css/procesos.css" rel="stylesheet" type="text/css" runat="server" />
+    
     <div class="container-fluid mt-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -52,6 +55,11 @@
                     <li class="nav-item">
                         <a class="nav-link" id="alcance-tab" data-bs-toggle="tab" href="#alcance" role="tab">
                             <i class="bi bi-bullseye me-2"></i>Alcance del Sistema
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="areas-tab" data-bs-toggle="tab" href="#areas" role="tab">
+                            <i class="bi bi-grid me-2"></i>Áreas Afectadas
                         </a>
                     </li>
                 </ul>
@@ -151,38 +159,119 @@
                             <div class="card-body">
                                 <asp:UpdatePanel ID="upFactores" runat="server" UpdateMode="Conditional">
                                     <ContentTemplate>
-                                        <asp:GridView ID="gvFactores" runat="server" CssClass="table table-hover" AutoGenerateColumns="false"
+                                        <asp:GridView ID="gvFactores" runat="server" CssClass="table" AutoGenerateColumns="false"
                                             OnRowCommand="gvFactores_RowCommand" DataKeyNames="FactorId">
+                                            <HeaderStyle CssClass="header-row" />
                                             <Columns>
-                                                <asp:BoundField DataField="Nombre" HeaderText="Factor" />
-                                                <asp:TemplateField HeaderText="Categoría">
+                                                <asp:BoundField HeaderText="FACTOR" DataField="Nombre" ItemStyle-Width="20%" />
+                                                <asp:TemplateField HeaderText="TIPO" ItemStyle-Width="15%">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblCategoria" runat="server" Text='<%# GetCategoriaNombre(Eval("TipoFactor.Categoria")) %>'
-                                                            CssClass='<%# GetCategoriaBadgeClass(Eval("TipoFactor.Categoria")) %>'></asp:Label>
+                                                        <span class='badge <%# GetCategoriaBadgeClass(Eval("TipoFactor.Categoria")) %>'>
+                                                            <%# GetCategoriaNombre(Eval("TipoFactor.Categoria")) %>
+                                                        </span>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:BoundField DataField="Descripcion" HeaderText="Descripción" />
-                                                <asp:TemplateField HeaderText="Impacto">
+                                                <asp:TemplateField HeaderText="IMPACTO" ItemStyle-Width="15%">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblImpacto" runat="server" Text='<%# GetImpactoNombre(Eval("Impacto")) %>'
-                                                            CssClass='<%# GetImpactoBadgeClass(Eval("Impacto")) %>'></asp:Label>
+                                                        <span class='badge <%# GetImpactoBadgeClass(Eval("Impacto")) %>'>
+                                                            <%# GetImpactoNombre(Eval("Impacto")) %>
+                                                        </span>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Acciones">
+                                                <asp:TemplateField HeaderText="PROBABILIDAD" ItemStyle-Width="15%">
                                                     <ItemTemplate>
-                                                        <asp:LinkButton ID="btnEditar" runat="server" CssClass="btn btn-sm btn-primary me-2"
-                                                            CommandName="EditarFactor" CommandArgument='<%# Eval("FactorId") %>'>
-                                                            <i class="bi bi-pencil"></i>
-                                                        </asp:LinkButton>
-                                                        <asp:LinkButton ID="btnEliminar" runat="server" CssClass="btn btn-sm btn-danger"
-                                                            CommandName="EliminarFactor" CommandArgument='<%# Eval("FactorId") %>'
-                                                            OnClientClick="return confirm('¿Está seguro de eliminar este factor?');">
-                                                            <i class="bi bi-trash"></i>
-                                                        </asp:LinkButton>
+                                                        <span class="badge bg-secondary">
+                                                            <%# GetProbabilidadNombre(Eval("Probabilidad")) %>
+                                                        </span>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:BoundField HeaderText="FECHA" DataField="FechaIdentificacion" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="15%" />
+                                                <asp:TemplateField HeaderText="ACCIONES" ItemStyle-Width="15%">
+                                                    <ItemTemplate>
+                                                        <div class="d-flex align-items-center justify-content-end gap-2">
+                                                            <button type="button" class="btn btn-icon" 
+                                                                    onclick='toggleDetails("collapse_factor_<%# Eval("FactorId") %>")'>
+                                                                <i class="bi bi-eye"></i>
+                                                            </button>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-icon" type="button" data-bs-toggle="dropdown">
+                                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                                    <li>
+                                                                        <asp:LinkButton ID="btnEditar" runat="server" CssClass="dropdown-item" 
+                                                                            CommandName="EditarFactor" CommandArgument='<%# Eval("FactorId") %>'>
+                                                                            <i class="bi bi-pencil me-2"></i>Editar
+                                                                        </asp:LinkButton>
+                                                                    </li>
+                                                                    <li><hr class="dropdown-divider"></li>
+                                                                    <li>
+                                                                        <asp:LinkButton ID="btnEliminar" runat="server" CssClass="dropdown-item text-danger"
+                                                                            CommandName="EliminarFactor" CommandArgument='<%# Eval("FactorId") %>'
+                                                                            OnClientClick="return confirm('¿Está seguro de eliminar este factor?');">
+                                                                            <i class="bi bi-trash me-2"></i>Eliminar
+                                                                        </asp:LinkButton>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
+                                            <RowStyle CssClass="align-middle" />
                                         </asp:GridView>
+                                        
+                                        <!-- Detalles colapsables -->
+                                        <asp:Repeater ID="rptDetalles" runat="server">
+                                            <ItemTemplate>
+                                                <div class="collapse" id='<%# "collapse_factor_" + Eval("FactorId") %>'>
+                                                    <div class="detalles-row">
+                                                        <!-- Tabs de navegación -->
+                                                        <ul class="nav nav-tabs mb-3" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" 
+                                                                   data-bs-toggle="tab" 
+                                                                   href='<%# "#descripcion_" + Eval("FactorId") %>' 
+                                                                   role="tab">
+                                                                    <i class="bi bi-file-text me-2"></i>Descripción
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" 
+                                                                   data-bs-toggle="tab" 
+                                                                   href='<%# "#areas_" + Eval("FactorId") %>' 
+                                                                   role="tab">
+                                                                    <i class="bi bi-diagram-2 me-2"></i>Áreas Afectadas
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" 
+                                                                   data-bs-toggle="tab" 
+                                                                   href='<%# "#acciones_" + Eval("FactorId") %>' 
+                                                                   role="tab">
+                                                                    <i class="bi bi-list-check me-2"></i>Acciones
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+
+                                                        <!-- Contenido de los tabs -->
+                                                        <div class="tab-content p-3">
+                                                            <div class="tab-pane fade show active" id='<%# "descripcion_" + Eval("FactorId") %>' role="tabpanel">
+                                                                <p class="text-muted mb-0"><%# Eval("Descripcion") %></p>
+                                                            </div>
+                                                            <div class="tab-pane fade" id='<%# "areas_" + Eval("FactorId") %>' role="tabpanel">
+                                                                <div class="d-flex flex-wrap gap-1">
+                                                                    <%# GetAreasAfectadas(Eval("Areas")) %>
+                                                                </div>
+                                                            </div>
+                                                            <div class="tab-pane fade" id='<%# "acciones_" + Eval("FactorId") %>' role="tabpanel">
+                                                                <p class="text-muted mb-0"><%# Eval("AccionesRecomendadas") %></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
                                     </ContentTemplate>
                                     <Triggers>
                                         <asp:AsyncPostBackTrigger ControlID="btnGuardarFactor" EventName="Click" />
@@ -233,22 +322,27 @@
                                                     ErrorMessage="Debe seleccionar un tipo de factor"></asp:RequiredFieldValidator>
                                             </div>
 
-                                            <div class="mb-3">
-                                                <label class="form-label">Impacto</label>
-                                                <asp:DropDownList ID="ddlImpacto" runat="server" CssClass="form-select">
-                                                    <asp:ListItem Value="0" Text="Bajo"></asp:ListItem>
-                                                    <asp:ListItem Value="1" Text="Medio"></asp:ListItem>
-                                                    <asp:ListItem Value="2" Text="Alto"></asp:ListItem>
-                                                </asp:DropDownList>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label class="form-label">Probabilidad</label>
-                                                <asp:DropDownList ID="ddlProbabilidad" runat="server" CssClass="form-select">
-                                                    <asp:ListItem Value="0" Text="Baja"></asp:ListItem>
-                                                    <asp:ListItem Value="1" Text="Media"></asp:ListItem>
-                                                    <asp:ListItem Value="2" Text="Alta"></asp:ListItem>
-                                                </asp:DropDownList>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Impacto</label>
+                                                        <asp:DropDownList ID="ddlImpacto" runat="server" CssClass="form-select">
+                                                            <asp:ListItem Value="0" Text="Bajo"></asp:ListItem>
+                                                            <asp:ListItem Value="1" Text="Medio"></asp:ListItem>
+                                                            <asp:ListItem Value="2" Text="Alto"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Probabilidad</label>
+                                                        <asp:DropDownList ID="ddlProbabilidad" runat="server" CssClass="form-select">
+                                                            <asp:ListItem Value="0" Text="Baja"></asp:ListItem>
+                                                            <asp:ListItem Value="1" Text="Media"></asp:ListItem>
+                                                            <asp:ListItem Value="2" Text="Alta"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="mb-3">
@@ -279,7 +373,7 @@
                                             <div class="d-flex justify-content-end gap-2">
                                                 <button type="button" class="btn btn-light" onclick="hideForm()">Cancelar</button>
                                                 <asp:Button ID="btnGuardarFactor" runat="server" Text="Guardar" CssClass="btn btn-primary"
-                                                    ValidationGroup="Factor" OnClick="btnGuardarFactor_Click" OnClientClick="if(Page_ClientValidate('Factor')) { hideForm(); return true; } return false;" />
+                                                    ValidationGroup="Factor" OnClick="btnGuardarFactor_Click" />
                                             </div>
                                         </ContentTemplate>
                                         <Triggers>
@@ -305,10 +399,257 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Partes Interesadas -->
                     <div class="tab-pane fade" id="partes-interesadas" role="tabpanel">
-                        <div class="alert alert-info">
-                            <i class="bi bi-info-circle me-2"></i>
-                            Sección en desarrollo
+                        <!-- Grid de Partes Interesadas -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Partes Interesadas</h5>
+                                <div>
+                                    <asp:LinkButton ID="btnNuevaParte" runat="server" CssClass="btn btn-success" OnClick="btnNuevaParte_Click">
+                                        <i class="bi bi-plus-circle me-2"></i>Nueva Parte Interesada
+                                    </asp:LinkButton>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <asp:UpdatePanel ID="upPartesInteresadas" runat="server" UpdateMode="Conditional">
+                                    <ContentTemplate>
+                                        <asp:GridView ID="gvPartesInteresadas" runat="server" CssClass="table" AutoGenerateColumns="false"
+                                            OnRowCommand="gvPartesInteresadas_RowCommand" DataKeyNames="ParteID">
+                                            <HeaderStyle CssClass="header-row" />
+                                            <Columns>
+                                                <asp:BoundField HeaderText="NOMBRE/GRUPO" DataField="Nombre" ItemStyle-Width="20%" />
+                                                <asp:TemplateField HeaderText="TIPO" ItemStyle-Width="15%">
+                                                    <ItemTemplate>
+                                                        <span class='badge <%# GetTipoParteBadgeClass(Eval("Tipo")) %>'>
+                                                            <%# GetTipoParteNombre(Eval("Tipo")) %>
+                                                        </span>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="CATEGORÍA" ItemStyle-Width="15%">
+                                                    <ItemTemplate>
+                                                        <span class='badge <%# GetCategoriaParteBadgeClass(Eval("Categoria")) %>'>
+                                                            <%# GetCategoriaParteNombre(Eval("Categoria")) %>
+                                                        </span>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="RELEVANCIA" ItemStyle-Width="15%">
+                                                    <ItemTemplate>
+                                                        <span class='badge <%# GetRelevanciaBadgeClass(Eval("Relevancia")) %>'>
+                                                            <%# GetRelevanciaNombre(Eval("Relevancia")) %>
+                                                        </span>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="ACCIONES" ItemStyle-Width="15%">
+                                                    <ItemTemplate>
+                                                        <div class="d-flex align-items-center justify-content-end gap-2">
+                                                            <button type="button" class="btn btn-icon" 
+                                                                    onclick='toggleDetails("collapse_parte_<%# Eval("ParteID") %>")'>
+                                                                <i class="bi bi-eye"></i>
+                                                            </button>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-icon" type="button" data-bs-toggle="dropdown">
+                                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                                    <li>
+                                                                        <asp:LinkButton ID="btnEditar" runat="server" CssClass="dropdown-item" 
+                                                                            CommandName="EditarParte" CommandArgument='<%# Eval("ParteID") %>'>
+                                                                            <i class="bi bi-pencil me-2"></i>Editar
+                                                                        </asp:LinkButton>
+                                                                    </li>
+                                                                    <li><hr class="dropdown-divider"></li>
+                                                                    <li>
+                                                                        <asp:LinkButton ID="btnEliminar" runat="server" CssClass="dropdown-item text-danger"
+                                                                            CommandName="EliminarParte" CommandArgument='<%# Eval("ParteID") %>'
+                                                                            OnClientClick="return confirm('¿Está seguro de eliminar esta parte interesada?');">
+                                                                            <i class="bi bi-trash me-2"></i>Eliminar
+                                                                        </asp:LinkButton>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                            <RowStyle CssClass="align-middle" />
+                                        </asp:GridView>
+
+                                        <!-- Detalles colapsables -->
+                                        <asp:Repeater ID="rptDetallesPartes" runat="server">
+                                            <ItemTemplate>
+                                                <div class="collapse" id='<%# "collapse_parte_" + Eval("ParteID") %>'>
+                                                    <div class="detalles-row">
+                                                        <!-- Tabs de navegación -->
+                                                        <ul class="nav nav-tabs mb-3" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" 
+                                                                   data-bs-toggle="tab" 
+                                                                   href='<%# "#intereses_" + Eval("ParteID") %>' 
+                                                                   role="tab">
+                                                                    <i class="bi bi-list-task me-2"></i>Intereses/Expectativas
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" 
+                                                                   data-bs-toggle="tab" 
+                                                                   href='<%# "#impacto_" + Eval("ParteID") %>' 
+                                                                   role="tab">
+                                                                    <i class="bi bi-graph-up me-2"></i>Impacto
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" 
+                                                                   data-bs-toggle="tab" 
+                                                                   href='<%# "#acciones_" + Eval("ParteID") %>' 
+                                                                   role="tab">
+                                                                    <i class="bi bi-check2-square me-2"></i>Acciones
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+
+                                                        <!-- Contenido de los tabs -->
+                                                        <div class="tab-content p-3">
+                                                            <div class="tab-pane fade show active" id='<%# "intereses_" + Eval("ParteID") %>' role="tabpanel">
+                                                                <p class="text-muted mb-0"><%# Eval("Intereses") %></p>
+                                                            </div>
+                                                            <div class="tab-pane fade" id='<%# "impacto_" + Eval("ParteID") %>' role="tabpanel">
+                                                                <p class="text-muted mb-0"><%# Eval("Impacto") %></p>
+                                                            </div>
+                                                            <div class="tab-pane fade" id='<%# "acciones_" + Eval("ParteID") %>' role="tabpanel">
+                                                                <p class="text-muted mb-0"><%# Eval("Acciones") %></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                            </div>
+                        </div>
+
+                        <!-- Formulario Colapsable de Parte Interesada -->
+                        <div class="collapse mb-4" id="formParte">
+                            <div class="card">
+                                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        <asp:Literal ID="litTituloParte" runat="server">Nueva Parte Interesada</asp:Literal>
+                                    </h5>
+                                    <button type="button" class="btn-close" onclick="hideFormParte()"></button>
+                                </div>
+                                <div class="card-body">
+                                    <asp:UpdatePanel ID="upFormParte" runat="server" UpdateMode="Conditional">
+                                        <ContentTemplate>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nombre/Grupo</label>
+                                                <asp:TextBox ID="txtNombreParte" runat="server" CssClass="form-control" MaxLength="100"></asp:TextBox>
+                                                <asp:RequiredFieldValidator ID="rfvNombreParte" runat="server" 
+                                                    ControlToValidate="txtNombreParte"
+                                                    ValidationGroup="Parte" 
+                                                    CssClass="text-danger" 
+                                                    Display="Dynamic"
+                                                    ErrorMessage="El nombre es obligatorio"></asp:RequiredFieldValidator>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Tipo</label>
+                                                        <asp:DropDownList ID="ddlTipoParte" runat="server" CssClass="form-select">
+                                                            <asp:ListItem Value="" Text="Seleccione..."></asp:ListItem>
+                                                            <asp:ListItem Value="I" Text="Interna"></asp:ListItem>
+                                                            <asp:ListItem Value="E" Text="Externa"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <asp:RequiredFieldValidator ID="rfvTipoParte" runat="server" 
+                                                            ControlToValidate="ddlTipoParte"
+                                                            InitialValue=""
+                                                            ValidationGroup="Parte" 
+                                                            CssClass="text-danger" 
+                                                            Display="Dynamic"
+                                                            ErrorMessage="Debe seleccionar un tipo"></asp:RequiredFieldValidator>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Categoría</label>
+                                                        <asp:DropDownList ID="ddlCategoriaParte" runat="server" CssClass="form-select">
+                                                            <asp:ListItem Value="" Text="Seleccione..."></asp:ListItem>
+                                                            <asp:ListItem Value="L" Text="Legal"></asp:ListItem>
+                                                            <asp:ListItem Value="E" Text="Económica"></asp:ListItem>
+                                                            <asp:ListItem Value="S" Text="Social"></asp:ListItem>
+                                                            <asp:ListItem Value="T" Text="Tecnológica"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <asp:RequiredFieldValidator ID="rfvCategoriaParte" runat="server" 
+                                                            ControlToValidate="ddlCategoriaParte"
+                                                            InitialValue=""
+                                                            ValidationGroup="Parte" 
+                                                            CssClass="text-danger" 
+                                                            Display="Dynamic"
+                                                            ErrorMessage="Debe seleccionar una categoría"></asp:RequiredFieldValidator>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Intereses/Expectativas</label>
+                                                <asp:TextBox ID="txtIntereses" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
+                                                <asp:RequiredFieldValidator ID="rfvIntereses" runat="server" 
+                                                    ControlToValidate="txtIntereses"
+                                                    ValidationGroup="Parte" 
+                                                    CssClass="text-danger" 
+                                                    Display="Dynamic"
+                                                    ErrorMessage="Los intereses son obligatorios"></asp:RequiredFieldValidator>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Relevancia</label>
+                                                <asp:DropDownList ID="ddlRelevancia" runat="server" CssClass="form-select">
+                                                    <asp:ListItem Value="" Text="Seleccione..."></asp:ListItem>
+                                                    <asp:ListItem Value="1" Text="Baja"></asp:ListItem>
+                                                    <asp:ListItem Value="2" Text="Media"></asp:ListItem>
+                                                    <asp:ListItem Value="3" Text="Alta"></asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="rfvRelevancia" runat="server" 
+                                                    ControlToValidate="ddlRelevancia"
+                                                    InitialValue=""
+                                                    ValidationGroup="Parte" 
+                                                    CssClass="text-danger" 
+                                                    Display="Dynamic"
+                                                    ErrorMessage="Debe seleccionar la relevancia"></asp:RequiredFieldValidator>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Impacto en la Norma</label>
+                                                <asp:TextBox ID="txtImpacto" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
+                                                <asp:RequiredFieldValidator ID="rfvImpacto" runat="server" 
+                                                    ControlToValidate="txtImpacto"
+                                                    ValidationGroup="Parte" 
+                                                    CssClass="text-danger" 
+                                                    Display="Dynamic"
+                                                    ErrorMessage="El impacto es obligatorio"></asp:RequiredFieldValidator>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Acciones Relacionadas</label>
+                                                <asp:TextBox ID="txtAccionesParte" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
+                                                <asp:RequiredFieldValidator ID="rfvAccionesParte" runat="server" 
+                                                    ControlToValidate="txtAccionesParte"
+                                                    ValidationGroup="Parte" 
+                                                    CssClass="text-danger" 
+                                                    Display="Dynamic"
+                                                    ErrorMessage="Las acciones son obligatorias"></asp:RequiredFieldValidator>
+                                            </div>
+
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <button type="button" class="btn btn-light" onclick="hideFormParte()">Cancelar</button>
+                                                <asp:Button ID="btnGuardarParte" runat="server" Text="Guardar" CssClass="btn btn-primary"
+                                                    ValidationGroup="Parte" OnClick="btnGuardarParte_Click" />
+                                            </div>
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="factores-internos" role="tabpanel">
@@ -354,129 +695,153 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Pestaña de Áreas -->
+                    <div class="tab-pane fade" id="areas" role="tabpanel">
+                        <div class="card mb-4">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Áreas Afectadas</h5>
+                                <div>
+                                    <asp:LinkButton ID="btnNuevaArea" runat="server" CssClass="btn btn-success" OnClick="btnNuevaArea_Click">
+                                        <i class="bi bi-plus-circle me-2"></i>Nueva Área
+                                    </asp:LinkButton>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <asp:UpdatePanel ID="upAreas" runat="server" UpdateMode="Conditional">
+                                    <ContentTemplate>
+                                        <asp:GridView ID="gvAreas" runat="server" CssClass="table table-hover" AutoGenerateColumns="false"
+                                            OnRowCommand="gvAreas_RowCommand" DataKeyNames="AreaId">
+                                            <Columns>
+                                                <asp:TemplateField>
+                                                    <ItemTemplate>
+                                                        <div class="row-content">
+                                                            <div class="main-row d-flex justify-content-between align-items-center p-2">
+                                                                <div class="d-flex align-items-center">
+                                                                    <button type="button" class="btn btn-link text-dark p-0 me-3" 
+                                                                            data-bs-toggle="collapse" 
+                                                                            data-bs-target='<%# "#collapse_" + Eval("AreaId") %>'>
+                                                                        <i class="bi bi-chevron-down"></i>
+                                                                    </button>
+                                                                    <div>
+                                                                        <h6 class="mb-0"><%# Eval("Nombre") %></h6>
+                                                                        <small class="text-muted"><%# Eval("UbicacionGeografica.Nombre") %></small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex align-items-center">
+                                                                    <span class='badge me-3 <%# (bool)Eval("Activo") ? "bg-success" : "bg-danger" %>'>
+                                                                        <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
+                                                                    </span>
+                                                                    <div class="dropdown">
+                                                                        <button class="btn btn-icon" type="button" data-bs-toggle="dropdown">
+                                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                                            <li>
+                                                                                <asp:LinkButton ID="btnEditar" runat="server" CssClass="dropdown-item" 
+                                                                                    CommandName="EditarArea" CommandArgument='<%# Eval("AreaId") %>'>
+                                                                                    <i class="bi bi-pencil me-2"></i>Editar
+                                                                                </asp:LinkButton>
+                                                                            </li>
+                                                                            <li><hr class="dropdown-divider"></li>
+                                                                            <li>
+                                                                                <asp:LinkButton ID="btnCambiarEstado" runat="server" 
+                                                                                    CssClass='<%# (bool)Eval("Activo") ? "dropdown-item text-danger" : "dropdown-item text-success" %>'
+                                                                                    CommandName="CambiarEstado" CommandArgument='<%# Eval("AreaId") %>'>
+                                                                                    <i class='<%# (bool)Eval("Activo") ? "bi bi-x-circle me-2" : "bi bi-check-circle me-2" %>'></i>
+                                                                                    <%# (bool)Eval("Activo") ? "Desactivar" : "Activar" %>
+                                                                                </asp:LinkButton>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="collapse border-top" id='<%# "collapse_" + Eval("AreaId") %>'>
+                                                                <div class="p-3">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <h6 class="mb-2">Descripción</h6>
+                                                                            <p class="text-muted mb-3"><%# Eval("Descripcion") %></p>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <div class="mb-3">
+                                                                                <h6 class="mb-2">Fecha de Creación</h6>
+                                                                                <p class="text-muted"><%# Eval("FechaCreacion", "{0:dd/MM/yyyy}") %></p>
+                                                                            </div>
+                                                                            <div>
+                                                                                <h6 class="mb-2">Última Modificación</h6>
+                                                                                <p class="text-muted"><%# Eval("UltimaModificacion", "{0:dd/MM/yyyy}") %></p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                            </div>
+                        </div>
+
+                        <!-- Formulario Colapsable de Área -->
+                        <div class="collapse mb-4" id="formArea">
+                            <div class="card">
+                                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        <asp:Literal ID="litTituloArea" runat="server">Nueva Área</asp:Literal>
+                                    </h5>
+                                    <button type="button" class="btn-close" onclick="hideFormArea()"></button>
+                                </div>
+                                <div class="card-body">
+                                    <asp:UpdatePanel ID="upFormArea" runat="server" UpdateMode="Conditional">
+                                        <ContentTemplate>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nombre del Área</label>
+                                                <asp:TextBox ID="txtNombreArea" runat="server" CssClass="form-control" MaxLength="100"></asp:TextBox>
+                                                <asp:RequiredFieldValidator ID="rfvNombreArea" runat="server" 
+                                                    ControlToValidate="txtNombreArea"
+                                                    ValidationGroup="Area" 
+                                                    CssClass="text-danger" 
+                                                    Display="Dynamic"
+                                                    ErrorMessage="El nombre del área es obligatorio"></asp:RequiredFieldValidator>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Descripción</label>
+                                                <asp:TextBox ID="txtDescripcionArea" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Ubicación</label>
+                                                <asp:DropDownList ID="ddlUbicacion" runat="server" CssClass="form-select">
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="rfvUbicacion" runat="server"
+                                                    ControlToValidate="ddlUbicacion"
+                                                    ValidationGroup="Area"
+                                                    CssClass="text-danger"
+                                                    Display="Dynamic"
+                                                    InitialValue=""
+                                                    ErrorMessage="Debe seleccionar una ubicación"></asp:RequiredFieldValidator>
+                                            </div>
+
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <asp:Button ID="btnCancelarArea" runat="server" Text="Cancelar" CssClass="btn btn-light"
+                                                    OnClick="btnCancelarArea_Click" CausesValidation="false" />
+                                                <asp:Button ID="btnGuardarArea" runat="server" Text="Guardar" CssClass="btn btn-primary"
+                                                    OnClick="btnGuardarArea_Click" ValidationGroup="Area" />
+                                            </div>
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <style>
-        .nav-tabs {
-            border-bottom: 1px solid #dee2e6;
-            margin-bottom: 1rem;
-        }
-
-        .nav-tabs .nav-link {
-            color: #6c757d;
-            border: 1px solid transparent;
-            border-bottom: none;
-            padding: 0.5rem 1rem;
-            font-weight: normal;
-            transition: all 0.2s ease;
-            font-size: 0.875rem;
-            border-radius: 0.375rem 0.375rem 0 0;
-            margin-right: 0.25rem;
-        }
-
-        .nav-tabs .nav-link:hover {
-            color: #212529;
-            border-color: #e9ecef #e9ecef #dee2e6;
-            background-color: #f8f9fa;
-        }
-
-        .nav-tabs .nav-link.active {
-            color: #212529;
-            background-color: #fff;
-            border-color: #dee2e6 #dee2e6 #fff;
-            font-weight: 500;
-        }
-
-        .card {
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: none;
-            background-color: #fff;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
-        }
-
-        .card-header {
-            background-color: #fff;
-            border-bottom: 1px solid #dee2e6;
-            padding: 1rem;
-        }
-
-        .form-control {
-            resize: none;
-            border-color: #dee2e6;
-            padding: 0.5rem 0.75rem;
-            font-size: 0.875rem;
-        }
-
-        .form-control:focus {
-            border-color: #dee2e6;
-            box-shadow: none;
-        }
-
-        .btn {
-            font-weight: 500;
-            font-size: 0.875rem;
-            padding: 0.5rem 1rem;
-            transition: all 0.2s ease;
-        }
-
-        .btn-dark {
-            background-color: #212529 !important;
-            border-color: #212529 !important;
-        }
-
-        .btn-dark:hover {
-            background-color: #000 !important;
-            border-color: #000 !important;
-            transform: translateY(-1px);
-        }
-
-        .btn-light {
-            background-color: #f8f9fa;
-            border-color: #dee2e6;
-            color: #212529;
-        }
-
-        .btn-light:hover {
-            background-color: #e9ecef;
-            border-color: #dee2e6;
-            color: #000;
-        }
-
-        .alert {
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-        }
-
-        /* Estilos para el modal */
-        .modal {
-            padding-right: 0 !important;
-        }
-        
-        .modal-open {
-            overflow: hidden;
-            padding-right: 0 !important;
-        }
-
-        .modal-backdrop {
-            z-index: 1040;
-        }
-
-        .modal {
-            z-index: 1050;
-        }
-
-        /* Prevenir scroll horizontal */
-        body {
-            overflow-x: hidden;
-        }
-    </style>
 
     <script type="text/javascript">
         function showSuccessMessage(message) {
@@ -494,7 +859,6 @@
                     toggle: false
                 });
                 bsCollapse.show();
-                // Scroll al formulario
                 formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
@@ -509,23 +873,28 @@
             }
         }
 
-        // Inicializar eventos después de cada postback parcial
-        if (typeof (Sys) !== 'undefined' && Sys.WebForms) {
-            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
-                // Aquí puedes agregar cualquier inicialización necesaria después de postbacks
+        // Función para manejar los collapses de detalles
+        function toggleDetails(targetId) {
+            // Cerrar todos los collapses abiertos excepto el objetivo
+            document.querySelectorAll('.collapse.show').forEach(function(collapse) {
+                if (collapse.id !== targetId) {
+                    bootstrap.Collapse.getInstance(collapse)?.hide();
+                }
             });
-        }
 
-        // Vincular el click del botón ASP con la función de mostrar formulario
-        Sys.Application.add_load(function () {
-            var btnNuevoFactor = document.getElementById('<%= btnNuevoFactor.ClientID %>');
-            if (btnNuevoFactor) {
-                btnNuevoFactor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    showForm();
-                });
+            // Abrir o cerrar el collapse objetivo
+            var targetCollapse = document.getElementById(targetId);
+            if (targetCollapse) {
+                var bsCollapse = bootstrap.Collapse.getInstance(targetCollapse) || 
+                                new bootstrap.Collapse(targetCollapse, { toggle: false });
+                
+                if (targetCollapse.classList.contains('show')) {
+                    bsCollapse.hide();
+                } else {
+                    bsCollapse.show();
+                    targetCollapse.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             }
-        });
-
+        }
     </script>
 </asp:Content> 

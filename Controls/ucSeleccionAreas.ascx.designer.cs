@@ -38,6 +38,16 @@ namespace IsomanagerWeb.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtDescripcionArea;
         
         /// <summary>
+        /// Control ddlUbicacion.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.DropDownList ddlUbicacion;
+        
+        /// <summary>
+        /// Control rfvUbicacion.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvUbicacion;
+        
+        /// <summary>
         /// Control btnGuardarArea.
         /// </summary>
         protected global::System.Web.UI.WebControls.Button btnGuardarArea;

@@ -25,6 +25,24 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
         protected DropDownList ddlRelevancia;
         protected TextBox txtImpacto;
         protected TextBox txtAccionesParte;
+        protected LinkButton btnEditar;
+        protected LinkButton btnBorrar;
+
+        // Controles de Factores Internos
+        protected LinkButton btnNuevoFactorInterno;
+        protected GridView gvFactoresInternos;
+        protected Repeater rptDetallesFactoresInternos;
+        protected UpdatePanel upFactoresInternos;
+        protected UpdatePanel upFormFactorInterno;
+        protected Literal litTituloFactorInterno;
+        protected TextBox txtNombreFactorInterno;
+        protected TextBox txtDescripcionFactorInterno;
+        protected DropDownList ddlTipoFactorInterno;
+        protected DropDownList ddlRelevanciaFactorInterno;
+        protected TextBox txtComentariosFactorInterno;
+        protected TextBox txtDesafiosFactorInterno;
+        protected Controls.ucSeleccionAreas ucAreasFactorInterno;
+        protected Button btnGuardarFactorInterno;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -45,11 +63,21 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
         {
             CargarTiposFactores();
             CargarFactoresExternos();
+            CargarPartesInteresadas();
+            CargarDatosNorma();
         }
 
         private void CargarTiposFactores()
         {
-            var tipos = db.TiposFactores.Where(t => t.Activo).OrderBy(t => t.Nombre).ToList();
+            var tipos = db.TiposFactores.Where(t => t.Activo && (
+                t.Categoria == "R" || // Recursos Humanos
+                t.Categoria == "I" || // Infraestructura
+                t.Categoria == "P" || // Procesos
+                t.Categoria == "F" || // Finanzas
+                t.Categoria == "T"    // Tecnología
+            ))
+            .OrderBy(t => t.Nombre)
+            .ToList();
             ddlTipoFactor.DataSource = tipos;
             ddlTipoFactor.DataTextField = "Nombre";
             ddlTipoFactor.DataValueField = "TipoFactorId";
@@ -59,7 +87,7 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
 
         protected void cvAreas_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            args.IsValid = ucAreas.GetSelectedAreaIds().Length > 0;
+            args.IsValid = ucAreasFactorInterno.GetSelectedAreaIds().Length > 0;
         }
 
         private void CargarFactor(int factorId)
@@ -233,7 +261,7 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
             if (int.TryParse(Request.QueryString["NormaId"], out normaId) && normaId > 0)
             {
                 // Verificar que la norma existe
-                if (db.Norma.Any(n => n.NormaId == normaId))
+                if (db.Normas.Any(n => n.NormaId == normaId))
                 {
                     ViewState["NormaId"] = normaId;
                     return true;
@@ -244,7 +272,7 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
 
         private void CargarDatosNorma()
         {
-            var norma = db.Norma.Find(normaId);
+            var norma = db.Normas.Find(normaId);
             if (norma != null)
             {
                 litTituloNorma.Text = norma.Titulo;
@@ -784,6 +812,7 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
             {
                 CargarUbicaciones();
                 CargarAreas();
+                CargarFactoresInternos();
             }
         }
 
@@ -814,7 +843,7 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
         {
             LimpiarFormularioParte();
             litTituloParte.Text = "Nueva Parte Interesada";
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowForm", "showFormParte();", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowFormParte", "showFormParte();", true);
         }
 
         protected void gvPartesInteresadas_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -855,7 +884,7 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
                     txtImpacto.Text = parte.Impacto;
                     txtAccionesParte.Text = parte.Acciones;
 
-                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowForm", "showFormParte();", true);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowFormParte", "showFormParte();", true);
                 }
                 else
                 {
@@ -1029,6 +1058,299 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
                 case 2: return baseClass + "bg-warning text-dark";
                 case 3: return baseClass + "bg-danger";
                 default: return baseClass + "bg-secondary";
+            }
+        }
+        #endregion
+
+        protected void btnEditarFoda_Click(object sender, EventArgs e)
+        {
+            ConfigurarModoEdicion();
+        }
+
+        protected void btnBorrarFoda_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var foda = db.Fodas.FirstOrDefault(f => f.NormaId == normaId);
+                if (foda != null)
+                {
+                    db.Fodas.Remove(foda);
+                    db.SaveChanges();
+                    LimpiarCampos();
+                    MostrarMensaje("El FODA ha sido eliminado correctamente", "success");
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarMensaje($"Error al eliminar el FODA: {ex.Message}", "danger");
+                System.Diagnostics.Debug.WriteLine($"Error completo: {ex.ToString()}");
+            }
+        }
+
+        #region Factores Internos
+        protected void btnNuevoFactorInterno_Click(object sender, EventArgs e)
+        {
+            LimpiarFormularioFactorInterno();
+            litTituloFactorInterno.Text = "Nuevo Factor Interno";
+            CargarTiposFactoresInternos();
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowFormInterno", "showFormFactorInterno();", true);
+        }
+
+        private void CargarTiposFactoresInternos()
+        {
+            try
+            {
+                var tipos = db.TiposFactores
+                    .Where(t => t.Activo)
+                    .OrderBy(t => t.Nombre)
+                    .ToList();
+
+                System.Diagnostics.Debug.WriteLine($"Tipos de factores encontrados: {tipos.Count}");
+                foreach (var tipo in tipos)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Tipo: {tipo.Nombre}, Categoría: {tipo.Categoria}, Activo: {tipo.Activo}");
+                }
+
+                ddlTipoFactorInterno.DataSource = tipos;
+                ddlTipoFactorInterno.DataTextField = "Nombre";
+                ddlTipoFactorInterno.DataValueField = "TipoFactorId";
+                ddlTipoFactorInterno.DataBind();
+                ddlTipoFactorInterno.Items.Insert(0, new ListItem("Seleccione...", ""));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al cargar tipos de factores: {ex.Message}");
+                MostrarError($"Error al cargar los tipos de factores: {ex.Message}");
+            }
+        }
+
+        protected void btnGuardarFactorInterno_Click(object sender, EventArgs e)
+        {
+            if (!Page.IsValid) return;
+
+            try
+            {
+                int? factorId = ViewState["FactorInternoId"] as int?;
+                var factor = factorId.HasValue ? 
+                    db.FactoresInternos.Include(f => f.Areas).FirstOrDefault(f => f.FactorInternoId == factorId.Value) : 
+                    new FactoresInternos { 
+                        NormaId = normaId,
+                        CreadorId = ((Usuario)Session["Usuario"]).UsuarioId,
+                        FechaCreacion = DateTime.Now,
+                        Activo = true
+                    };
+
+                factor.Nombre = txtNombreFactorInterno.Text.Trim();
+                factor.Descripcion = txtDescripcionFactorInterno.Text.Trim();
+                factor.TipoFactorId = Convert.ToInt32(ddlTipoFactorInterno.SelectedValue);
+                factor.Relevancia = Convert.ToInt32(ddlRelevanciaFactorInterno.SelectedValue);
+                factor.Comentarios = txtComentariosFactorInterno.Text.Trim();
+                factor.PosiblesDesafios = txtDesafiosFactorInterno.Text.Trim();
+                factor.FechaIdentificacion = DateTime.Now;
+
+                if (factorId.HasValue)
+                {
+                    factor.UltimoEditorId = ((Usuario)Session["Usuario"]).UsuarioId;
+                    factor.UltimaModificacion = DateTime.Now;
+                }
+
+                // Actualizar áreas seleccionadas
+                factor.Areas.Clear();
+                foreach (int areaId in ucAreasFactorInterno.GetSelectedAreaIds())
+                {
+                    var area = db.Areas.Find(areaId);
+                    if (area != null)
+                        factor.Areas.Add(area);
+                }
+
+                if (!factorId.HasValue)
+                    db.FactoresInternos.Add(factor);
+
+                db.SaveChanges();
+
+                // Limpiar y ocultar formulario
+                LimpiarFormularioFactorInterno();
+                ScriptManager.RegisterStartupScript(this, GetType(), "HideFormInterno", "hideFormFactorInterno();", true);
+
+                // Recargar grid
+                CargarFactoresInternos();
+                MostrarMensaje("Factor interno guardado correctamente", "success");
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al guardar el factor interno: {ex.Message}");
+            }
+        }
+
+        protected void gvFactoresInternos_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            try
+            {
+                if (e.CommandName == "EditarFactorInterno")
+                {
+                    int factorId = Convert.ToInt32(e.CommandArgument);
+                    CargarFactorInterno(factorId);
+                }
+                else if (e.CommandName == "EliminarFactorInterno")
+                {
+                    int factorId = Convert.ToInt32(e.CommandArgument);
+                    EliminarFactorInterno(factorId);
+                }
+                else if (e.CommandName == "CambiarEstadoFactorInterno")
+                {
+                    int factorId = Convert.ToInt32(e.CommandArgument);
+                    CambiarEstadoFactorInterno(factorId);
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al procesar la acción: {ex.Message}");
+            }
+        }
+
+        private void CargarFactorInterno(int factorId)
+        {
+            try
+            {
+                var factor = db.FactoresInternos
+                    .Include(f => f.TipoFactor)
+                    .Include(f => f.Areas)
+                    .FirstOrDefault(f => f.FactorInternoId == factorId);
+
+                if (factor != null)
+                {
+                    ViewState["FactorInternoId"] = factorId;
+                    litTituloFactorInterno.Text = "Editar Factor Interno";
+                    
+                    CargarTiposFactoresInternos();
+                    
+                    txtNombreFactorInterno.Text = factor.Nombre;
+                    txtDescripcionFactorInterno.Text = factor.Descripcion;
+                    ddlTipoFactorInterno.SelectedValue = factor.TipoFactorId.ToString();
+                    ddlRelevanciaFactorInterno.SelectedValue = factor.Relevancia.ToString();
+                    txtComentariosFactorInterno.Text = factor.Comentarios;
+                    txtDesafiosFactorInterno.Text = factor.PosiblesDesafios;
+                    ucAreasFactorInterno.SetSelectedAreaIds(factor.Areas.Select(a => a.AreaId).ToArray());
+
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowFormInterno", "showFormFactorInterno();", true);
+                }
+                else
+                {
+                    MostrarError("No se encontró el factor interno especificado");
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cargar el factor interno: {ex.Message}");
+            }
+        }
+
+        private void EliminarFactorInterno(int factorId)
+        {
+            try
+            {
+                var factor = db.FactoresInternos.Find(factorId);
+                if (factor != null)
+                {
+                    db.FactoresInternos.Remove(factor);
+                    db.SaveChanges();
+                    CargarFactoresInternos();
+                    MostrarMensaje("Factor interno eliminado correctamente", "success");
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarMensaje("Error al eliminar el factor interno: " + ex.Message, "danger");
+            }
+        }
+
+        private void LimpiarFormularioFactorInterno()
+        {
+            ViewState["FactorInternoId"] = null;
+            txtNombreFactorInterno.Text = string.Empty;
+            txtDescripcionFactorInterno.Text = string.Empty;
+            ddlTipoFactorInterno.SelectedIndex = 0;
+            ddlRelevanciaFactorInterno.SelectedIndex = 0;
+            txtComentariosFactorInterno.Text = string.Empty;
+            txtDesafiosFactorInterno.Text = string.Empty;
+            ucAreasFactorInterno.SetSelectedAreaIds(new int[0]);
+        }
+
+        private void CargarFactoresInternos()
+        {
+            try
+            {
+                var factores = db.FactoresInternos
+                    .Include(f => f.TipoFactor)
+                    .Include(f => f.Areas)
+                    .Include(f => f.Creador)
+                    .Include(f => f.UltimoEditor)
+                    .Where(f => f.NormaId == normaId)
+                    .OrderBy(f => f.TipoFactor.Categoria)
+                    .ThenBy(f => f.Nombre)
+                    .ToList();
+
+                gvFactoresInternos.DataSource = factores;
+                gvFactoresInternos.DataBind();
+                upFactoresInternos.Update();
+
+                // Asignar la misma fuente de datos al Repeater
+                rptDetallesFactoresInternos.DataSource = factores;
+                rptDetallesFactoresInternos.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cargar los factores internos: {ex.Message}");
+            }
+        }
+
+        protected string GetCategoriaInternaNombre(object categoria)
+        {
+            if (categoria == null) return string.Empty;
+            switch (categoria.ToString())
+            {
+                case "R": return "Recursos Humanos";
+                case "I": return "Infraestructura";
+                case "P": return "Procesos";
+                case "F": return "Finanzas";
+                case "T": return "Tecnología";
+                default: return string.Empty;
+            }
+        }
+
+        protected string GetCategoriaInternaBadgeClass(object categoria)
+        {
+            if (categoria == null) return "badge bg-secondary";
+            string baseClass = "badge ";
+            switch (categoria.ToString())
+            {
+                case "R": return baseClass + "bg-primary";
+                case "I": return baseClass + "bg-success";
+                case "P": return baseClass + "bg-info";
+                case "F": return baseClass + "bg-warning text-dark";
+                case "T": return baseClass + "bg-danger";
+                default: return baseClass + "bg-secondary";
+            }
+        }
+
+        private void CambiarEstadoFactorInterno(int factorId)
+        {
+            try
+            {
+                var factor = db.FactoresInternos.Find(factorId);
+                if (factor != null)
+                {
+                    factor.Activo = !factor.Activo;
+                    factor.UltimoEditorId = ((Usuario)Session["Usuario"]).UsuarioId;
+                    factor.UltimaModificacion = DateTime.Now;
+                    db.SaveChanges();
+                    CargarFactoresInternos();
+                    MostrarMensaje($"Factor interno {(factor.Activo ? "activado" : "desactivado")} correctamente", "success");
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError($"Error al cambiar el estado del factor interno: {ex.Message}");
             }
         }
         #endregion

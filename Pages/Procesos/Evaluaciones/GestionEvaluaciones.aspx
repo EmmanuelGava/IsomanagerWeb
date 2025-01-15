@@ -107,8 +107,8 @@
         <!-- Grid de Evaluaciones -->
         <asp:UpdatePanel ID="upEvaluaciones" runat="server">
             <ContentTemplate>
-                <div class="table-responsive">
-                    <asp:GridView ID="gvEvaluaciones" runat="server" CssClass="table table-hover" 
+                <div class="custom-table-container">
+                    <asp:GridView ID="gvEvaluaciones" runat="server" CssClass="table table-hover align-middle" 
                         AutoGenerateColumns="False" DataKeyNames="EvaluacionId"
                         OnRowCommand="gvEvaluaciones_RowCommand" OnRowDataBound="gvEvaluaciones_RowDataBound">
                         <Columns>
@@ -143,7 +143,7 @@
                                                     <i class="bi bi-eye"></i>
                                                 </button>
                                                 <div class="dropdown">
-                                                    <button class="btn btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <button class="dots-button" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <i class="bi bi-three-dots-vertical"></i>
                                                     </button>
                                                     <ul class="dropdown-menu">

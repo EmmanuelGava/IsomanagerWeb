@@ -106,8 +106,8 @@
         <!-- Grid de Cambios -->
         <asp:UpdatePanel ID="upCambios" runat="server">
             <ContentTemplate>
-                <div class="table-responsive">
-                    <asp:GridView ID="gvCambios" runat="server" CssClass="table table-hover" 
+                <div class="custom-table-container">
+                    <asp:GridView ID="gvCambios" runat="server" CssClass="table table-hover align-middle" 
                         AutoGenerateColumns="False" DataKeyNames="CambioId"
                         OnRowCommand="gvCambios_RowCommand" OnRowDataBound="gvCambios_RowDataBound">
                         <Columns>
@@ -142,7 +142,7 @@
                                                     <i class="bi bi-eye"></i>
                                                 </button>
                                                 <div class="dropdown">
-                                                    <button class="btn btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <button class="dots-button" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <i class="bi bi-three-dots-vertical"></i>
                                                     </button>
                                                     <ul class="dropdown-menu">

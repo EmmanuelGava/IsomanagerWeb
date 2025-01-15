@@ -1,140 +1,87 @@
-/* Estilos para la gestión de normas */
-
-/* Columna de acciones */
-.action-column {
-    width: 60px !important;
-    min-width: 60px !important;
-    position: relative;
-    text-align: center;
+/* Variables específicas de normas */
+:root-vars {
+    --norm-primary: #2196f3;
+    --norm-secondary: #607d8b;
+    --norm-success: #4caf50;
+    --norm-warning: #ff9800;
+    --norm-danger: #f44336;
 }
 
-/* Botón de tres puntos */
-.btn-icon {
-    padding: 0.25rem 0.5rem;
-    background: transparent;
-    border: none;
-    color: #6c757d;
-    transition: color 0.15s ease-in-out;
+/* Contenedor de normas */
+.norms-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 1.5rem;
 }
 
-.btn-icon:hover {
-    color: #000;
-}
-
-.btn-icon i {
-    font-size: 1.25rem;
-    line-height: 1;
-}
-
-/* Menú desplegable */
-.dropdown-menu {
-    padding: 0.25rem 0;
-    min-width: 160px;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    margin: 0;
-    transform: none !important;
-    position: absolute !important;
-    inset: auto !important;
-    right: 0 !important;
-    left: auto !important;
-}
-
-.dropdown-item {
-    padding: 0.5rem 1rem;
-    white-space: nowrap;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.dropdown-item i {
-    font-size: 1rem;
-    opacity: 0.7;
-}
-
-.dropdown-item:hover {
-    background-color: #f8f9fa;
-}
-
-.dropdown-item.text-danger:hover {
-    background-color: #dc3545;
-    color: white !important;
-}
-
-.dropdown-item.text-danger:hover i {
-    opacity: 1;
-}
-
-/* Contenedor de tabla */
-.table-responsive {
-    overflow: initial !important;
-}
-
-/* Contenedor del dropdown */
-.dropdown {
-    position: static !important;
-}
-
-/* Estados de norma */
-.badge {
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    border-radius: 2rem;
-}
-
-.badge-success {
-    background-color: #d1e7dd;
-    color: #0f5132;
-}
-
-.badge-warning {
-    background-color: #fff3cd;
-    color: #664d03;
-}
-
-.badge-danger {
-    background-color: #f8d7da;
-    color: #842029;
-}
-
-/* Ajustes de la tabla */
-.table {
-    vertical-align: middle;
-}
-
-.table > :not(caption) > * > * {
-    padding: 1rem 0.75rem;
-}
-
-.table > tbody > tr:hover {
-    background-color: rgba(0, 0, 0, 0.02);
-}
-
-.table th {
-    border-top: none;
-    font-weight: 600;
-    color: #6c757d;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.5px;
-}
-
-/* Estilos para la barra de búsqueda */
-.search-container {
-    max-width: 300px;
-}
-
-.search-container .input-group-text {
-    border-right: none;
-    background-color: transparent;
-}
-
-.search-container .form-control {
-    border-left: none;
-}
-
-.search-container .form-control:focus {
-    border-color: #dee2e6;
+.norms-container .table-responsive {
+    margin: -0.5rem -1rem;
+    border-radius: 0;
     box-shadow: none;
+}
+
+/* Tabla de normas */
+.norms-table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.norms-table th {
+    background-color: var(--gray-100);
+    font-weight: 600;
+    padding: 0.75rem;
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.norms-table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+/* Estados de normas */
+.norm-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.norm-status-active {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--norm-success);
+}
+
+.norm-status-pending {
+    background-color: rgba(255, 152, 0, 0.1);
+    color: var(--norm-warning);
+}
+
+.norm-status-expired {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: var(--norm-danger);
+}
+
+/* Tooltips específicos */
+.norm-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.norm-tooltip:hover::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1060;
 } 

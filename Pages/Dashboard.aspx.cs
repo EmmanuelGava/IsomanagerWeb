@@ -127,7 +127,7 @@ namespace IsomanagerWeb.Pages
 
                     // Primero obtenemos las normas con sus datos básicos
                     System.Diagnostics.Debug.WriteLine("Consultando normas básicas...");
-                    var normasBasicas = db.Norma
+                    var normasBasicas = db.Normas
                         .Include(n => n.Responsable)
                         .AsNoTracking()
                         .OrderByDescending(n => n.UltimaActualizacion)
@@ -386,7 +386,7 @@ namespace IsomanagerWeb.Pages
                     var busqueda = txtBuscar.Text?.Trim().ToLower() ?? "";
                     System.Diagnostics.Debug.WriteLine($"Iniciando búsqueda con término: {busqueda}");
                     
-                    var normasBasicas = db.Norma
+                    var normasBasicas = db.Normas
                         .Include(n => n.Responsable)
                         .AsNoTracking()
                         .Where(n => n.Titulo.ToLower().Contains(busqueda) ||

@@ -35,7 +35,7 @@ namespace IsomanagerWeb.Pages.Procesos.Mejoras
 
                     using (var context = new IsomanagerContext())
                     {
-                        var norma = context.Norma.FirstOrDefault(n => n.NormaId == normaId);
+                        var norma = context.Normas.FirstOrDefault(n => n.NormaId == normaId);
                         if (norma == null)
                         {
                             System.Diagnostics.Debug.WriteLine($"No se encontró la norma con ID: {normaId}");

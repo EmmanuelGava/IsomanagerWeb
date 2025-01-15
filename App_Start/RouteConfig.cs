@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Web;
 using System.Web.Routing;
 using Microsoft.AspNet.FriendlyUrls;
 
@@ -8,23 +10,9 @@ namespace IsomanagerWeb
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
-            routes.Clear();
-            
             var settings = new FriendlyUrlSettings();
-            settings.AutoRedirectMode = RedirectMode.Off;
+            settings.AutoRedirectMode = RedirectMode.Permanent;
             routes.EnableFriendlyUrls(settings);
-
-            routes.MapPageRoute(
-                "Default",
-                "",
-                "~/Pages/Dashboard.aspx"
-            );
-
-            routes.MapPageRoute(
-                "Error",
-                "Error",
-                "~/Pages/Error.aspx"
-            );
         }
     }
 }

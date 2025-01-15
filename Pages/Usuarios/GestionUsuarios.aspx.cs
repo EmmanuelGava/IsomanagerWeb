@@ -318,7 +318,7 @@ namespace IsomanagerWeb.Pages.Usuarios
                         }
 
                         // Verificar si el usuario tiene referencias
-                        var tieneNormas = context.Norma.Any(n => n.ResponsableId == usuarioId);
+                        var tieneNormas = context.Normas.Any(n => n.ResponsableId == usuarioId);
                         var tieneProcesos = context.Procesos.Any(p => p.ResponsableId == usuarioId || p.AdministradorId == usuarioId);
 
                         if (tieneNormas || tieneProcesos)

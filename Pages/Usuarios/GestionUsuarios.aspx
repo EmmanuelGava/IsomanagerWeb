@@ -27,7 +27,7 @@
             <ContentTemplate>
                 <asp:Label ID="lblMensaje" runat="server" CssClass="d-block mb-3"></asp:Label>
 
-                <div class="table-responsive">
+                <div class="custom-table-container">
                     <asp:GridView ID="gvUsuarios" runat="server" AutoGenerateColumns="False" 
                         CssClass="table table-hover align-middle" 
                         OnRowCommand="gvUsuarios_RowCommand" DataKeyNames="UsuarioId"

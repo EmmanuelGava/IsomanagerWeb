@@ -41,7 +41,7 @@ namespace IsomanagerWeb.Pages.Procesos.Normas
         {
             try
             {
-                var norma = db.Norma.FirstOrDefault(n => n.NormaId == normaId);
+                var norma = db.Normas.FirstOrDefault(n => n.NormaId == normaId);
                 if (norma != null)
                 {
                     // Mostrar los datos en la UI

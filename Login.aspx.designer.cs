@@ -33,5 +33,56 @@ namespace IsomanagerWeb
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPasswordRegistro;
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvConfirmPasswordRegistro;
         protected global::System.Web.UI.WebControls.CompareValidator cvPasswordRegistro;
+        protected global::System.Web.UI.WebControls.CheckBox chkRecordarme;
+        
+        /// <summary>
+        /// Control ddlDbType.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDbType;
+        
+        /// <summary>
+        /// Control sqlServerConfig.
+        /// </summary>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl sqlServerConfig;
+        
+        /// <summary>
+        /// Control txtServer.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.TextBox txtServer;
+        
+        /// <summary>
+        /// Control txtDatabase.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.TextBox txtDatabase;
+        
+        /// <summary>
+        /// Control chkIntegratedSecurity.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.CheckBox chkIntegratedSecurity;
+        
+        /// <summary>
+        /// Control sqlCredentials.
+        /// </summary>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl sqlCredentials;
+        
+        /// <summary>
+        /// Control txtDbUser.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.TextBox txtDbUser;
+        
+        /// <summary>
+        /// Control txtDbPassword.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.TextBox txtDbPassword;
+        
+        /// <summary>
+        /// Control btnSaveDbConfig.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Button btnSaveDbConfig;
+
+        /// <summary>
+        /// Control ddlDbTypeConfig.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDbTypeConfig;
     }
 } 

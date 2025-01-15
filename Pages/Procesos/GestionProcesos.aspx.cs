@@ -50,7 +50,7 @@ namespace IsomanagerWeb.Pages.Procesos
             {
                 using (var context = new IsomanagerContext())
                 {
-                    var norma = context.Norma
+                    var norma = context.Normas
                         .FirstOrDefault(n => n.NormaId == NormaId);
                     if (norma == null)
                     {

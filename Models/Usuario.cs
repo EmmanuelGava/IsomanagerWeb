@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IsomanagerWeb.Models
 {
+    [Table("Usuario")]
     public class Usuario
     {
         public Usuario()

@@ -18,6 +18,40 @@ bld/
 [Bb]in/
 [Oo]bj/
 
+# Archivos sensibles y de configuración
+Web.config
+!Web.config.example
+Properties/serviceDependencies.json
+Properties/serviceDependencies.*.json
+Properties/ServiceDependencies/*/mssql1.arm.json
+Properties/ServiceDependencies/*/*
+SQL/QueryDataAzure.sql
+appsettings.*.json
+*.pubxml
+*.pubxml.user
+PublishProfiles/
+FolderProfile.pubxml
+
+# Archivos de claves y secretos
+*.pfx
+*.key
+*.pem
+Utils/Encryption.cs
+
+# Entity Framework Migrations
+Migrations/
+*.Migration.cs
+*.Designer.cs
+*_Migration.cs
+*.edmx
+*.edmx.diagram
+*.Context.cs
+*.Context.tt
+*.tt
+*.ssdl
+*.msl
+*.csdl
+
 # NuGet Packages
 *.nupkg
 **/packages/*

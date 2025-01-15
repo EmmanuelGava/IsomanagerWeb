@@ -104,8 +104,8 @@
         <!-- Grid de Archivos -->
         <asp:UpdatePanel ID="upArchivos" runat="server">
             <ContentTemplate>
-                <div class="table-responsive">
-                    <asp:GridView ID="gvArchivos" runat="server" CssClass="table table-hover" 
+                <div class="custom-table-container">
+                    <asp:GridView ID="gvArchivos" runat="server" CssClass="table table-hover align-middle" 
                         AutoGenerateColumns="False" DataKeyNames="ArchivoId"
                         OnRowCommand="gvArchivos_RowCommand">
                         <Columns>
@@ -124,7 +124,7 @@
                             <asp:TemplateField HeaderText="Acciones">
                                 <ItemTemplate>
                                     <div class="dropdown">
-                                        <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="dots-button" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu">

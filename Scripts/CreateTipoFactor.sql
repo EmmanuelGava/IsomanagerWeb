@@ -43,6 +43,15 @@ VALUES
     (N'Tecnológico', N'Factores relacionados con la tecnología e innovación', 1),
     (N'Legal', N'Factores relacionados con leyes y regulaciones', 1)
 
+-- Insertar tipos de factores internos
+INSERT INTO [dbo].[TipoFactor] ([Nombre], [Descripcion], [Categoria], [Activo])
+VALUES 
+    ('Recursos Humanos', 'Factores relacionados con el personal y la gestión del talento', 'R', 1),
+    ('Infraestructura', 'Factores relacionados con instalaciones y equipamiento', 'I', 1),
+    ('Procesos', 'Factores relacionados con los procesos internos', 'P', 1),
+    ('Finanzas', 'Factores relacionados con recursos financieros', 'F', 1),
+    ('Tecnología', 'Factores relacionados con sistemas y tecnología', 'T', 1);
+
 -- Recrear la clave foránea
 ALTER TABLE [dbo].[FactoresExternos] 
 ADD CONSTRAINT [FK_FactoresExternos_TipoFactor] 

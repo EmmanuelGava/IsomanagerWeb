@@ -3,37 +3,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Estilos para botones */
-.btn {
-    font-weight: 500;
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
-    transition: all 0.2s ease;
-}
-
-.btn-dark {
-    background-color: #212529 !important;
-    border-color: #212529 !important;
-}
-
-.btn-dark:hover {
-    background-color: #000 !important;
-    border-color: #000 !important;
-    transform: translateY(-1px);
-}
-
-.btn-light {
-    background-color: #f8f9fa;
-    border-color: #dee2e6;
-    color: #212529;
-}
-
-.btn-light:hover {
-    background-color: #e9ecef;
-    border-color: #dee2e6;
-    color: #000;
-}
-
 /* Estilos para alertas */
 .alert {
     border-radius: 0.5rem;
@@ -72,27 +41,18 @@ body {
     min-height: 3.5rem;
 }
 
-.btn-link {
-    text-decoration: none;
-}
-
-.btn-link:hover {
-    color: var(--bs-primary) !important;
-}
-
 /* Estilos para el menú desplegable */
 .dropdown-menu {
     padding: 0.5rem 0;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 0.5rem;
 }
 
 .dropdown-item {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
-}
-
-.dropdown-item:hover {
-    background-color: #f8f9fa;
+    transition: all 0.2s ease;
 }
 
 /* Estilos para el collapse */
@@ -152,33 +112,42 @@ body {
 
 /* Estilos para las cards */
 .card {
-    transition: transform 0.2s, box-shadow 0.2s;
     border: none;
     background-color: #fff;
-}
-
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border-radius: 0.5rem;
 }
 
 .card-header {
     background-color: #fff;
     border-bottom: 1px solid #dee2e6;
     padding: 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
 }
 
 /* Estilos para el formulario */
 .form-control {
-    resize: none;
     border-color: #dee2e6;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
+    border-radius: 0.375rem;
 }
 
 .form-control:focus {
+    border-color: #212529;
+    box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.25);
+}
+
+.form-select {
     border-color: #dee2e6;
-    box-shadow: none;
+    padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+}
+
+.form-select:focus {
+    border-color: #212529;
+    box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.25);
 }
 
 /* Estilos para el GridView */
@@ -200,6 +169,7 @@ body {
     color: #212529;
     border-bottom: 2px solid #dee2e6;
     padding: 0.75rem 1rem;
+    background-color: #fff;
 }
 
 .table > tbody > tr:hover {
@@ -214,69 +184,13 @@ body {
     border-radius: 2rem;
 }
 
-.badge-success {
-    background-color: #d1e7dd;
-    color: #0f5132;
-}
-
-.badge-warning {
-    background-color: #fff3cd;
-    color: #664d03;
-}
-
-.badge-danger {
-    background-color: #f8d7da;
-    color: #842029;
-}
-
-.badge-info {
-    background-color: #cff4fc;
-    color: #055160;
-}
-
-/* Estilos para los botones de acción */
-.btn-icon {
-    padding: 0.25rem 0.5rem;
-    color: #6c757d;
-    background: transparent;
-    border: none;
-    transition: all 0.2s ease;
-}
-
-.btn-icon:hover {
-    color: #000;
-    background-color: rgba(0,0,0,0.05);
-    border-radius: 0.25rem;
-}
-
 /* Estilos para el collapse */
 .detalles-row {
-    background-color: #f8f9fa;
+    background-color: #fff;
     padding: 1.5rem;
     border-radius: 0.5rem;
     margin: 0.5rem 1rem 1.5rem 1rem;
     box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
-}
-
-/* Estilos para el botón de ver detalles */
-.btn-ver-detalles {
-    padding: 0.25rem;
-    color: #6c757d;
-    background: transparent;
-    border: none;
-    transition: all 0.2s ease;
-}
-
-.btn-ver-detalles:hover {
-    color: #000;
-    background-color: rgba(0,0,0,0.05);
-}
-
-/* Estilos para el collapse */
-.collapse-content {
-    background-color: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 0 0 0.5rem 0.5rem;
 }
 
 /* Estilos para los tabs dentro del collapse */

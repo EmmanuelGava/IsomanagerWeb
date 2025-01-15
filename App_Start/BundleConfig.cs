@@ -54,8 +54,12 @@ namespace IsomanagerWeb
 
             // Estilos
             bundles.Add(new StyleBundle("~/Content/css")
-                .Include("~/Content/bootstrap.min.css",
-                         "~/Content/Site.css"));
+                .Include(
+                    "~/Content/bootstrap.min.css",
+                    "~/Content/css/Site.css",
+                    "~/Content/css/normas.css",
+                    "~/Content/css/dashboard.css"
+                ));
 
             bundles.Add(new StyleBundle("~/Content/site")
                 .Include("~/Content/Site.css"));

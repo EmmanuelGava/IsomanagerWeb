@@ -11,7 +11,9 @@ namespace IsomanagerWeb.Models
 {
     public class IsomanagerContext : DbContext
     {
-        public IsomanagerContext() : base("name=IsomanagerContext")
+        private static string _connectionString;
+
+        public IsomanagerContext() : base(GetConnectionString())
         {
             // Usar la configuración de migraciones
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<IsomanagerContext, Migrations.Configuration>());
@@ -23,9 +25,23 @@ namespace IsomanagerWeb.Models
             Configuration.ProxyCreationEnabled = true;
         }
 
+        public static void SetConnectionString(string databaseType)
+        {
+            _connectionString = ConnectionManager.GetConnectionString(databaseType);
+        }
+
+        private static string GetConnectionString()
+        {
+            if (string.IsNullOrEmpty(_connectionString))
+            {
+                throw new InvalidOperationException("La cadena de conexión no ha sido configurada. Llame a SetConnectionString antes de usar el contexto.");
+            }
+            return _connectionString;
+        }
+
         public virtual DbSet<Usuario> Usuarios { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
-        public virtual DbSet<Norma> Norma { get; set; }
+        public virtual DbSet<Norma> Normas { get; set; }
         public virtual DbSet<Proceso> Procesos { get; set; }
         public virtual DbSet<Contexto> Contexto { get; set; }
         public virtual DbSet<AuditoriasInternaProceso> AuditoriasInternaProceso { get; set; }
@@ -46,6 +62,8 @@ namespace IsomanagerWeb.Models
         public virtual DbSet<Mensaje> Mensajes { get; set; }
         public virtual DbSet<Archivo> Archivos { get; set; }
         public virtual DbSet<AlcanceSistemaGestion> AlcanceSistemaGestion { get; set; }
+        public virtual DbSet<PartesInteresadas> PartesInteresadas { get; set; }
+        public virtual DbSet<FactoresInternos> FactoresInternos { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -324,6 +342,46 @@ namespace IsomanagerWeb.Models
                 .HasRequired(f => f.TipoFactor)
                 .WithMany()
                 .HasForeignKey(f => f.TipoFactorId)
+                .WillCascadeOnDelete(false);
+
+            // Configurar PartesInteresadas
+            modelBuilder.Entity<PartesInteresadas>()
+                .ToTable("PartesInteresadas", "dbo")
+                .HasKey(p => p.ParteID);
+
+            modelBuilder.Entity<PartesInteresadas>()
+                .HasRequired(p => p.Norma)
+                .WithMany()
+                .HasForeignKey(p => p.NormaId)
+                .WillCascadeOnDelete(false);
+
+            // Configurar FactoresInternos
+            modelBuilder.Entity<FactoresInternos>()
+                .ToTable("FactoresInternos", "dbo")
+                .HasKey(f => f.FactorInternoId);
+
+            modelBuilder.Entity<FactoresInternos>()
+                .HasRequired(f => f.TipoFactor)
+                .WithMany()
+                .HasForeignKey(f => f.TipoFactorId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<FactoresInternos>()
+                .HasRequired(f => f.Norma)
+                .WithMany()
+                .HasForeignKey(f => f.NormaId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<FactoresInternos>()
+                .HasRequired(f => f.Creador)
+                .WithMany()
+                .HasForeignKey(f => f.CreadorId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<FactoresInternos>()
+                .HasOptional(f => f.UltimoEditor)
+                .WithMany()
+                .HasForeignKey(f => f.UltimoEditorId)
                 .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);

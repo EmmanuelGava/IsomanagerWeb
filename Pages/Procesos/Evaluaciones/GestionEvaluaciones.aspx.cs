@@ -31,7 +31,7 @@ namespace IsomanagerWeb.Pages.Procesos.Evaluaciones
 
                     using (var context = new IsomanagerContext())
                     {
-                        if (!context.Norma.Any(n => n.NormaId == normaId))
+                        if (!context.Normas.Any(n => n.NormaId == normaId))
                         {
                             Response.Redirect("~/Default.aspx");
                             return 0;
@@ -65,7 +65,7 @@ namespace IsomanagerWeb.Pages.Procesos.Evaluaciones
             {
                 using (var context = new IsomanagerContext())
                 {
-                    var norma = context.Norma.FirstOrDefault(n => n.NormaId == NormaId);
+                    var norma = context.Normas.FirstOrDefault(n => n.NormaId == NormaId);
                     if (norma == null)
                     {
                         Response.Redirect("~/Default.aspx");

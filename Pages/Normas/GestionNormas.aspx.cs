@@ -24,7 +24,7 @@ namespace IsomanagerWeb.Pages.Normas
             {
                 using (var context = new IsomanagerContext())
                 {
-                    IQueryable<Norma> query = context.Norma
+                    IQueryable<Norma> query = context.Normas
                         .Include(n => n.Responsable)
                         .OrderByDescending(n => n.UltimaActualizacion);
 
@@ -99,12 +99,12 @@ namespace IsomanagerWeb.Pages.Normas
                             {
                                 FechaCreacion = DateTime.Now
                             };
-                            context.Norma.Add(norma);
+                            context.Normas.Add(norma);
                         }
                         else
                         {
                             int normaId = Convert.ToInt32(hdnNormaId.Value);
-                            norma = context.Norma.Find(normaId);
+                            norma = context.Normas.Find(normaId);
                             if (norma == null)
                             {
                                 lblErrorModal.Text = "Error: No se encontró la norma a editar.";
@@ -124,7 +124,7 @@ namespace IsomanagerWeb.Pages.Normas
                         context.SaveChanges();
 
                         // Actualizar contador en sesión para el dashboard
-                        Session["NormasCount"] = context.Norma.Count();
+                        Session["NormasCount"] = context.Normas.Count();
                         Session["LastNormaUpdate"] = DateTime.Now;
 
                         // Cerrar modal y mostrar mensaje de éxito
@@ -159,10 +159,10 @@ namespace IsomanagerWeb.Pages.Normas
                     {
                         using (var context = new IsomanagerContext())
                         {
-                            var norma = context.Norma.Find(normaId);
+                            var norma = context.Normas.Find(normaId);
                             if (norma != null)
                             {
-                                context.Norma.Remove(norma);
+                                context.Normas.Remove(norma);
                                 context.SaveChanges();
                                 CargarNormas();
                                 
@@ -186,7 +186,7 @@ namespace IsomanagerWeb.Pages.Normas
             {
                 using (var context = new IsomanagerContext())
                 {
-                    var norma = context.Norma
+                    var norma = context.Normas  
                         .Include(n => n.Responsable)
                         .FirstOrDefault(n => n.NormaId == normaId);
 

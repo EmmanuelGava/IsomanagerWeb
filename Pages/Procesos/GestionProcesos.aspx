@@ -17,7 +17,7 @@
         <!-- Cards de Contadores -->
         <div class="row mb-4">
             <div class="col-md-3">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm process-card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -28,7 +28,7 @@
                                 <i class="bi bi-clipboard-check fs-4 text-success"></i>
                             </div>
                         </div>
-                        <asp:LinkButton ID="btnIrEvaluaciones" runat="server" CssClass="btn btn-sm mt-3 w-100"
+                        <asp:LinkButton ID="btnIrEvaluaciones" runat="server" CssClass="btn btn-dark w-100 mt-3"
                             OnClick="btnIrEvaluaciones_Click">
                             Ver Evaluaciones <i class="bi bi-arrow-right"></i>
                         </asp:LinkButton>
@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm process-card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -47,7 +47,7 @@
                                 <i class="bi bi-arrow-repeat fs-4 text-warning"></i>
                             </div>
                         </div>
-                        <asp:LinkButton ID="btnIrCambios" runat="server" CssClass="btn btn-sm mt-3 w-100"
+                        <asp:LinkButton ID="btnIrCambios" runat="server" CssClass="btn btn-dark w-100 mt-3"
                             OnClick="btnIrCambios_Click">
                             Ver Cambios <i class="bi bi-arrow-right"></i>
                         </asp:LinkButton>
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm process-card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -66,7 +66,7 @@
                                 <i class="bi bi-graph-up-arrow fs-4 text-primary"></i>
                             </div>
                         </div>
-                        <asp:LinkButton ID="btnIrMejoras" runat="server" CssClass="btn btn-sm mt-3 w-100"
+                        <asp:LinkButton ID="btnIrMejoras" runat="server" CssClass="btn btn-dark w-100 mt-3"
                             OnClick="btnIrMejoras_Click">
                             Ver Mejoras <i class="bi bi-arrow-right"></i>
                         </asp:LinkButton>
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm process-card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -85,7 +85,7 @@
                                 <i class="bi bi-shield-check fs-4 text-info"></i>
                             </div>
                         </div>
-                        <asp:LinkButton ID="btnIrAuditorias" runat="server" CssClass="btn btn-sm mt-3 w-100"
+                        <asp:LinkButton ID="btnIrAuditorias" runat="server" CssClass="btn btn-dark w-100 mt-3"
                             OnClick="btnIrAuditorias_Click">
                             Ver Auditorías <i class="bi bi-arrow-right"></i>
                         </asp:LinkButton>
@@ -118,7 +118,7 @@
             <ContentTemplate>
                 <asp:Label ID="lblMensaje" runat="server" CssClass="d-block mb-3"></asp:Label>
 
-                <div class="table-responsive">
+                <div class="custom-table-container">
                     <asp:GridView ID="gvProcesos" runat="server" AutoGenerateColumns="False" 
                         CssClass="table table-hover align-middle" 
                         OnRowCommand="gvProcesos_RowCommand" DataKeyNames="ProcesoId"
@@ -140,7 +140,8 @@
                                     <div class="progress" style="height: 8px;">
                                         <div class="progress-bar bg-success" 
                                             role="progressbar" 
-                                            style="width:<%# Eval("Progreso") %>%"
+                                            style="width: 0"
+                                            data-progress='<%# Eval("Progreso") %>'
                                             aria-valuenow="<%# Eval("Progreso") %>" 
                                             aria-valuemin="0" 
                                             aria-valuemax="100">
@@ -155,13 +156,14 @@
                                         <button class="btn btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
-                                        <ul class="dropdown-menu">
+                                        <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
                                                 <asp:LinkButton ID="btnEditar" runat="server" CssClass="dropdown-item" 
                                                     CommandName="Editar" CommandArgument='<%# Eval("ProcesoId") %>'>
                                                     <i class="bi bi-pencil"></i> Editar
                                                 </asp:LinkButton>
                                             </li>
+                                            <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <asp:LinkButton ID="btnEliminar" runat="server" CssClass="dropdown-item text-danger" 
                                                     CommandName="Eliminar" CommandArgument='<%# Eval("ProcesoId") %>'
@@ -280,6 +282,7 @@
         </div>
     </div>
 
+    <!-- Scripts -->
     <script type="text/javascript">
         function showSuccessMessage(message) {
             toastr.success(message);
@@ -305,6 +308,23 @@
             if (modalBackdrop) {
                 modalBackdrop.remove();
             }
+        }
+
+        function updateProgressBars() {
+            document.querySelectorAll('.progress-bar').forEach(function(bar) {
+                var progress = bar.getAttribute('data-progress');
+                if (progress) {
+                    bar.style.width = progress + '%';
+                }
+            });
+        }
+
+        // Actualizar barras de progreso cuando el documento esté listo
+        document.addEventListener('DOMContentLoaded', updateProgressBars);
+
+        // Actualizar barras de progreso después de cada actualización parcial
+        if (typeof Sys !== 'undefined') {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(updateProgressBars);
         }
 
         // Manejar el cierre del modal

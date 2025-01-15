@@ -2,6 +2,10 @@
 <%@ Register Src="~/Controls/ucUsuarioSelector.ascx" TagPrefix="uc1" TagName="ucUsuarioSelector" %>
 <%@ Register Src="~/Controls/ucDepartamentoSelector.ascx" TagPrefix="uc1" TagName="ucDepartamentoSelector" %>
 
+<asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="server">
+    <link href="<%: ResolveUrl("~/Content/css/normas.css") %>" rel="stylesheet" type="text/css" />
+</asp:Content>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -26,7 +30,7 @@
             <ContentTemplate>
                 <asp:Label ID="lblMensaje" runat="server" CssClass="d-block mb-3"></asp:Label>
 
-                <div class="table-responsive">
+                <div class="custom-table-container">
                     <asp:GridView ID="gvNormas" runat="server" AutoGenerateColumns="False" 
                         CssClass="table table-hover align-middle" 
                         OnRowCommand="gvNormas_RowCommand" DataKeyNames="NormaId"
@@ -47,33 +51,37 @@
                             <asp:BoundField DataField="ProximaAuditoria" HeaderText="Próxima Auditoría" 
                                 DataFormatString="{0:yyyy-MM-dd}" />
                             <asp:BoundField DataField="Responsable" HeaderText="Responsable" />
-                            <asp:TemplateField HeaderText="Acciones" ItemStyle-CssClass="action-column">
+                            <asp:TemplateField HeaderText="" ItemStyle-CssClass="action-column">
                                 <ItemTemplate>
                                     <div class="dropdown">
                                         <button class="btn btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
-                                        <ul class="dropdown-menu">
+                                        <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <asp:LinkButton ID="btnEditar" runat="server" CssClass="dropdown-item" CommandName="Editar" CommandArgument='<%# Eval("NormaId") %>'>
-                                                    <i class="bi bi-pencil"></i>Editar
+                                                <asp:LinkButton ID="btnEditar" runat="server" CssClass="dropdown-item" 
+                                                    CommandName="Editar" CommandArgument='<%# Eval("NormaId") %>'>
+                                                    <i class="bi bi-pencil"></i> Editar
                                                 </asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="btnVerDetalles" runat="server" CssClass="dropdown-item" CommandName="VerDetalles" CommandArgument='<%# Eval("NormaId") %>'>
-                                                    <i class="bi bi-eye"></i>Ver Detalles
+                                                <asp:LinkButton ID="btnVerDetalles" runat="server" CssClass="dropdown-item" 
+                                                    CommandName="VerDetalles" CommandArgument='<%# Eval("NormaId") %>'>
+                                                    <i class="bi bi-eye"></i> Ver Detalles
                                                 </asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="btnDescargar" runat="server" CssClass="dropdown-item" CommandName="Descargar" CommandArgument='<%# Eval("NormaId") %>'>
-                                                    <i class="bi bi-download"></i>Descargar
+                                                <asp:LinkButton ID="btnDescargar" runat="server" CssClass="dropdown-item" 
+                                                    CommandName="Descargar" CommandArgument='<%# Eval("NormaId") %>'>
+                                                    <i class="bi bi-download"></i> Descargar
                                                 </asp:LinkButton>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <asp:LinkButton ID="btnEliminar" runat="server" CssClass="dropdown-item text-danger" CommandName="Eliminar" CommandArgument='<%# Eval("NormaId") %>'
+                                                <asp:LinkButton ID="btnEliminar" runat="server" CssClass="dropdown-item text-danger" 
+                                                    CommandName="Eliminar" CommandArgument='<%# Eval("NormaId") %>'
                                                     OnClientClick="return confirm('¿Está seguro que desea eliminar esta norma?');">
-                                                    <i class="bi bi-trash"></i>Eliminar
+                                                    <i class="bi bi-trash"></i> Eliminar
                                                 </asp:LinkButton>
                                             </li>
                                         </ul>

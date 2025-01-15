@@ -51,22 +51,22 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
         protected global::System.Web.UI.WebControls.Literal litMensaje;
 
         /// <summary>
-        /// Control btnEditar.
+        /// Control btnEditarFoda.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnEditar;
+        protected global::System.Web.UI.WebControls.LinkButton btnEditarFoda;
 
         /// <summary>
-        /// Control btnBorrar.
+        /// Control btnBorrarFoda.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnBorrar;
+        protected global::System.Web.UI.WebControls.LinkButton btnBorrarFoda;
 
         /// <summary>
         /// Control txtFortalezas.
@@ -330,6 +330,96 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
         protected global::System.Web.UI.WebControls.LinkButton btnGuardarFactores;
 
         /// <summary>
+        /// Control btnNuevaParte.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnNuevaParte;
+
+        /// <summary>
+        /// Control upFormParte.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upFormParte;
+
+        /// <summary>
+        /// Control rfvNombreParte.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNombreParte;
+
+        /// <summary>
+        /// Control rfvTipoParte.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTipoParte;
+
+        /// <summary>
+        /// Control rfvCategoriaParte.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCategoriaParte;
+
+        /// <summary>
+        /// Control rfvIntereses.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvIntereses;
+
+        /// <summary>
+        /// Control rfvRelevancia.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvRelevancia;
+
+        /// <summary>
+        /// Control rfvImpacto.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvImpacto;
+
+        /// <summary>
+        /// Control rfvAccionesParte.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvAccionesParte;
+
+        /// <summary>
+        /// Control btnGuardarParte.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardarParte;
+
+        /// <summary>
         /// Control btnEditarAlcance.
         /// </summary>
         /// <remarks>
@@ -386,61 +476,100 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
         /// <summary>
         /// Control btnNuevaArea.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnNuevaArea;
 
         /// <summary>
         /// Control upAreas.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.UpdatePanel upAreas;
 
         /// <summary>
         /// Control gvAreas.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvAreas;
 
         /// <summary>
         /// Control litTituloArea.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litTituloArea;
 
         /// <summary>
         /// Control upFormArea.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.UpdatePanel upFormArea;
 
         /// <summary>
         /// Control txtNombreArea.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNombreArea;
 
         /// <summary>
         /// Control rfvNombreArea.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNombreArea;
 
         /// <summary>
         /// Control txtDescripcionArea.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescripcionArea;
 
         /// <summary>
         /// Control ddlUbicacion.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlUbicacion;
 
         /// <summary>
         /// Control rfvUbicacion.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvUbicacion;
-
-        /// <summary>
-        /// Control btnCancelarArea.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.Button btnCancelarArea;
 
         /// <summary>
         /// Control btnGuardarArea.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnGuardarArea;
     }
 }

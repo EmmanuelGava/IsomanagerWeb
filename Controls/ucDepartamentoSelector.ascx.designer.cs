@@ -1,4 +1,4 @@
-namespace Isomanager.Controls
+namespace IsomanagerWeb.Controls
 {
     public partial class ucDepartamentoSelector
     {

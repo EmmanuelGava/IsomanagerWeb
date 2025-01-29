@@ -27,23 +27,23 @@ namespace IsomanagerWeb.Models
         public int UsuarioId { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(200)]
         public string Nombre { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(200)]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(200)]
         public string Password { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(100)]
         public string Rol { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(100)]
         public string Estado { get; set; }
 
         public int? AreaId { get; set; }
@@ -54,6 +54,14 @@ namespace IsomanagerWeb.Models
         public DateTime? UltimaConexion { get; set; }
 
         public int ContadorIntentos { get; set; }
+
+        [Required]
+        [StringLength(200)]
+        [Column("Cargo")]
+        public string Cargo { get; set; }
+
+        [StringLength(1000)]
+        public string Responsabilidades { get; set; }
 
         // Propiedades de navegación
         [ForeignKey("AreaId")]
@@ -68,7 +76,6 @@ namespace IsomanagerWeb.Models
         public virtual ICollection<CambiosProceso> Cambios { get; set; }
         public virtual ICollection<Documentos> Documentos { get; set; }
         public virtual ICollection<EvaluacionProcesos> Evaluaciones { get; set; }
-        public virtual ICollection<MejoraProceso> Mejoras { get; set; }
         public virtual ICollection<Archivo> Archivos { get; set; }
     }
 } 

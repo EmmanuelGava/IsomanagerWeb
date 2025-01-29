@@ -276,7 +276,7 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
             if (norma != null)
             {
                 litTituloNorma.Text = norma.Titulo;
-                litDetallesNorma.Text = $"Versión {norma.Version} - {norma.UltimaActualizacion:dd/MM/yyyy}";
+                litDetallesNorma.Text = $"Versión {norma.Version} - {norma.UltimaModificacion:dd/MM/yyyy}";
             }
         }
 

@@ -294,6 +294,7 @@
     <Content Include="Pages\Normas\ComponentesNorma.aspx" />
     <Content Include="Pages\Normas\GestionNormas.aspx" />
     <Content Include="Pages\Normas\Secciones\DatosPartida.aspx" />
+    <Content Include="Pages\Normas\Secciones\RecursosHumanos.aspx" />
     <Content Include="Pages\Procesos\Auditorias\GestionAuditorias.aspx" />
     <Content Include="Pages\Procesos\Cambios\GestionCambios.aspx" />
     <Content Include="Pages\Procesos\Evaluaciones\GestionEvaluaciones.aspx" />
@@ -438,6 +439,7 @@
     <Compile Include="Models\AuditoriasInternaProceso.cs" />
     <Compile Include="Models\Calificacion.cs" />
     <Compile Include="Models\CambiosProceso.cs" />
+    <Compile Include="Models\CompetenciaNorma.cs" />
     <Compile Include="Models\ConnectionManager.cs" />
     <Compile Include="Models\Contexto.cs" />
     <Compile Include="Models\DefinicionObjetivoAlcance.cs" />
@@ -506,6 +508,13 @@
     </Compile>
     <Compile Include="Pages\Normas\Secciones\DatosPartida.aspx.designer.cs">
       <DependentUpon>DatosPartida.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Normas\Secciones\RecursosHumanos.aspx.cs">
+      <DependentUpon>RecursosHumanos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Normas\Secciones\RecursosHumanos.aspx.designer.cs">
+      <DependentUpon>RecursosHumanos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Procesos\Auditorias\GestionAuditorias.aspx.cs">
       <DependentUpon>GestionAuditorias.aspx</DependentUpon>

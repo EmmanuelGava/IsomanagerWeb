@@ -13,10 +13,10 @@ namespace IsomanagerWeb.Models
     {
         private static string _connectionString;
 
-        public IsomanagerContext() : base(GetConnectionString())
+        public IsomanagerContext()
+            : base("name=IsomanagerContext")
         {
-            // Usar la configuración de migraciones
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<IsomanagerContext, Migrations.Configuration>());
+            Database.SetInitializer<IsomanagerContext>(null);
 
             // Habilitar el log de las consultas SQL para depuración
             Database.Log = sql => Debug.WriteLine(sql);
@@ -64,6 +64,7 @@ namespace IsomanagerWeb.Models
         public virtual DbSet<AlcanceSistemaGestion> AlcanceSistemaGestion { get; set; }
         public virtual DbSet<PartesInteresadas> PartesInteresadas { get; set; }
         public virtual DbSet<FactoresInternos> FactoresInternos { get; set; }
+        public virtual DbSet<CompetenciaNorma> CompetenciasNorma { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -78,6 +79,18 @@ namespace IsomanagerWeb.Models
             modelBuilder.Entity<Usuario>()
                 .ToTable("Usuario", "dbo")
                 .HasKey(u => u.UsuarioId);
+
+            modelBuilder.Entity<Usuario>()
+                .Property(u => u.Cargo)
+                .HasColumnName("Cargo")
+                .HasMaxLength(200)
+                .IsRequired();
+
+            modelBuilder.Entity<Usuario>()
+                .Property(u => u.Responsabilidades)
+                .HasColumnName("Responsabilidades")
+                .HasMaxLength(1000)
+                .IsOptional();
 
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.Email)
@@ -382,6 +395,40 @@ namespace IsomanagerWeb.Models
                 .HasOptional(f => f.UltimoEditor)
                 .WithMany()
                 .HasForeignKey(f => f.UltimoEditorId)
+                .WillCascadeOnDelete(false);
+
+            // CompetenciaNorma
+            modelBuilder.Entity<CompetenciaNorma>()
+                .ToTable("CompetenciaNorma", "dbo")
+                .HasKey(c => c.CompetenciaId);
+
+            modelBuilder.Entity<CompetenciaNorma>()
+                .HasRequired(c => c.Norma)
+                .WithMany()
+                .HasForeignKey(c => c.NormaId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<CompetenciaNorma>()
+                .HasRequired(c => c.Usuario)
+                .WithMany()
+                .HasForeignKey(c => c.UsuarioId)
+                .WillCascadeOnDelete(false);
+
+            // Configurar Formacion
+            modelBuilder.Entity<Formacion>()
+                .ToTable("Formacion", "dbo")
+                .HasKey(f => f.FormacionId);
+
+            modelBuilder.Entity<Formacion>()
+                .HasRequired(f => f.Usuario)
+                .WithMany()
+                .HasForeignKey(f => f.UsuarioId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Formacion>()
+                .HasRequired(f => f.Norma)
+                .WithMany()
+                .HasForeignKey(f => f.NormaId)
                 .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);

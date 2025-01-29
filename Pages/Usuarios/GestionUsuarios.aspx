@@ -36,7 +36,8 @@
                             <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
                             <asp:BoundField DataField="Email" HeaderText="Email" />
                             <asp:BoundField DataField="Area" HeaderText="Área" />
-                            <asp:BoundField DataField="Rol" HeaderText="Rol" />
+                            <asp:BoundField DataField="Cargo" HeaderText="Cargo" />
+                            <asp:BoundField DataField="Rol" HeaderText="Rol Sistema" />
                             <asp:TemplateField HeaderText="Estado">
                                 <ItemTemplate>
                                     <span class='badge rounded-pill <%# GetEstadoBadgeClass(Eval("Estado").ToString() == "Activo") %>'>
@@ -163,7 +164,16 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="<%= ddlRol.ClientID %>" class="form-label">Rol</label>
+                                <label for="<%= txtCargo.ClientID %>" class="form-label">Cargo en la Empresa</label>
+                                <asp:TextBox ID="txtCargo" runat="server" CssClass="form-control" MaxLength="100" />
+                                <asp:RequiredFieldValidator ID="rfvCargo" runat="server" 
+                                    ControlToValidate="txtCargo"
+                                    ValidationGroup="NuevoUsuario"
+                                    CssClass="text-danger"
+                                    ErrorMessage="El cargo es requerido." />
+                            </div>
+                            <div class="mb-3">
+                                <label for="<%= ddlRol.ClientID %>" class="form-label">Rol en el Sistema</label>
                                 <asp:DropDownList ID="ddlRol" runat="server" CssClass="form-select">
                                     <asp:ListItem Text="Usuario" Value="Usuario" />
                                     <asp:ListItem Text="Administrador" Value="Administrador" />

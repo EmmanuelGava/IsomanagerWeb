@@ -1,4 +1,4 @@
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucDepartamentoSelector.ascx.cs" Inherits="Isomanager.Controls.ucDepartamentoSelector" %>
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ucDepartamentoSelector.ascx.cs" Inherits="IsomanagerWeb.Controls.ucDepartamentoSelector" %>
 
 <asp:UpdatePanel ID="upDepartamento" runat="server" UpdateMode="Conditional">
     <ContentTemplate>

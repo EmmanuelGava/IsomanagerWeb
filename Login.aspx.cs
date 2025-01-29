@@ -42,68 +42,11 @@ namespace IsomanagerWeb
         {
             if (!IsPostBack)
             {
-                // Verificar si hay una cookie de autenticación
-                HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
-                if (authCookie != null)
-                {
-                    try
-                    {
-                        FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
-                        if (!ticket.Expired)
-                        {
-                            string dbType = ticket.UserData; // Recuperar el tipo de base de datos del ticket
-                            
-                            // Establecer el tipo de base de datos en la sesión
-                            Session["TipoBaseDatos"] = dbType;
-                            
-                            // Configurar la cadena de conexión
-                            IsomanagerContext.SetConnectionString(dbType);
-                            
-                            // Intentar autenticar al usuario
-                            using (var context = new IsomanagerContext())
-                            {
-                                var usuario = context.Usuarios
-                                    .Include("Area")
-                                    .FirstOrDefault(u => u.Email == ticket.Name);
-
-                                if (usuario != null && usuario.Estado == "Activo")
-                                {
-                                    // Guardar información en sesión
-                                    Session["Usuario"] = usuario;
-                                    Session["UsuarioId"] = usuario.UsuarioId;
-                                    Session["NombreUsuario"] = usuario.Nombre;
-                                    Session["EmailUsuario"] = usuario.Email;
-                                    Session["RolUsuario"] = usuario.Rol;
-                                    Session["DepartamentoUsuario"] = usuario.Area?.Nombre ?? "Sin departamento";
-
-                                    // Redirigir al dashboard
-                                    Response.Redirect("~/Pages/Dashboard.aspx", false);
-                                    Context.ApplicationInstance.CompleteRequest();
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    catch
-                    {
-                        // Si hay algún error con la cookie, la eliminamos
-                        FormsAuthentication.SignOut();
-                        Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
-                    }
-                }
-
-                // Si no hay cookie válida o hubo un error, mostrar el formulario de login
+                // Limpiar cualquier sesión existente
                 Session.Clear();
                 FormsAuthentication.SignOut();
 
-                // Verificar si hay un mensaje de error en la URL
-                string error = Request.QueryString["error"];
-                if (!string.IsNullOrEmpty(error))
-                {
-                    lblError.Text = Server.UrlDecode(error);
-                    lblError.Visible = true;
-                }
-
+                // Cargar la configuración de la base de datos
                 LoadCurrentDbConfig();
             }
         }
@@ -299,8 +242,6 @@ namespace IsomanagerWeb
                 string password = txtPassword.Text;
                 string dbType = ddlDbType.SelectedValue;
 
-                Debug.WriteLine($"Intento de login para email: {email} usando base de datos: {dbType}");
-
                 if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 {
                     MostrarError("Por favor, ingrese su correo electrónico y contraseña.");
@@ -309,7 +250,6 @@ namespace IsomanagerWeb
 
                 // Establecer el tipo de base de datos en la sesión
                 Session["TipoBaseDatos"] = dbType;
-                Debug.WriteLine($"=== Tipo de base de datos seleccionado: {dbType} ===");
 
                 // Probar la conexión antes de intentar el login
                 var connectionTest = await ConnectionManager.TestConnection(dbType);
@@ -330,21 +270,14 @@ namespace IsomanagerWeb
 
                     if (usuario == null)
                     {
-                        Debug.WriteLine("Usuario no encontrado en la base de datos");
                         MostrarError("Usuario no encontrado.");
                         return;
                     }
 
-                    Debug.WriteLine($"Usuario encontrado: {usuario.Nombre}, Estado: {usuario.Estado}");
-
                     // Verificar contraseña
                     string hashedPassword = GeneratePasswordHash(password);
-                    Debug.WriteLine($"Hash de contraseña ingresada: {hashedPassword}");
-                    Debug.WriteLine($"Hash almacenado en BD: {usuario.Password}");
-
                     if (usuario.Password != hashedPassword)
                     {
-                        Debug.WriteLine("Contraseña incorrecta");
                         ManejarIntentoFallido(usuario);
                         return;
                     }
@@ -352,16 +285,17 @@ namespace IsomanagerWeb
                     // Verificar estado del usuario
                     if (usuario.Estado != "Activo")
                     {
-                        Debug.WriteLine($"Usuario inactivo. Estado actual: {usuario.Estado}");
                         MostrarError("Su cuenta está desactivada. Por favor, contacte al administrador.");
                         return;
                     }
 
-                    Debug.WriteLine("Login exitoso, actualizando última conexión");
-
                     // Actualizar última conexión
                     usuario.UltimaConexion = DateTime.Now;
-                    usuario.ContadorIntentos = 0; // Resetear contador de intentos
+                    usuario.ContadorIntentos = 0;
+                    if (string.IsNullOrEmpty(usuario.Cargo))
+                    {
+                        usuario.Cargo = "Sin asignar";
+                    }
                     await context.SaveChangesAsync();
 
                     // Guardar información en sesión
@@ -373,19 +307,16 @@ namespace IsomanagerWeb
                     Session["DepartamentoUsuario"] = usuario.Area?.Nombre ?? "Sin departamento";
                     Session["ConnectionString"] = ConnectionManager.GetConnectionString(dbType);
 
-                    Debug.WriteLine("Información guardada en sesión");
-
                     // Autenticar usuario y crear cookie persistente si "Recordarme" está marcado
                     if (chkRecordarme.Checked)
                     {
-                        // Crear ticket con información de conexión
                         var authTicket = new FormsAuthenticationTicket(
                             1,
                             email,
                             DateTime.Now,
                             DateTime.Now.AddDays(14),
                             true,
-                            dbType, // Guardamos el tipo de base de datos en el ticket
+                            dbType,
                             FormsAuthentication.FormsCookiePath);
 
                         string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
@@ -395,20 +326,20 @@ namespace IsomanagerWeb
                     }
 
                     FormsAuthentication.SetAuthCookie(email, chkRecordarme.Checked);
-                    Debug.WriteLine("Redirigiendo al dashboard");
 
-                    Response.Redirect("~/Pages/Dashboard.aspx", false);
+                    // Redirigir al dashboard usando el método correcto
+                    string redirectUrl = FormsAuthentication.GetRedirectUrl(email, chkRecordarme.Checked);
+                    if (string.IsNullOrEmpty(redirectUrl) || redirectUrl == "/")
+                    {
+                        redirectUrl = "~/Pages/Dashboard.aspx";
+                    }
+
+                    Response.Redirect(redirectUrl, false);
                     Context.ApplicationInstance.CompleteRequest();
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error en login: {ex.Message}");
-                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                {
-                    Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
-                }
                 MostrarError("Error al intentar iniciar sesión. Por favor, intente nuevamente.");
             }
         }
@@ -495,6 +426,7 @@ namespace IsomanagerWeb
                         Password = GeneratePasswordHash(password),
                         Estado = "Activo",
                         Rol = "Usuario", // Rol por defecto
+                        Cargo = "Sin asignar", // Cargo por defecto
                         FechaRegistro = DateTime.Now,
                         ContadorIntentos = 0
                     };

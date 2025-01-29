@@ -25,26 +25,9 @@ namespace IsomanagerWeb.Models
 
         private static string BuildLocalConnectionString()
         {
-            var instance = ConfigurationManager.AppSettings["LocalInstance"] ?? @".\SQLEXPRESS";
-            var database = ConfigurationManager.AppSettings["LocalDatabase"] ?? "IsomanagerDB";
-            var useIntegratedSecurity = bool.Parse(ConfigurationManager.AppSettings["LocalUseIntegratedSecurity"] ?? "true");
-            
-            var builder = new SqlConnectionStringBuilder
-            {
-                DataSource = instance,
-                InitialCatalog = database,
-                IntegratedSecurity = useIntegratedSecurity,
-                MultipleActiveResultSets = true,
-                Encrypt = false
-            };
-
-            if (!useIntegratedSecurity)
-            {
-                builder.UserID = ConfigurationManager.AppSettings["LocalUser"];
-                builder.Password = ConfigurationManager.AppSettings["LocalPassword"];
-            }
-
-            return builder.ConnectionString;
+            // Usar directamente la cadena de conexión DefaultConnection del Web.config
+            return ConfigurationManager.ConnectionStrings["DefaultConnection"]?.ConnectionString
+                ?? "Data Source=LEGION5;Initial Catalog=IsomanagerDB;Integrated Security=True;MultipleActiveResultSets=True";
         }
 
         private static string BuildRemoteConnectionString()

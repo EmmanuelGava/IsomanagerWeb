@@ -122,7 +122,7 @@ namespace IsomanagerWeb.Pages.Procesos
         /// <summary>
         /// Control ucArea.
         /// </summary>
-        protected global::Isomanager.Controls.ucDepartamentoSelector ucArea;
+        protected global::IsomanagerWeb.Controls.ucDepartamentoSelector ucArea;
 
         /// <summary>
         /// Control ucResponsable.

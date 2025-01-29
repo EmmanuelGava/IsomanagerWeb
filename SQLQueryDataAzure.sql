@@ -30,6 +30,7 @@ CREATE TABLE [dbo].[Usuario] (
     [Email] [nvarchar](100) NOT NULL UNIQUE,
     [Password] [nvarchar](100) NOT NULL,
     [Rol] [nvarchar](50) NOT NULL,
+    [Cargo] [nvarchar](100) NOT NULL DEFAULT 'Sin asignar',
     [Estado] [nvarchar](50) NOT NULL DEFAULT 'Activo',
     [AreaId] [int] NULL,
     [FechaRegistro] [datetime] NOT NULL DEFAULT GETDATE(),

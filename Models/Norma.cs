@@ -18,6 +18,10 @@ namespace IsomanagerWeb.Models
         public int NormaId { get; set; }
 
         [Required]
+        [StringLength(50)]
+        public string TipoNorma { get; set; }
+
+        [Required]
         [StringLength(200)]
         public string Titulo { get; set; }
 
@@ -38,7 +42,7 @@ namespace IsomanagerWeb.Models
         public DateTime FechaCreacion { get; set; }
 
         [Required]
-        public DateTime UltimaActualizacion { get; set; }
+        public DateTime UltimaModificacion { get; set; }
 
         [ForeignKey(nameof(ResponsableId))]
         public virtual Usuario Responsable { get; set; }

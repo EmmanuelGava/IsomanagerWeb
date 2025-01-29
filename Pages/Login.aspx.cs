@@ -38,11 +38,14 @@ public partial class Login : System.Web.UI.Page
                         if (usuario != null && usuario.Estado == "Activo")
                         {
                             // Establecer variables de sesión
+                            Session["Usuario"] = usuario;
                             Session["UsuarioId"] = usuario.UsuarioId;
                             Session["NombreUsuario"] = usuario.Nombre;
                             Session["EmailUsuario"] = usuario.Email;
                             Session["RolUsuario"] = usuario.Rol;
-                            Session["AreaUsuario"] = usuario.Area?.Nombre;
+                            Session["CargoUsuario"] = usuario.Cargo;
+                            Session["ResponsabilidadesUsuario"] = usuario.Responsabilidades;
+                            Session["DepartamentoUsuario"] = usuario.Area?.Nombre ?? "Sin departamento";
                             Session["Autenticado"] = true;
 
                             // Redirigir al dashboard
@@ -110,11 +113,14 @@ public partial class Login : System.Web.UI.Page
                         db.SaveChanges();
 
                         // Establecer variables de sesión
+                        Session["Usuario"] = usuario;
                         Session["UsuarioId"] = usuario.UsuarioId;
                         Session["NombreUsuario"] = usuario.Nombre;
                         Session["EmailUsuario"] = usuario.Email;
                         Session["RolUsuario"] = usuario.Rol;
-                        Session["AreaUsuario"] = usuario.Area?.Nombre;
+                        Session["CargoUsuario"] = usuario.Cargo;
+                        Session["ResponsabilidadesUsuario"] = usuario.Responsabilidades;
+                        Session["DepartamentoUsuario"] = usuario.Area?.Nombre ?? "Sin departamento";
                         Session["Autenticado"] = true;
 
                         // Si el checkbox de recordar está marcado, crear cookie

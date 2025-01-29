@@ -16,7 +16,7 @@ namespace IsomanagerWeb.Pages.Usuarios
         protected global::System.Web.UI.WebControls.TextBox txtPassword;
         protected global::System.Web.UI.WebControls.DropDownList ddlRol;
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvRol;
-        protected global::Isomanager.Controls.ucDepartamentoSelector ucDepartamento;
+        protected global::IsomanagerWeb.Controls.ucDepartamentoSelector ucDepartamento;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPassword;
         protected global::System.Web.UI.WebControls.TextBox txtConfirmPassword;
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPassword;

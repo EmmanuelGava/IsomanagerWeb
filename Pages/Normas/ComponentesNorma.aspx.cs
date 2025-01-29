@@ -3,13 +3,14 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using IsomanagerWeb.Models;
 using System.Linq;
+using System.Data.Entity.SqlServer;
 
 namespace IsomanagerWeb.Pages.Procesos.Normas
 {
     public partial class ComponentesNorma : Page
     {
         private IsomanagerContext db = new IsomanagerContext();
-        private int normaId;
+        protected int NormaId { get; private set; }
 
         private int ObtenerNormaId()
         {
@@ -25,207 +26,134 @@ namespace IsomanagerWeb.Pages.Procesos.Normas
         {
             if (!IsPostBack)
             {
-                int normaId = ObtenerNormaId();
-                if (normaId > 0)
-                {
-                    CargarDatosNorma(normaId);
-                }
-                else
-                {
-                    Response.Redirect("~/Pages/Procesos/GestionProcesos.aspx");
-                }
+                NormaId = ObtenerNormaId();
+                CargarDatosNorma();
+                this.DataBind();
             }
         }
 
-        private void CargarDatosNorma(int normaId)
+        private void CargarDatosNorma()
         {
             try
             {
-                var norma = db.Normas.FirstOrDefault(n => n.NormaId == normaId);
+                var norma = db.Normas.FirstOrDefault(n => n.NormaId == NormaId);
                 if (norma != null)
                 {
-                    // Mostrar los datos en la UI
                     litTituloNorma.Text = norma.Titulo ?? "Sin título";
                     litVersion.Text = norma.Version ?? "1.0";
-                    litFecha.Text = norma.UltimaActualizacion.ToString("dd/MM/yyyy");
-
-                    // Solo actualizamos si realmente hay campos que necesitan ser actualizados
-                    bool requiereActualizacion = false;
-
-                    if (string.IsNullOrEmpty(norma.Estado))
-                    {
-                        norma.Estado = "Activo";
-                        requiereActualizacion = true;
-                    }
-
-                    if (norma.FechaCreacion == default(DateTime))
-                    {
-                        norma.FechaCreacion = DateTime.Now;
-                        requiereActualizacion = true;
-                    }
-
-                    if (norma.UltimaActualizacion == default(DateTime))
-                    {
-                        norma.UltimaActualizacion = DateTime.Now;
-                        requiereActualizacion = true;
-                    }
-
-                    // Solo guardamos si hubo cambios
-                    if (requiereActualizacion)
-                    {
-                        try
-                        {
-                            db.SaveChanges();
-                        }
-                        catch (System.Data.Entity.Validation.DbEntityValidationException ex)
-                        {
-                            // Si falla la actualización, no es crítico para mostrar la página
-                            System.Diagnostics.Debug.WriteLine($"Error al actualizar campos por defecto: {ex.Message}");
-                        }
-                    }
+                    litFecha.Text = norma.UltimaModificacion.ToString("dd/MM/yyyy");
                 }
                 else
                 {
-                    Response.Redirect("~/Pages/Procesos/GestionProcesos.aspx");
+                    // Si no se encuentra la norma, mostrar valores por defecto
+                    litTituloNorma.Text = "Norma no encontrada";
+                    litVersion.Text = "N/A";
+                    litFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    System.Diagnostics.Debug.WriteLine($"No se encontró la norma con ID: {NormaId}");
                 }
             }
             catch (Exception ex)
             {
-                // Registrar el error para debugging
-                System.Diagnostics.Debug.WriteLine($"Error al cargar datos de norma: {ex.Message}");
-                Response.Redirect("~/Pages/Procesos/GestionProcesos.aspx");
+                System.Diagnostics.Debug.WriteLine($"Error al cargar datos de la norma: {ex.Message}");
+                litTituloNorma.Text = "Error al cargar la norma";
+                litVersion.Text = "N/A";
+                litFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
             }
         }
 
         protected void btnVolver_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/Pages/Procesos/GestionProcesos.aspx");
+            Response.Redirect("~/Pages/Normas/ListaNormas.aspx");
         }
 
         protected void lnkDatosPartida_Click(object sender, EventArgs e)
         {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/DatosPartida.aspx?NormaId={normaId}");
-            }
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/DatosPartida.aspx?NormaId={currentNormaId}");
+        }
+
+        protected void lnkContextoOrg_Click(object sender, EventArgs e)
+        {
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/ContextoOrganizacion.aspx?NormaId={currentNormaId}");
         }
 
         protected void lnkRecursosHumanos_Click(object sender, EventArgs e)
         {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/RecursosHumanos.aspx?NormaId={normaId}");
-            }
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/RecursosHumanos.aspx?NormaId={currentNormaId}");
         }
 
         protected void lnkInfraestructura_Click(object sender, EventArgs e)
         {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/Infraestructura.aspx?NormaId={normaId}");
-            }
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/Infraestructura.aspx?NormaId={currentNormaId}");
         }
 
-        protected void lnkRealizacion_Click(object sender, EventArgs e)
+        protected void lnkProcesosProductivos_Click(object sender, EventArgs e)
         {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/Realizacion.aspx?NormaId={normaId}");
-            }
-        }
-
-        protected void lnkDocumentacion_Click(object sender, EventArgs e)
-        {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/Documentacion.aspx?NormaId={normaId}");
-            }
-        }
-
-        protected void lnkCompras_Click(object sender, EventArgs e)
-        {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/Compras.aspx?NormaId={normaId}");
-            }
-        }
-
-        protected void lnkIDI_Click(object sender, EventArgs e)
-        {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/IDI.aspx?NormaId={normaId}");
-            }
-        }
-
-        protected void lnkPlanificacion_Click(object sender, EventArgs e)
-        {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/Planificacion.aspx?NormaId={normaId}");
-            }
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/ProcesosProductivos.aspx?NormaId={currentNormaId}");
         }
 
         protected void lnkControlOperacional_Click(object sender, EventArgs e)
         {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/ControlOperacional.aspx?NormaId={normaId}");
-            }
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/ControlOperacional.aspx?NormaId={currentNormaId}");
         }
 
-        protected void lnkPlanesEmergencia_Click(object sender, EventArgs e)
+        protected void lnkDocumentacion_Click(object sender, EventArgs e)
         {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/PlanesEmergencia.aspx?NormaId={normaId}");
-            }
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/Documentacion.aspx?NormaId={currentNormaId}");
+        }
+
+        protected void lnkCompras_Click(object sender, EventArgs e)
+        {
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/Compras.aspx?NormaId={currentNormaId}");
+        }
+
+        protected void lnkIDI_Click(object sender, EventArgs e)
+        {
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/IDI.aspx?NormaId={currentNormaId}");
+        }
+
+        protected void lnkPlanificacion_Click(object sender, EventArgs e)
+        {
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/Planificacion.aspx?NormaId={currentNormaId}");
         }
 
         protected void lnkIncidentes_Click(object sender, EventArgs e)
         {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/Incidentes.aspx?NormaId={normaId}");
-            }
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/Incidentes.aspx?NormaId={currentNormaId}");
         }
 
-        protected void lnkComunicacion_Click(object sender, EventArgs e)
+        protected void lnkPlanesEmergencia_Click(object sender, EventArgs e)
         {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/Comunicacion.aspx?NormaId={normaId}");
-            }
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/PlanesEmergencia.aspx?NormaId={currentNormaId}");
         }
 
         protected void lnkNoConformidades_Click(object sender, EventArgs e)
         {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/NoConformidades.aspx?NormaId={normaId}");
-            }
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/NoConformidades.aspx?NormaId={currentNormaId}");
+        }
+
+        protected void lnkComunicacion_Click(object sender, EventArgs e)
+        {
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/Comunicacion.aspx?NormaId={currentNormaId}");
         }
 
         protected void lnkAuditoria_Click(object sender, EventArgs e)
         {
-            int normaId = ObtenerNormaId();
-            if (normaId > 0)
-            {
-                Response.Redirect($"~/Pages/Normas/Secciones/Auditoria.aspx?NormaId={normaId}");
-            }
+            int currentNormaId = NormaId > 0 ? NormaId : ObtenerNormaId();
+            Response.Redirect($"~/Pages/Normas/Secciones/Auditoria.aspx?NormaId={currentNormaId}");
         }
     }
 } 

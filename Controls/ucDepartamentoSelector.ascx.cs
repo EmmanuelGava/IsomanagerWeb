@@ -4,7 +4,7 @@ using System.Web.UI.WebControls;
 using System.Linq;
 using IsomanagerWeb.Models;
 
-namespace Isomanager.Controls
+namespace IsomanagerWeb.Controls
 {
     public partial class ucDepartamentoSelector : System.Web.UI.UserControl
     {

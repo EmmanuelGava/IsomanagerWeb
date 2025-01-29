@@ -80,21 +80,21 @@ namespace IsomanagerWeb.Pages
             }
         }
 
-        protected string GetStatusClass(string estado)
+        protected string GetEstadoClass(string estado)
         {
             try
             {
                 estado = estado?.ToLower() ?? "";
-                if (estado == "en progreso") return "in-progress";
-                if (estado == "en revisión") return "in-review";
-                if (estado == "iniciado") return "initiated";
-                if (estado == "planificación") return "planning";
-                return "in-progress";
+                if (estado == "borrador") return "estado-borrador";
+                if (estado == "revision") return "estado-revision";
+                if (estado == "aprobado") return "estado-aprobado";
+                if (estado == "obsoleto") return "estado-obsoleto";
+                return "estado-borrador";
             }
             catch (Exception ex)
             {
-                LogError("GetStatusClass", ex);
-                return "in-progress";
+                LogError("GetEstadoClass", ex);
+                return "estado-borrador";
             }
         }
 
@@ -103,16 +103,16 @@ namespace IsomanagerWeb.Pages
             try
             {
                 estado = estado?.ToLower() ?? "";
-                if (estado == "en progreso") return "En Progreso";
-                if (estado == "en revisión") return "En Revisión";
-                if (estado == "iniciado") return "Iniciado";
-                if (estado == "planificación") return "Planificación";
-                return estado;
+                if (estado == "borrador") return "Borrador";
+                if (estado == "revision") return "En Revisión";
+                if (estado == "aprobado") return "Aprobado";
+                if (estado == "obsoleto") return "Obsoleto";
+                return "Borrador";
             }
             catch (Exception ex)
             {
                 LogError("GetStatusText", ex);
-                return estado ?? "Desconocido";
+                return "Borrador";
             }
         }
 
@@ -130,7 +130,7 @@ namespace IsomanagerWeb.Pages
                     var normasBasicas = db.Normas
                         .Include(n => n.Responsable)
                         .AsNoTracking()
-                        .OrderByDescending(n => n.UltimaActualizacion)
+                        .OrderByDescending(n => n.UltimaModificacion)
                         .ToList();
 
                     System.Diagnostics.Debug.WriteLine($"Normas básicas obtenidas: {normasBasicas?.Count ?? 0}");
@@ -170,10 +170,11 @@ namespace IsomanagerWeb.Pages
                             var normaObj = new
                             {
                                 n.NormaId,
+                                n.TipoNorma,
                                 Nombre = n.Titulo ?? "Sin título",
                                 Version = n.Version ?? "1.0",
                                 Estado = n.Estado ?? "En Progreso",
-                                UltimaActualizacion = n.UltimaActualizacion.ToString("dd/MM/yyyy"),
+                                UltimaModificacion = n.UltimaModificacion.ToString("dd/MM/yyyy"),
                                 Responsable = n.Responsable?.Nombre ?? "Sin asignar",
                                 TotalProcesos = stats.TotalProcesos,
                                 TotalDocumentos = totalDocumentos,
@@ -426,7 +427,7 @@ namespace IsomanagerWeb.Pages
                                 Nombre = n.Titulo ?? "Sin título",
                                 Version = n.Version ?? "1.0",
                                 Estado = n.Estado ?? "En Progreso",
-                                UltimaActualizacion = n.UltimaActualizacion.ToString("dd/MM/yyyy"),
+                                UltimaActualizacion = n.UltimaModificacion.ToString("dd/MM/yyyy"),
                                 Responsable = n.Responsable?.Nombre ?? "Sin asignar",
                                 TotalProcesos = stats.TotalProcesos,
                                 TotalDocumentos = totalDocumentos,

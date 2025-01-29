@@ -184,6 +184,20 @@
 
         <!-- Script para inicializar componentes Bootstrap -->
         <script type="text/javascript">
+            // Función para inicializar los tooltips
+            function initTooltips() {
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                    // Remover instancias existentes para evitar duplicados
+                    var existingTooltip = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+                    if (existingTooltip) {
+                        existingTooltip.dispose();
+                    }
+                    // Crear nueva instancia
+                    new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            }
+
             // Función para inicializar los dropdowns
             function initDropdowns() {
                 var dropdownTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
@@ -216,6 +230,7 @@
             $(document).ready(function() {
                 initDropdowns();
                 initModals();
+                initTooltips();
             });
 
             // Reinicializar después de postbacks parciales
@@ -224,6 +239,7 @@
                 prm.add_endRequest(function() {
                     initDropdowns();
                     initModals();
+                    initTooltips();
                 });
             }
 

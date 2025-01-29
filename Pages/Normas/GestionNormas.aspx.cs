@@ -26,7 +26,7 @@ namespace IsomanagerWeb.Pages.Normas
                 {
                     IQueryable<Norma> query = context.Normas
                         .Include(n => n.Responsable)
-                        .OrderByDescending(n => n.UltimaActualizacion);
+                        .OrderByDescending(n => n.UltimaModificacion);
 
                     // Aplicar filtro de búsqueda si existe
                     if (!string.IsNullOrEmpty(txtBuscar.Text))
@@ -37,18 +37,19 @@ namespace IsomanagerWeb.Pages.Normas
                             n.Version.ToLower().Contains(filtro) ||
                             n.Estado.ToLower().Contains(filtro) ||
                             n.Responsable.Nombre.ToLower().Contains(filtro)
-                        ).OrderByDescending(n => n.UltimaActualizacion);
+                        ).OrderByDescending(n => n.UltimaModificacion);
                     }
 
                     var normas = query.Select(n => new
                     {
                         n.NormaId,
+                        n.TipoNorma,
                         n.Titulo,
                         n.Descripcion,
                         n.Version,
                         n.Estado,
                         FechaImplementacion = n.FechaCreacion,
-                        ProximaAuditoria = SqlFunctions.DateAdd("month", 6, n.UltimaActualizacion),
+                        ProximaAuditoria = SqlFunctions.DateAdd("month", 6, n.UltimaModificacion),
                         Responsable = n.Responsable.Nombre
                     }).ToList();
 
@@ -75,71 +76,84 @@ namespace IsomanagerWeb.Pages.Normas
                 "setTimeout(function() { showModal(); }, 100);", true);
         }
 
+        protected void ddlTipoNorma_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ddlTipoNorma.SelectedValue))
+            {
+                // Establecer descripción predeterminada según la norma seleccionada
+                switch (ddlTipoNorma.SelectedValue)
+                {
+                    case "ISO 9001":
+                        txtDescripcion.Text = "Sistema de Gestión de Calidad que proporciona la infraestructura, procedimientos, procesos y recursos necesarios para ayudar a las organizaciones a controlar y mejorar su rendimiento y conducirles hacia la eficiencia.";
+                        break;
+                    case "ISO 14001":
+                        txtDescripcion.Text = "Sistema de Gestión Ambiental que ayuda a identificar, priorizar y gestionar los riesgos ambientales como parte de sus prácticas habituales.";
+                        break;
+                    case "ISO 45001":
+                        txtDescripcion.Text = "Sistema de Gestión de Seguridad y Salud en el Trabajo que ayuda a las organizaciones a mejorar su desempeño en prevención de lesiones y enfermedades.";
+                        break;
+                }
+            }
+        }
+
         protected void btnGuardarNorma_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
             {
                 try
                 {
-                    using (var context = new IsomanagerContext())
+                    using (var db = new IsomanagerContext())
                     {
-                        if (!ucResponsable.SelectedUsuarioId.HasValue)
-                        {
-                            lblErrorModal.Text = "Error: Debe seleccionar un responsable.";
-                            lblErrorModal.Visible = true;
-                            return;
-                        }
-
-                        bool esNueva = string.IsNullOrEmpty(hdnNormaId.Value);
+                        bool esNuevo = string.IsNullOrEmpty(hdnNormaId.Value);
                         Norma norma;
 
-                        if (esNueva)
+                        if (esNuevo)
                         {
                             norma = new Norma
                             {
-                                FechaCreacion = DateTime.Now
+                                Titulo = ddlTipoNorma.SelectedItem.Text,
+                                Descripcion = txtDescripcion.Text,
+                                Version = txtVersion.Text,
+                                Estado = ddlEstado.SelectedValue,
+                                ResponsableId = ucResponsable.SelectedUsuarioId.Value,
+                                FechaCreacion = DateTime.Now,
+                                UltimaModificacion = DateTime.Now,
+                                TipoNorma = ddlTipoNorma.SelectedValue
                             };
-                            context.Normas.Add(norma);
+                            db.Normas.Add(norma);
                         }
                         else
                         {
                             int normaId = Convert.ToInt32(hdnNormaId.Value);
-                            norma = context.Normas.Find(normaId);
+                            norma = db.Normas.Find(normaId);
                             if (norma == null)
                             {
-                                lblErrorModal.Text = "Error: No se encontró la norma a editar.";
-                                lblErrorModal.Visible = true;
+                                MostrarError("La norma no fue encontrada.");
                                 return;
                             }
+
+                            norma.Titulo = ddlTipoNorma.SelectedItem.Text;
+                            norma.Descripcion = txtDescripcion.Text;
+                            norma.Version = txtVersion.Text;
+                            norma.Estado = ddlEstado.SelectedValue;
+                            norma.ResponsableId = ucResponsable.SelectedUsuarioId.Value;
+                            norma.UltimaModificacion = DateTime.Now;
+                            norma.TipoNorma = ddlTipoNorma.SelectedValue;
                         }
 
-                        // Actualizar propiedades
-                        norma.Titulo = txtTitulo.Text.Trim();
-                        norma.Descripcion = txtDescripcion.Text.Trim();
-                        norma.Version = txtVersion.Text.Trim();
-                        norma.Estado = ddlEstado.SelectedValue;
-                        norma.ResponsableId = ucResponsable.SelectedUsuarioId.Value;
-                        norma.UltimaActualizacion = DateTime.Now;
-
-                        context.SaveChanges();
-
-                        // Actualizar contador en sesión para el dashboard
-                        Session["NormasCount"] = context.Normas.Count();
-                        Session["LastNormaUpdate"] = DateTime.Now;
-
-                        // Cerrar modal y mostrar mensaje de éxito
-                        string mensaje = esNueva ? "Norma creada exitosamente." : "Norma actualizada exitosamente.";
-                        ScriptManager.RegisterStartupScript(this, GetType(), "hideModal",
-                            $"hideModal(); toastr.success('{mensaje}');", true);
-
-                        // Recargar la grilla
+                        db.SaveChanges();
                         CargarNormas();
+                        LimpiarModal();
+
+                        // Cerrar el modal y mostrar mensaje de éxito
+                        ScriptManager.RegisterStartupScript(this, GetType(), "hideModal", "hideModal();", true);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showSuccess", 
+                            $"showSuccessMessage('Norma {(esNuevo ? "creada" : "actualizada")} exitosamente.');", true);
                     }
                 }
                 catch (Exception ex)
                 {
-                    lblErrorModal.Text = "Error al guardar la norma: " + ex.Message;
-                    lblErrorModal.Visible = true;
+                    MostrarError($"Error al {(string.IsNullOrEmpty(hdnNormaId.Value) ? "crear" : "actualizar")} la norma: {ex.Message}");
                 }
             }
         }
@@ -186,7 +200,7 @@ namespace IsomanagerWeb.Pages.Normas
             {
                 using (var context = new IsomanagerContext())
                 {
-                    var norma = context.Normas  
+                    var norma = context.Normas
                         .Include(n => n.Responsable)
                         .FirstOrDefault(n => n.NormaId == normaId);
 
@@ -197,7 +211,7 @@ namespace IsomanagerWeb.Pages.Normas
                         
                         // Establecer valores
                         hdnNormaId.Value = norma.NormaId.ToString();
-                        txtTitulo.Text = norma.Titulo;
+                        ddlTipoNorma.SelectedValue = norma.TipoNorma;
                         txtDescripcion.Text = norma.Descripcion;
                         txtVersion.Text = norma.Version;
                         ddlEstado.SelectedValue = norma.Estado;
@@ -221,13 +235,19 @@ namespace IsomanagerWeb.Pages.Normas
 
         private void LimpiarModal()
         {
-            txtTitulo.Text = string.Empty;
-            txtDescripcion.Text = string.Empty;
-            txtVersion.Text = string.Empty;
+            hdnNormaId.Value = "";
+            ddlTipoNorma.SelectedIndex = 0;
+            txtDescripcion.Text = "";
+            txtVersion.Text = "";
             ddlEstado.SelectedIndex = 0;
             ucResponsable.SelectedUsuarioId = null;
             lblErrorModal.Visible = false;
-            hdnNormaId.Value = "";
+        }
+
+        private void MostrarError(string mensaje)
+        {
+            lblErrorModal.Text = mensaje;
+            lblErrorModal.Visible = true;
         }
 
         protected string GetEstadoBadgeClass(string estado)

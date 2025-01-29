@@ -32,29 +32,19 @@ namespace IsomanagerWeb.Pages.Normas
         protected global::System.Web.UI.WebControls.GridView gvNormas;
 
         /// <summary>
-        /// litTituloModal control.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.Literal litTituloModal;
-
-        /// <summary>
-        /// upModalNuevaNorma control.
-        /// </summary>
-        protected global::System.Web.UI.UpdatePanel upModalNuevaNorma;
-
-        /// <summary>
         /// hdnNormaId control.
         /// </summary>
         protected global::System.Web.UI.WebControls.HiddenField hdnNormaId;
 
         /// <summary>
-        /// txtTitulo control.
+        /// ddlTipoNorma control.
         /// </summary>
-        protected global::System.Web.UI.WebControls.TextBox txtTitulo;
+        protected global::System.Web.UI.WebControls.DropDownList ddlTipoNorma;
 
         /// <summary>
-        /// rfvTitulo control.
+        /// rfvTipoNorma control.
         /// </summary>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTitulo;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTipoNorma;
 
         /// <summary>
         /// txtDescripcion control.
@@ -85,6 +75,11 @@ namespace IsomanagerWeb.Pages.Normas
         /// lblErrorModal control.
         /// </summary>
         protected global::System.Web.UI.WebControls.Label lblErrorModal;
+
+        /// <summary>
+        /// litTituloModal control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Literal litTituloModal;
 
         /// <summary>
         /// btnGuardarNorma control.

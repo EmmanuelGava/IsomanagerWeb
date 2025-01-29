@@ -36,6 +36,7 @@
                         OnRowCommand="gvNormas_RowCommand" DataKeyNames="NormaId"
                         GridLines="None">
                         <Columns>
+                            <asp:BoundField DataField="TipoNorma" HeaderText="Tipo de Norma" />
                             <asp:BoundField DataField="Titulo" HeaderText="Nombre" />
                             <asp:BoundField DataField="Descripcion" HeaderText="Descripción" />
                             <asp:BoundField DataField="Version" HeaderText="Versión" />
@@ -110,13 +111,19 @@
                         <ContentTemplate>
                             <asp:HiddenField ID="hdnNormaId" runat="server" Value="" />
                             <div class="mb-3">
-                                <label for="<%= txtTitulo.ClientID %>" class="form-label">Título</label>
-                                <asp:TextBox ID="txtTitulo" runat="server" CssClass="form-control" MaxLength="200" />
-                                <asp:RequiredFieldValidator ID="rfvTitulo" runat="server" 
-                                    ControlToValidate="txtTitulo"
+                                <label for="<%= ddlTipoNorma.ClientID %>" class="form-label">Tipo de Norma</label>
+                                <asp:DropDownList ID="ddlTipoNorma" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlTipoNorma_SelectedIndexChanged">
+                                    <asp:ListItem Text="Seleccione una norma..." Value="" />
+                                    <asp:ListItem Text="ISO 9001:2015 - Sistema de Gestión de Calidad" Value="ISO 9001" />
+                                    <asp:ListItem Text="ISO 14001:2015 - Sistema de Gestión Ambiental" Value="ISO 14001" />
+                                    <asp:ListItem Text="ISO 45001:2018 - Sistema de Gestión de Seguridad y Salud en el Trabajo" Value="ISO 45001" />
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="rfvTipoNorma" runat="server" 
+                                    ControlToValidate="ddlTipoNorma"
                                     ValidationGroup="NuevaNorma"
                                     CssClass="text-danger"
-                                    ErrorMessage="El título es requerido." />
+                                    ErrorMessage="Debe seleccionar una norma." 
+                                    InitialValue="" />
                             </div>
                             <div class="mb-3">
                                 <label for="<%= txtDescripcion.ClientID %>" class="form-label">Descripción</label>

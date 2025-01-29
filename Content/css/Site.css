@@ -264,4 +264,98 @@ body {
 
 .action-button i {
     font-size: 1rem !important;
+}
+
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Contenedor de login */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-logo {
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Estilos para formularios */
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Estilos para botones */
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.btn-link {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    color: #0a58ca;
+    text-decoration: underline;
+}
+
+/* Estilos para validadores */
+.text-danger {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Estilos para modales */
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Estilos para alertas */
+.alert {
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Estilos para toastr */
+#toast-container > div {
+    border-radius: 8px !important;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1) !important;
 } 

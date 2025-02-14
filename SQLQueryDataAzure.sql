@@ -16,7 +16,6 @@ IF OBJECT_ID('dbo.Document', 'U') IS NOT NULL DROP TABLE dbo.Document;
 IF OBJECT_ID('dbo.Contexto', 'U') IS NOT NULL DROP TABLE dbo.Contexto;
 IF OBJECT_ID('dbo.CambioProceso', 'U') IS NOT NULL DROP TABLE dbo.CambioProceso;
 IF OBJECT_ID('dbo.AuditoriaInternaProceso', 'U') IS NOT NULL DROP TABLE dbo.AuditoriaInternaProceso;
-IF OBJECT_ID('dbo.AlcanceSistemaGestion', 'U') IS NOT NULL DROP TABLE dbo.AlcanceSistemaGestion;
 IF OBJECT_ID('dbo.__MigrationHistory', 'U') IS NOT NULL DROP TABLE dbo.__MigrationHistory;
 IF OBJECT_ID('dbo.Usuario', 'U') IS NOT NULL DROP TABLE dbo.Usuario;
 IF OBJECT_ID('dbo.Area', 'U') IS NOT NULL DROP TABLE dbo.Area;
@@ -84,18 +83,6 @@ CREATE TABLE [dbo].[Contexto] (
     [UltimaActualizacion] [datetime] NOT NULL DEFAULT GETDATE(),
     [Estado] [nvarchar](50) NOT NULL DEFAULT 'Activo',
     CONSTRAINT [FK_Contexto_Norma] FOREIGN KEY ([NormaId]) REFERENCES [dbo].[Norma] ([NormaId])
-);
-GO
-
--- Tabla AlcanceSistemaGestion
-CREATE TABLE [dbo].[AlcanceSistemaGestion] (
-    [AlcanceId] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    [Descripcion] [nvarchar](1000) NOT NULL,
-    [FechaCreacion] [datetime] NOT NULL DEFAULT GETDATE(),
-    [UltimaModificacion] [datetime] NOT NULL DEFAULT GETDATE(),
-    [Activo] [bit] NOT NULL DEFAULT 1,
-    [ContextoId] [int] NOT NULL,
-    CONSTRAINT [FK_AlcanceSistemaGestion_Contexto] FOREIGN KEY ([ContextoId]) REFERENCES [dbo].[Contexto] ([ContextoId])
 );
 GO
 

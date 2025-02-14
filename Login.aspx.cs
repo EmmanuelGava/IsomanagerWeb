@@ -274,7 +274,7 @@ namespace IsomanagerWeb
                         return;
                     }
 
-                    // Verificar contraseña
+                    // Verificar contraseña usando el mismo método de hash
                     string hashedPassword = GeneratePasswordHash(password);
                     if (usuario.Password != hashedPassword)
                     {
@@ -338,7 +338,7 @@ namespace IsomanagerWeb
                     Context.ApplicationInstance.CompleteRequest();
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 MostrarError("Error al intentar iniciar sesión. Por favor, intente nuevamente.");
             }

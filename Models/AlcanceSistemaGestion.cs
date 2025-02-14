@@ -6,9 +6,16 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace IsomanagerWeb.Models
 {
-    [Table("AlcanceSistemaGestion")]
+    [Table("AlcanceSistemaGestion", Schema = "dbo")]
     public class AlcanceSistemaGestion
     {
+        public AlcanceSistemaGestion()
+        {
+            FechaCreacion = DateTime.Now;
+            UltimaModificacion = DateTime.Now;
+            Activo = true;
+        }
+
         [Key]
         public int AlcanceId { get; set; }
 

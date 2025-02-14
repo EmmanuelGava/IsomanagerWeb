@@ -9,55 +9,19 @@
 
 namespace IsomanagerWeb.Pages
 {
+
+
     public partial class Dashboard
     {
-        /// <summary>
-        /// Control ScriptManager1.
-        /// </summary>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
-        /// Control upDashboard.
-        /// </summary>
-        protected global::System.Web.UI.UpdatePanel upDashboard;
-
-        /// <summary>
-        /// Control txtBuscar.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.TextBox txtBuscar;
-
-        /// <summary>
-        /// Control btnBuscar.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.Button btnBuscar;
-
-        /// <summary>
-        /// Control pnlMensajes.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.Panel pnlMensajes;
-
-        /// <summary>
-        /// Control litMensaje.
-        /// </summary>
-        protected global::System.Web.UI.WebControls.Literal litMensaje;
-
-        /// <summary>
-        /// Control pnlData.
+        /// Control txtBuscarNormas.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlData;
-
-        /// <summary>
-        /// Control rptNormas.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptNormas;
+        protected global::System.Web.UI.WebControls.TextBox txtBuscarNormas;
 
         /// <summary>
         /// Control pnlNoData.
@@ -71,6 +35,100 @@ namespace IsomanagerWeb.Pages
         /// <summary>
         /// Control rptNormas1.
         /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptNormas1;
+
+        /// <summary>
+        /// Control litCalendario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litCalendario;
+
+        /// <summary>
+        /// Control rptTareas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptTareas;
+
+        /// <summary>
+        /// Control litSaludo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSaludo;
+
+        /// <summary>
+        /// Control litUserInitials.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litUserInitials;
+
+        /// <summary>
+        /// Control pnlMensajes.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlMensajes;
+
+        /// <summary>
+        /// Control litMensaje.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litMensaje;
+
+        /// <summary>
+        /// Control pnlNoAuditorias.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlNoAuditorias;
+
+        /// <summary>
+        /// Control rptAuditorias.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptAuditorias;
+
+        /// <summary>
+        /// Control ddlEstadoFiltro.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlEstadoFiltro;
+
+        /// <summary>
+        /// Control chkSoloActivas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkSoloActivas;
     }
 }

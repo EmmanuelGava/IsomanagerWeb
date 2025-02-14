@@ -1,0 +1,801 @@
+/* ========== VARIABLES CSS ========== */
+:root {
+    /* Colores */
+    --color-text-primary: #333;
+    --color-text-secondary: #666;
+    --color-background: #fff;
+    --color-border: #dee2e6;
+    
+    /* Estados de Auditorías */
+    --auditoria-pendiente-bg: #fff3cd;
+    --auditoria-pendiente-border: #ffc107;
+    --auditoria-proceso-bg: #cce5ff;
+    --auditoria-proceso-border: #0d6efd;
+    --auditoria-confirmada-bg: #d4edda;
+    --auditoria-confirmada-border: #198754;
+    --auditoria-completada-bg: #e2e3e5;
+    --auditoria-completada-border: #6c757d;
+    --auditoria-cancelada-bg: #f8d7da;
+    --auditoria-cancelada-border: #dc3545;
+}
+
+/* ========== ESTILOS BASE DEL CALENDARIO ========== */
+.week-calendar {
+    font-family: "Segoe UI", Arial, sans-serif;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    background: var(--color-background);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    height: 100%;
+    min-height: 350px;
+}
+
+/* Encabezado del calendario semanal */
+.week-calendar .fc-header-toolbar {
+    margin: 0 !important;
+    padding: 1rem !important;
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid var(--color-border) !important;
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.week-calendar .fc-col-header {
+    width: 100% !important;
+    background-color: #fff !important;
+    padding: 0.5rem 0 !important;
+}
+
+.week-calendar .fc-col-header-cell {
+    padding: 0.5rem !important;
+    text-align: center !important;
+}
+
+.week-calendar .fc-col-header-cell-cushion {
+    width: 100% !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: var(--color-text-primary) !important;
+    text-transform: capitalize !important;
+    padding: 0.5rem 0 !important;
+    display: block !important;
+}
+
+.week-calendar .fc-view-harness {
+    padding: 0.5rem !important;
+}
+
+.week-calendar .fc-daygrid-day-number {
+    font-size: 0.875rem !important;
+    font-weight: normal !important;
+}
+
+/* Eventos del calendario pequeño */
+.week-calendar .fc-event {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0.25rem !important;
+    cursor: pointer !important;
+    height: 25px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    position: relative !important;
+}
+
+.week-calendar .fc-event::after {
+    content: attr(data-initial) !important;
+    position: absolute !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    color: var(--color-text-primary) !important;
+}
+
+.week-calendar .fc-event-title,
+.week-calendar .fc-event-time {
+    display: none !important;
+}
+
+.week-calendar .fc-daygrid-event-harness {
+    width: 100% !important;
+    margin: 0 !important;
+    height: 25px !important;
+    margin-bottom: 2px !important;
+}
+
+.week-calendar .fc-daygrid-day-events {
+    padding: 2px !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+}
+
+/* Estados específicos de auditorías en el calendario semanal */
+.week-calendar .fc-event.auditoria-pendiente {
+    background-color: #fff3cd !important;
+    color: #333 !important;
+    border-left: 4px solid #ffc107 !important;
+}
+
+.week-calendar .fc-event.auditoria-programada,
+.week-calendar .fc-event.auditoria-en-proceso {
+    background-color: #cce5ff !important;
+    color: #333 !important;
+    border-left: 4px solid #0d6efd !important;
+}
+
+.week-calendar .fc-event.auditoria-confirmada {
+    background-color: #d4edda !important;
+    color: #333 !important;
+    border-left: 4px solid #198754 !important;
+}
+
+.week-calendar .fc-event.auditoria-completada {
+    background-color: #e2e3e5 !important;
+    color: #333 !important;
+    border-left: 4px solid #6c757d !important;
+}
+
+.week-calendar .fc-event.auditoria-cancelada {
+    background-color: #f8d7da !important;
+    color: #333 !important;
+    border-left: 4px solid #dc3545 !important;
+}
+
+/* Estilos para procesos en el calendario semanal */
+.week-calendar .fc-event.proceso-evento,
+.week-calendar .fc-event.proceso {
+    background-color: #e2e3e5 !important;
+    color: #333 !important;
+    border-left: 4px solid #6c757d !important;
+}
+
+/* ========== CALENDARIO COMPLETO (MODAL) ========== */
+/* Contenedor del modal */
+#fullCalendarModal .modal-dialog {
+    max-width: 90% !important;
+    margin: 1.75rem auto !important;
+}
+
+#fullCalendarModal .modal-content {
+    height: 90vh !important;
+    border: none !important;
+    border-radius: 8px !important;
+}
+
+#fullCalendarModal .modal-body {
+    display: flex !important;
+    gap: 1rem !important;
+    padding: 1rem !important;
+    height: calc(100% - 56px) !important;
+}
+
+/* Eventos del calendario completo */
+#fullCalendarModal .fc-event,
+#fullCalendar .fc-event {
+    margin: 2px 4px !important;
+    padding: 4px 6px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    color: #333 !important;
+    font-weight: 500 !important;
+}
+
+/* Asegurarse que los estilos se apliquen correctamente */
+#fullCalendarModal .fc-event.auditoria,
+#fullCalendarModal .fc-event.auditoria-pendiente,
+#fullCalendarModal .fc-event.auditoria-programada,
+#fullCalendarModal .fc-event.auditoria-confirmada,
+#fullCalendarModal .fc-event.auditoria-completada,
+#fullCalendarModal .fc-event.auditoria-cancelada {
+    background-color: #cce5ff !important;
+    color: #333 !important;
+    border-left: 4px solid #0d6efd !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+#fullCalendarModal .fc-event.proceso,
+#fullCalendarModal .fc-event.proceso-evento {
+    background-color: #fff3cd !important;
+    color: #333 !important;
+    border-left: 4px solid #ffc107 !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+/* Próximos eventos */
+.upcoming-event {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0.75rem !important;
+    border-radius: 0.25rem !important;
+    margin-bottom: 0.5rem !important;
+    cursor: pointer !important;
+    transition: transform 0.2s !important;
+    border: none !important;
+}
+
+.upcoming-event.auditoria,
+.upcoming-event.auditoria-pendiente,
+.upcoming-event.auditoria-programada,
+.upcoming-event.auditoria-confirmada,
+.upcoming-event.auditoria-completada,
+.upcoming-event.auditoria-cancelada {
+    background-color: #cce5ff !important;
+    color: #333 !important;
+    border-left: 4px solid #0d6efd !important;
+}
+
+.upcoming-event.proceso,
+.upcoming-event.proceso-evento {
+    background-color: #fff3cd !important;
+    color: #333 !important;
+    border-left: 4px solid #ffc107 !important;
+}
+
+.upcoming-event-date {
+    font-size: 0.8rem !important;
+    color: #666 !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.upcoming-event-title {
+    font-size: 0.9rem !important;
+    color: #333 !important;
+    font-weight: 500 !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.upcoming-event-type {
+    font-size: 0.8rem !important;
+    color: #666 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+.upcoming-event:hover {
+    transform: translateX(4px) !important;
+    opacity: 0.9 !important;
+}
+
+/* ========== ESTILOS GENERALES DEL CALENDARIO ========== */
+.fc {
+    font-family: Arial, sans-serif !important;
+    background: var(--color-background) !important;
+}
+
+.fc th,
+.fc td,
+.fc-theme-standard td, 
+.fc-theme-standard th,
+.fc-theme-standard .fc-scrollgrid {
+    border: none !important;
+}
+
+.fc-col-header-cell-cushion {
+    font-weight: normal !important;
+    font-size: 0.9rem !important;
+    color: #666 !important;
+    padding: 8px 0 !important;
+    text-transform: lowercase !important;
+}
+
+.fc-col-header-cell-cushion::first-letter {
+    text-transform: uppercase !important;
+}
+
+.fc .fc-daygrid-day-top {
+    justify-content: center !important;
+    padding: 4px !important;
+    flex-direction: column !important;
+    text-align: center !important;
+}
+
+.fc .fc-daygrid-day-number {
+    font-size: 0.9rem !important;
+    color: #666 !important;
+    padding: 2px 6px !important;
+    text-decoration: none !important;
+    width: 24px !important;
+    height: 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 4px auto !important;
+}
+
+.fc .fc-day-today {
+    background: #f8f9fa !important;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+    background: #000 !important;
+    color: #fff !important;
+    border-radius: 50% !important;
+}
+
+/* ========== MODAL GENERAL ========== */
+.modal-backdrop {
+    display: none !important;
+}
+
+.modal {
+    background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.modal-dialog {
+    z-index: 1056 !important;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .fc .fc-toolbar {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    
+    .fc .fc-toolbar-title {
+        font-size: 0.9rem !important;
+    }
+    
+    .modal-dialog {
+        margin: 0.5rem !important;
+    }
+    
+    #fullCalendarModal .modal-dialog {
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+    
+    .calendar-sidebar {
+        display: none !important;
+    }
+}
+
+/* Estilos del Calendario */
+.calendar-section {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+}
+
+.current-month {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.calendar-container {
+    position: relative;
+    min-height: 300px;
+}
+
+/* Estilos para el Modal del Calendario */
+#calendarModal {
+    background: rgba(0, 0, 0, 0.5);
+    padding-right: 0 !important;
+}
+
+#calendarModal .modal-dialog {
+    max-width: 90%;
+    margin: 1.75rem auto;
+}
+
+#calendarModal .modal-content {
+    height: calc(100vh - 3.5rem);
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+#calendarModal .modal-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 8px 8px 0 0;
+    padding: 1rem;
+}
+
+#calendarModal .modal-body {
+    padding: 1.5rem;
+    height: calc(100vh - 8rem);
+    overflow-y: auto;
+}
+
+.calendar-sidebar {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    height: 100%;
+}
+
+/* Estilos para los Eventos */
+.auditoria-details {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.event-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.event-date {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.event-status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.event-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+/* Estados de Auditorías */
+.auditoria-pendiente {
+    background-color: #cce5ff !important;
+    color: #333 !important;
+    border-color: #0d6efd !important;
+}
+
+.auditoria-programada {
+    background-color: #cce5ff !important;
+    color: #333 !important;
+    border-color: #0d6efd !important;
+}
+
+.auditoria-confirmada {
+    background-color: #cce5ff !important;
+    color: #333 !important;
+    border-color: #0d6efd !important;
+}
+
+.auditoria-completada {
+    background-color: #cce5ff !important;
+    color: #333 !important;
+    border-color: #0d6efd !important;
+}
+
+.auditoria-cancelada {
+    background-color: #cce5ff !important;
+    color: #333 !important;
+    border-color: #0d6efd !important;
+}
+
+.proceso-evento {
+    background-color: #fff3cd !important;
+    color: #333 !important;
+    border-color: #ffc107 !important;
+}
+
+/* Estilos para FullCalendar */
+.fc {
+    font-family: inherit;
+}
+
+.fc .fc-button-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.fc .fc-button-primary:disabled {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.fc .fc-button-primary:not(:disabled):active,
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: #0a58ca;
+    border-color: #0a53be;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.fc .fc-event {
+    border: none;
+    padding: 2px 4px;
+    margin: 1px 0;
+    font-size: 0.875rem;
+}
+
+.fc .fc-daygrid-day-number,
+.fc .fc-col-header-cell-cushion {
+    color: #333;
+    text-decoration: none;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .calendar-section {
+        padding: 0.5rem;
+    }
+
+    .calendar-header {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    #calendarModal .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .fc .fc-toolbar {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Estilos para eventos del calendario */
+.fc-event {
+    cursor: pointer;
+}
+
+.fc-event:hover {
+    opacity: 0.8;
+}
+
+/* Quitar color azul de los enlaces del calendario */
+.fc a {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+.fc-day-header, 
+.fc-day-number {
+    color: #495057 !important;
+}
+
+.fc-button {
+    color: #495057 !important;
+}
+
+/* Estilos para el modal del calendario completo */
+#fullCalendarModal .modal-dialog {
+    max-width: 90%;
+}
+
+#fullCalendarModal .modal-content {
+    height: 90vh;
+}
+
+#fullCalendarModal .modal-body {
+    display: flex;
+    height: calc(100% - 56px);
+}
+
+#fullCalendar {
+    flex-grow: 1 !important;
+    height: 100% !important;
+}
+
+.calendar-sidebar {
+    width: 300px;
+    padding-left: 1rem;
+    border-left: 1px solid #dee2e6;
+}
+
+/* Estilos para el modal */
+.modal-backdrop {
+    display: none !important;
+}
+
+.modal {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+    z-index: 1056 !important;
+}
+
+
+/* Estilos adicionales para el calendario */
+.fc-toolbar-title {
+    color: #495057 !important;
+}
+
+.fc-col-header-cell-cushion {
+    color: #495057 !important;
+}
+
+.fc-daygrid-day-number {
+    color: #495057 !important;
+}
+
+.fc-button-primary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+}
+
+.fc-button-primary:hover {
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+}
+
+/* Estructura del día */
+.fc .fc-daygrid-day-frame {
+    min-height: 120px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+}
+
+.fc .fc-daygrid-day-events {
+    margin: 0 !important;
+    min-height: 100px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+}
+
+.week-calendar .fc-daygrid-day-events {
+    padding: 2px !important;
+    margin: 0 !important;
+}
+
+.week-calendar .fc-daygrid-event-harness {
+    width: 100% !important;
+    margin: 0 !important;
+    height: 30px !important;
+}
+
+/* Tooltip personalizado */
+.fc-event[data-bs-toggle="tooltip"] {
+    position: relative !important;
+}
+
+/* Botones de navegación del calendario completo */
+#fullCalendarModal .fc .fc-button-primary {
+    background-color: transparent !important;
+    border: none !important;
+    color: #666 !important;
+    box-shadow: none !important;
+    padding: 0.5rem !important;
+}
+
+#fullCalendarModal .fc .fc-button-primary:hover {
+    background-color: #f8f9fa !important;
+    color: #333 !important;
+}
+
+#fullCalendarModal .fc .fc-prev-button,
+#fullCalendarModal .fc .fc-next-button {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#fullCalendarModal .fc .fc-toolbar-title {
+    font-size: 1.2rem !important;
+    font-weight: normal !important;
+    color: #333 !important;
+    padding: 0 1rem !important;
+}
+
+.fc-view-harness .fc-event.auditoria,
+.fc-view-harness .fc-event.auditoria-pendiente,
+.fc-view-harness .fc-event.auditoria-programada,
+.fc-view-harness .fc-event.auditoria-confirmada,
+.fc-view-harness .fc-event.auditoria-completada,
+.fc-view-harness .fc-event.auditoria-cancelada {
+    background-color: #cce5ff !important;
+    color: #333 !important;
+    border-left: 4px solid #0d6efd !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+.fc-view-harness .fc-event.proceso,
+.fc-view-harness .fc-event.proceso-evento {
+    background-color: #fff3cd !important;
+    color: #333 !important;
+    border-left: 4px solid #ffc107 !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+/* Asegurarse que los estilos se apliquen también en el calendario pequeño */
+.week-calendar .fc-view-harness .fc-event.auditoria,
+.week-calendar .fc-view-harness .fc-event[class*="auditoria-"] {
+    background-color: #cce5ff !important;
+    color: #333 !important;
+    border-left: 4px solid #0d6efd !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+.week-calendar .fc-view-harness .fc-event.proceso,
+.week-calendar .fc-view-harness .fc-event[class*="proceso-"] {
+    background-color: #fff3cd !important;
+    color: #333 !important;
+    border-left: 4px solid #ffc107 !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+/* Botón Ver Mes Completo */
+.week-calendar .btn-primary {
+    background-color: #fff !important;
+    border: 1px solid #dee2e6 !important;
+    color: #333 !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+    border-radius: 0.375rem !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    font-weight: 500 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.week-calendar .btn-primary:hover {
+    background-color: #f8f9fa !important;
+    border-color: #ced4da !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-1px) !important;
+}
+
+.week-calendar .btn-primary:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.week-calendar .btn-primary i {
+    font-size: 0.875rem !important;
+}
+
+#fullCalendarModal .fc-event-title,
+#fullCalendarModal .fc-event-time {
+    color: #333 !important;
+    font-weight: 500 !important;
+}
+
+#fullCalendarModal .fc-event {
+    color: #333 !important;
+    font-weight: 500 !important;
+} 

@@ -1,8 +1,9 @@
 using System;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Diagnostics;
 using System.Linq;
+using System.Configuration;
+using System.Diagnostics;
 using System.Web;
 using System.ComponentModel.DataAnnotations.Schema;
 using IsomanagerWeb.Models;
@@ -16,7 +17,7 @@ namespace IsomanagerWeb.Models
         public IsomanagerContext()
             : base("name=IsomanagerContext")
         {
-            Database.SetInitializer<IsomanagerContext>(null);
+            Database.SetInitializer(new DatabaseInitializer());
 
             // Habilitar el log de las consultas SQL para depuración
             Database.Log = sql => Debug.WriteLine(sql);
@@ -331,6 +332,12 @@ namespace IsomanagerWeb.Models
             modelBuilder.Entity<AlcanceSistemaGestion>()
                 .ToTable("AlcanceSistemaGestion", "dbo")
                 .HasKey(a => a.AlcanceId);
+
+            modelBuilder.Entity<AlcanceSistemaGestion>()
+                .HasRequired(a => a.Norma)
+                .WithMany()
+                .HasForeignKey(a => a.NormaId)
+                .WillCascadeOnDelete(false);
 
             // TipoFactor
             modelBuilder.Entity<TipoFactor>()

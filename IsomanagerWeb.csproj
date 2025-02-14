@@ -275,13 +275,16 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\css\calendar.css" />
     <Content Include="Content\css\dashboard.css" />
     <Content Include="Content\css\datospartida.css" />
     <Content Include="Content\css\perfil-usuario.css" />
     <Content Include="Content\css\procesos.css" />
     <Content Include="Content\normas.css" />
     <Content Include="Content\usuarios.css" />
+    <Content Include="controls\ucCalendario.ascx" />
     <Content Include="controls\ucDepartamentoSelector.ascx" />
+    <Content Include="controls\ucProximasAuditorias.ascx" />
     <Content Include="controls\ucSeleccionAreas.ascx" />
     <Content Include="controls\ucUsuarioSelector.ascx" />
     <Content Include="Default.aspx" />
@@ -336,6 +339,8 @@
     <None Include="Properties\PublishProfiles\IsoGestionIntegral - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <None Include="Scripts\jquery-3.7.1-vsdoc.js" />
+    <Content Include="Scripts\chart.js" />
+    <Content Include="Scripts\chart.min.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.js" />
@@ -385,12 +390,23 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="controls\ucCalendario.ascx.cs">
+      <DependentUpon>ucCalendario.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="controls\ucDepartamentoSelector.ascx.cs">
       <DependentUpon>ucDepartamentoSelector.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="controls\ucDepartamentoSelector.ascx.designer.cs">
       <DependentUpon>ucDepartamentoSelector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="controls\ucProximasAuditorias.ascx.cs">
+      <DependentUpon>ucProximasAuditorias.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="controls\ucProximasAuditorias.ascx.designer.cs">
+      <DependentUpon>ucProximasAuditorias.ascx</DependentUpon>
     </Compile>
     <Compile Include="controls\ucSeleccionAreas.ascx.cs">
       <DependentUpon>ucSeleccionAreas.ascx</DependentUpon>
@@ -424,14 +440,6 @@
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202412282243187_ajustarAreaAFactores.cs" />
-    <Compile Include="Migrations\202412282243187_ajustarAreaAFactores.Designer.cs">
-      <DependentUpon>202412282243187_ajustarAreaAFactores.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202412302053393_UpdateTipoFactores.cs" />
-    <Compile Include="Migrations\202412302053393_UpdateTipoFactores.Designer.cs">
-      <DependentUpon>202412302053393_UpdateTipoFactores.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AlcanceSistemaGestion.cs" />
     <Compile Include="Models\Archivo.cs" />
@@ -442,6 +450,7 @@
     <Compile Include="Models\CompetenciaNorma.cs" />
     <Compile Include="Models\ConnectionManager.cs" />
     <Compile Include="Models\Contexto.cs" />
+    <Compile Include="Models\DatabaseInitializer.cs" />
     <Compile Include="Models\DefinicionObjetivoAlcance.cs" />
     <Compile Include="Models\Desempeno.cs" />
     <Compile Include="Models\Document.cs" />
@@ -618,14 +627,6 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202412282243187_ajustarAreaAFactores.resx">
-      <DependentUpon>202412282243187_ajustarAreaAFactores.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202412302053393_UpdateTipoFactores.resx">
-      <DependentUpon>202412302053393_UpdateTipoFactores.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

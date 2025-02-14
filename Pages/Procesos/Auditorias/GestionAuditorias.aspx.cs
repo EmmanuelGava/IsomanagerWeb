@@ -268,14 +268,14 @@ namespace IsomanagerWeb.Pages.Procesos.Auditorias
 
                     // Obtener los datos
                     var auditoriasList = query
-                        .OrderByDescending(a => a.FechaCreacion)
+                        .OrderByDescending(a => a.FechaAuditoria)
                         .Select(a => new
                         {
                             a.AuditoriaInternaProcesoId,
                             a.ProcesoId,
                             Proceso = a.Proceso.Nombre,
                             Titulo = a.Titulo,
-                            FechaAuditoria = a.FechaCreacion,
+                            FechaAuditoria = a.FechaAuditoria,
                             Auditor = a.Asignado.Nombre,
                             a.AsignadoId,
                             a.Estado,
@@ -373,7 +373,8 @@ namespace IsomanagerWeb.Pages.Procesos.Auditorias
                             CreadorId = UsuarioActual.UsuarioId,
                             AsignadoId = ucUsuarioAsignado.SelectedUsuarioId ?? UsuarioActual.UsuarioId,
                             FechaCreacion = DateTime.Now,
-                            UltimaActualizacion = DateTime.Now
+                            UltimaActualizacion = DateTime.Now,
+                            FechaAuditoria = DateTime.Parse(txtFechaAuditoria.Text)
                         };
                         context.AuditoriasInternaProceso.Add(auditoria);
                     }
@@ -388,6 +389,7 @@ namespace IsomanagerWeb.Pages.Procesos.Auditorias
                         }
                         auditoria.UltimaActualizacion = DateTime.Now;
                         auditoria.AsignadoId = ucUsuarioAsignado.SelectedUsuarioId ?? auditoria.AsignadoId;
+                        auditoria.FechaAuditoria = DateTime.Parse(txtFechaAuditoria.Text);
                     }
 
                     // Actualizar propiedades
@@ -398,17 +400,7 @@ namespace IsomanagerWeb.Pages.Procesos.Auditorias
                     auditoria.Recomendaciones = txtRecomendaciones.Text.Trim();
                     auditoria.Descripcion = txtDescripcion.Text.Trim();
 
-                    // Mantener sincronizado el campo Descripcion
-                    auditoria.Descripcion = auditoria.Alcance;
-                    if (!string.IsNullOrEmpty(auditoria.Hallazgos))
-                    {
-                        auditoria.Descripcion += "\n\nHallazgos:\n" + auditoria.Hallazgos;
-                    }
-                    if (!string.IsNullOrEmpty(auditoria.Recomendaciones))
-                    {
-                        auditoria.Descripcion += "\n\nRecomendaciones:\n" + auditoria.Recomendaciones;
-                    }
-
+                    // Guardar los cambios
                     context.SaveChanges();
 
                     CargarAuditorias();
@@ -516,7 +508,7 @@ namespace IsomanagerWeb.Pages.Procesos.Auditorias
                             estadoItem.Selected = true;
                         }
 
-                        txtFechaAuditoria.Text = auditoria.FechaCreacion.ToString("yyyy-MM-dd");
+                        txtFechaAuditoria.Text = auditoria.FechaAuditoria.ToString("yyyy-MM-dd");
                         txtAlcance.Text = auditoria.Alcance;
                         txtHallazgos.Text = auditoria.Hallazgos;
                         txtRecomendaciones.Text = auditoria.Recomendaciones;

@@ -12,7 +12,7 @@ namespace IsomanagerWeb.Pages.Normas.Secciones
     {
         private IsomanagerContext db = new IsomanagerContext();
         private int normaId;
-        private bool modoEdicion = false;
+        private bool    modoEdicion = false;
         protected Repeater rptDetalles;
         protected Repeater rptDetallesPartes;
         protected GridView gvPartesInteresadas;

@@ -7,22 +7,6 @@
     border: 1px solid #e0e0e0;
 }
 
-.iso-card.estado-borrador {
-    border-left: 4px solid #6c757d;
-}
-
-.iso-card.estado-revision {
-    border-left: 4px solid #ffc107;
-}
-
-.iso-card.estado-aprobado {
-    border-left: 4px solid #28a745;
-}
-
-.iso-card.estado-obsoleto {
-    border-left: 4px solid #dc3545;
-}
-
 .iso-card-header {
     padding: 0.75rem 1rem 1.25rem;
     border-bottom: 1px solid #e0e0e0;
@@ -133,4 +117,13 @@
     background: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+}
+
+.container-1600 {
+    width: 100%;
+    max-width: 1600px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 1rem;
+    padding-left: 1rem;
 } 
